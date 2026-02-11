@@ -1,51 +1,293 @@
+/* ✅ RESPONSIVE DESIGN */
+
+/* 📱 Tablets */
+@media (max-width: 992px) {
+
+    .hero {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .hero-left, .hero-right {
+        width: 100%;
+    }
+
+    .hero-right img {
+        width: 80%;
+        margin-top: 20px;
+    }
+
+    .stats {
+        flex-wrap: wrap;
+    }
+
+    .stat-box {
+        width: 45%;
+        margin-bottom: 20px;
+    }
+
+    .services {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .service-card {
+        width: 80%;
+        margin-bottom: 20px;
+    }
+}
+
+/* 📱 Mobile */
+@media (max-width: 576px) {
+
+    .navbar {
+        flex-direction: column;
+        padding: 15px;
+    }
+
+    .nav-links {
+        margin-top: 10px;
+    }
+
+    .nav-links a {
+        display: block;
+        margin: 8px 0;
+    }
+
+    .hero-left h1 {
+        font-size: 32px;
+    }
+
+    .hero-left p {
+        font-size: 16px;
+    }
+
+    .primary-btn, .secondary-btn {
+        width: 100%;
+        margin: 5px 0;
+    }
+
+    .stat-box {
+        width: 100%;
+    }
+
+    .service-card {
+        width: 95%;
+    }
+}
+
 body {
-    font-family: Arial;
     margin: 0;
-    background: #f4f6f9;
-}
-
-header {
-    background: #2c3e50;
+    font-family: Arial, sans-serif;
+    background: #0d6efd;
     color: white;
-    padding: 15px;
-    text-align: center;
 }
 
-.container {
-    width: 70%;
-    margin: 30px auto;
+/* ✅ NAVBAR */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 60px;
     background: white;
-    padding: 25px;
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    color: black;
 }
 
-input, select {
-    width: 100%;
-    padding: 8px;
-    margin: 8px 0;
+.logo {
+    display: flex;
+    align-items: center;
+    font-weight: bold;
 }
 
-button {
-    background: #3498db;
+.logo-box {
+    background: #0d6efd;
     color: white;
-    border: none;
     padding: 8px 12px;
-    border-radius: 5px;
+    border-radius: 8px;
+    margin-right: 10px;
+}
+
+.logo-text {
+    font-size: 18px;
+}
+
+.nav-links a {
+    margin: 0 12px;
+    text-decoration: none;
+    color: black;
+    font-weight: 500;
+}
+
+.register-btn {
+    background: #0d6efd;
+    color: white !important;
+    padding: 8px 15px;
+    border-radius: 8px;
+}
+
+/* ✅ HERO */
+.hero {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 60px;
+}
+
+.hero-left {
+    width: 45%;
+}
+
+.hero-left h1 {
+    font-size: 48px;
+    margin-bottom: 20px;
+}
+
+.hero-left p {
+    font-size: 18px;
+    line-height: 1.6;
+}
+
+/* ✅ BUTTONS */
+.hero-buttons {
+    margin-top: 30px;
+}
+
+.primary-btn {
+    background: white;
+    color: #0d6efd;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 10px;
+    font-size: 16px;
+    cursor: pointer;
+    margin-right: 10px;
+}
+
+.secondary-btn {
+    background: transparent;
+    color: white;
+    border: 2px solid white;
+    padding: 10px 20px;
+    border-radius: 10px;
+    font-size: 16px;
     cursor: pointer;
 }
 
-table {
-    width: 100%;
-    border-collapse: collapse;
+/* ✅ IMAGE */
+.hero-right img {
+    width: 500px;
+    border-radius: 15px;
+    background: white;
+    padding: 5px;
 }
 
-th {
-    background: #3498db;
-    color: white;
+/* ✅ STATS SECTION */
+.stats {
+    background: white;
+    color: black;
+    display: flex;
+    justify-content: space-around;
+    padding: 40px 60px;
+    text-align: center;
 }
 
-table, th, td {
-    border: 1px solid #ddd;
-    padding: 10px;
+.stat-box {
+    width: 20%;
 }
+
+.stat-icon {
+    font-size: 40px;
+    color: #0d6efd;
+    margin-bottom: 10px;
+}
+
+.stat-box h2 {
+    margin: 5px 0;
+    font-size: 28px;
+}
+
+/* ✅ SERVICES TITLE */
+.services-title {
+    background: white;
+    color: black;
+    text-align: center;
+    padding: 30px;
+}
+
+.services-title h1 {
+    font-size: 32px;
+    margin-bottom: 10px;
+}
+
+.services-title p {
+    color: #555;
+}
+/* ✅ SERVICES CARDS SECTION */
+.services {
+    background: #f4f6f9;
+    display: flex;
+    justify-content: space-around;
+    padding: 50px 60px;
+    gap:10px;
+}
+
+.service-card {
+    background: white;
+    width: 30%;
+    padding: 25px;
+    border-radius: 15px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+    text-align: left;
+    transition: 0.3s;
+}
+
+.service-card:hover {
+    transform: translateY(-5px);
+}
+
+/* ✅ ICON CIRCLES */
+.service-icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 26px;
+    margin-bottom: 15px;
+}
+
+/* Different soft colors */
+.cardio {
+    background: #e7f1ff;
+    color: #0d6efd;
+}
+
+.neuro {
+    background: #e9f9ee;
+    color: #28a745;
+}
+
+.pediatric {
+    background: #f3e8ff;
+    color: #6f42c1;
+}
+
+/* ✅ TEXT */
+.service-card h2 {
+    margin: 10px 0;
+    color: #2c3e50;
+}
+
+.service-card p {
+    color: #555;
+    font-size: 15px;
+    line-height: 1.6;
+}
+
+.service-card a {
+    text-decoration: none;
+    color: #0d6efd;
+    font-weight: bold;
+}
+
