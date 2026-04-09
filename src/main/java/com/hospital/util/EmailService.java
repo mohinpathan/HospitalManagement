@@ -13,12 +13,13 @@ public class EmailService {
     @Autowired
     private JavaMailSender mailSender;
 
-    /** Send a plain HTML email */
+    // ── Core send method ─────────────────────────────────────
     public void sendHtml(String to, String subject, String htmlBody) {
         try {
             MimeMessage msg = mailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(msg, true, "UTF-8");
             helper.setTo(to);
+            helper.setFrom("mohinkhan1118@gmail.com", "HealthCare Connect");
             helper.setSubject(subject);
             helper.setText(htmlBody, true);
             mailSender.send(msg);
@@ -27,31 +28,134 @@ public class EmailService {
         }
     }
 
-    /** OTP email for forgot-password */
-    public void sendOtp(String to, String otp) {
-        String body = "<h2>Password Reset OTP</h2>"
-                + "<p>Your OTP is: <strong style='font-size:24px;color:#2b7cff'>" + otp + "</strong></p>"
-                + "<p>This OTP is valid for <strong>10 minutes</strong>.</p>"
-                + "<p>If you did not request this, please ignore this email.</p>";
-        sendHtml(to, "Hospital Management - Password Reset OTP", body);
+    // ── Shared email wrapper ──────────────────────────────────
+    private String wrap(String accentColor, String iconEmoji, String title, String body) {
+        return "<!DOCTYPE html><html><head><meta charset='UTF-8'></head><body style='margin:0;padding:0;background:#f0f4f8;font-family:Segoe UI,Arial,sans-serif'>"
+            + "<table width='100%' cellpadding='0' cellspacing='0' style='background:#f0f4f8;padding:40px 0'>"
+            + "<tr><td align='center'>"
+            + "<table width='580' cellpadding='0' cellspacing='0' style='background:#fff;border-radius:18px;overflow:hidden;box-shadow:0 4px 24px rgba(0,0,0,.10)'>"
+            // Header
+            + "<tr><td style='background:linear-gradient(135deg," + accentColor + ");padding:36px 40px;text-align:center'>"
+            + "<div style='font-size:42px;margin-bottom:10px'>" + iconEmoji + "</div>"
+            + "<h1 style='color:#fff;margin:0;font-size:24px;font-weight:800;letter-spacing:-0.5px'>" + title + "</h1>"
+            + "<p style='color:rgba(255,255,255,.85);margin:8px 0 0;font-size:14px'>HealthCare Connect</p>"
+            + "</td></tr>"
+            // Body
+            + "<tr><td style='padding:36px 40px'>" + body + "</td></tr>"
+            // Footer
+            + "<tr><td style='background:#f8fafc;padding:20px 40px;text-align:center;border-top:1px solid #e8edf5'>"
+            + "<p style='color:#94a3b8;font-size:12px;margin:0'>© 2026 HealthCare Connect &nbsp;|&nbsp; RK University Road, Rajkot &nbsp;|&nbsp; support@hospital.com</p>"
+            + "<p style='color:#94a3b8;font-size:11px;margin:6px 0 0'>This is an automated email. Please do not reply.</p>"
+            + "</td></tr>"
+            + "</table></td></tr></table></body></html>";
     }
 
-    /** Bill receipt + prescription email to patient */
+    // ── Welcome / Registration email ─────────────────────────
+    public void sendWelcome(String to, String name, String role) {
+        String roleLabel = role.substring(0, 1).toUpperCase() + role.substring(1);
+        String accent = "patient".equals(role) ? "#7c3aed,#8b5cf6"
+                      : "doctor".equals(role)  ? "#19b37a,#0d9668"
+                      : "#2b7cff,#1a5fd4";
+        String icon = "patient".equals(role) ? "🧑" : "doctor".equals(role) ? "👨‍⚕️" : "🛡️";
+
+        String body = "<p style='color:#374151;font-size:16px;margin:0 0 16px'>Dear <strong>" + name + "</strong>,</p>"
+            + "<p style='color:#374151;font-size:15px;line-height:1.7;margin:0 0 20px'>Welcome to <strong>HealthCare Connect</strong>! Your account has been successfully created as a <strong>" + roleLabel + "</strong>.</p>"
+            + "<div style='background:#f8fafc;border-radius:12px;padding:20px 24px;margin:0 0 24px;border-left:4px solid #2b7cff'>"
+            + "<p style='color:#374151;font-size:14px;margin:0 0 8px'><strong>Account Details:</strong></p>"
+            + "<p style='color:#374151;font-size:14px;margin:0 0 4px'>📧 Email: <strong>" + to + "</strong></p>"
+            + "<p style='color:#374151;font-size:14px;margin:0'>🏷️ Role: <strong>" + roleLabel + "</strong></p>"
+            + "</div>"
+            + "<p style='color:#374151;font-size:14px;line-height:1.7;margin:0 0 24px'>You can now log in to your portal and access all features available to you.</p>"
+            + "<div style='text-align:center;margin:28px 0'>"
+            + "<a href='http://localhost:8080/HospitalManagement/login.jsp' style='background:linear-gradient(135deg,#2b7cff,#1a5fd4);color:#fff;padding:14px 32px;border-radius:10px;text-decoration:none;font-weight:700;font-size:15px;display:inline-block'>Go to Login →</a>"
+            + "</div>"
+            + "<p style='color:#94a3b8;font-size:13px;margin:0'>If you did not create this account, please contact us immediately at support@hospital.com</p>";
+
+        sendHtml(to, "Welcome to HealthCare Connect! 🎉", wrap(accent, icon, "Welcome, " + name + "!", body));
+    }
+
+    // ── Login notification email ──────────────────────────────
+    public void sendLoginNotification(String to, String name, String role) {
+        String roleLabel = role.substring(0, 1).toUpperCase() + role.substring(1);
+        String now = new java.text.SimpleDateFormat("dd MMM yyyy, hh:mm a").format(new java.util.Date());
+
+        String body = "<p style='color:#374151;font-size:16px;margin:0 0 16px'>Hello <strong>" + name + "</strong>,</p>"
+            + "<p style='color:#374151;font-size:15px;line-height:1.7;margin:0 0 20px'>A successful login was detected on your <strong>HealthCare Connect</strong> account.</p>"
+            + "<div style='background:#f8fafc;border-radius:12px;padding:20px 24px;margin:0 0 24px;border-left:4px solid #19b37a'>"
+            + "<p style='color:#374151;font-size:14px;margin:0 0 8px'><strong>Login Details:</strong></p>"
+            + "<p style='color:#374151;font-size:14px;margin:0 0 4px'>📧 Email: <strong>" + to + "</strong></p>"
+            + "<p style='color:#374151;font-size:14px;margin:0 0 4px'>🏷️ Role: <strong>" + roleLabel + "</strong></p>"
+            + "<p style='color:#374151;font-size:14px;margin:0'>🕐 Time: <strong>" + now + "</strong></p>"
+            + "</div>"
+            + "<div style='background:#fef3c7;border-radius:10px;padding:14px 18px;margin:0 0 20px'>"
+            + "<p style='color:#92400e;font-size:13px;margin:0'>⚠️ If this was not you, please change your password immediately and contact support.</p>"
+            + "</div>"
+            + "<div style='text-align:center;margin:24px 0'>"
+            + "<a href='http://localhost:8080/HospitalManagement/login.jsp' style='background:linear-gradient(135deg,#19b37a,#0d9668);color:#fff;padding:13px 28px;border-radius:10px;text-decoration:none;font-weight:700;font-size:14px;display:inline-block'>Go to Dashboard →</a>"
+            + "</div>";
+
+        sendHtml(to, "Login Alert - HealthCare Connect 🔐", wrap("#19b37a,#0d9668", "🔐", "Login Successful", body));
+    }
+
+    // ── OTP / Forgot Password email ───────────────────────────
+    public void sendOtp(String to, String otp) {
+        String body = "<p style='color:#374151;font-size:15px;line-height:1.7;margin:0 0 20px'>We received a request to reset your password. Use the OTP below to proceed.</p>"
+            + "<div style='text-align:center;margin:28px 0'>"
+            + "<div style='display:inline-block;background:linear-gradient(135deg,#7c3aed,#8b5cf6);border-radius:16px;padding:24px 48px'>"
+            + "<p style='color:rgba(255,255,255,.8);font-size:12px;font-weight:700;letter-spacing:2px;text-transform:uppercase;margin:0 0 8px'>Your OTP Code</p>"
+            + "<p style='color:#fff;font-size:42px;font-weight:900;letter-spacing:10px;margin:0;font-family:monospace'>" + otp + "</p>"
+            + "</div></div>"
+            + "<div style='background:#f8fafc;border-radius:12px;padding:16px 20px;margin:0 0 20px;text-align:center'>"
+            + "<p style='color:#374151;font-size:14px;margin:0'>⏱️ This OTP is valid for <strong>10 minutes</strong> only.</p>"
+            + "</div>"
+            + "<p style='color:#374151;font-size:14px;line-height:1.7;margin:0 0 8px'>Steps to reset your password:</p>"
+            + "<ol style='color:#374151;font-size:14px;line-height:1.9;margin:0 0 20px;padding-left:20px'>"
+            + "<li>Enter the OTP code above on the verification page</li>"
+            + "<li>Set your new password</li>"
+            + "<li>Login with your new credentials</li>"
+            + "</ol>"
+            + "<div style='background:#fee2e2;border-radius:10px;padding:14px 18px;margin:0 0 20px'>"
+            + "<p style='color:#991b1b;font-size:13px;margin:0'>🚫 If you did not request a password reset, please ignore this email. Your account is safe.</p>"
+            + "</div>";
+
+        sendHtml(to, "Password Reset OTP - HealthCare Connect 🔑", wrap("#7c3aed,#8b5cf6", "🔑", "Reset Your Password", body));
+    }
+
+    // ── Password reset success email ──────────────────────────
+    public void sendPasswordResetSuccess(String to, String name) {
+        String now = new java.text.SimpleDateFormat("dd MMM yyyy, hh:mm a").format(new java.util.Date());
+
+        String body = "<p style='color:#374151;font-size:16px;margin:0 0 16px'>Hello <strong>" + name + "</strong>,</p>"
+            + "<p style='color:#374151;font-size:15px;line-height:1.7;margin:0 0 20px'>Your password has been successfully reset. You can now log in with your new password.</p>"
+            + "<div style='background:#d1fae5;border-radius:12px;padding:18px 22px;margin:0 0 24px;border-left:4px solid #19b37a'>"
+            + "<p style='color:#065f46;font-size:14px;margin:0'>✅ Password changed on: <strong>" + now + "</strong></p>"
+            + "</div>"
+            + "<div style='background:#fef3c7;border-radius:10px;padding:14px 18px;margin:0 0 24px'>"
+            + "<p style='color:#92400e;font-size:13px;margin:0'>⚠️ If you did not make this change, contact support immediately at support@hospital.com</p>"
+            + "</div>"
+            + "<div style='text-align:center;margin:24px 0'>"
+            + "<a href='http://localhost:8080/HospitalManagement/login.jsp' style='background:linear-gradient(135deg,#2b7cff,#1a5fd4);color:#fff;padding:14px 32px;border-radius:10px;text-decoration:none;font-weight:700;font-size:15px;display:inline-block'>Login Now →</a>"
+            + "</div>";
+
+        sendHtml(to, "Password Reset Successful ✅ - HealthCare Connect", wrap("#19b37a,#0d9668", "✅", "Password Reset Successful", body));
+    }
+
+    // ── Bill receipt + prescription email ────────────────────
     public void sendBillReceipt(String to, String patientName,
                                  String doctorName, String diagnosis,
                                  String medicines, double totalAmount,
                                  int billId) {
-        String body = "<h2>Payment Receipt & Prescription</h2>"
-                + "<p>Dear <strong>" + patientName + "</strong>,</p>"
-                + "<p>Your payment has been confirmed. Below are your details:</p>"
-                + "<table border='1' cellpadding='8' style='border-collapse:collapse'>"
-                + "<tr><td><b>Bill ID</b></td><td>#" + billId + "</td></tr>"
-                + "<tr><td><b>Doctor</b></td><td>" + doctorName + "</td></tr>"
-                + "<tr><td><b>Diagnosis</b></td><td>" + diagnosis + "</td></tr>"
-                + "<tr><td><b>Medicines</b></td><td>" + medicines + "</td></tr>"
-                + "<tr><td><b>Total Amount</b></td><td>$" + String.format("%.2f", totalAmount) + "</td></tr>"
-                + "</table>"
-                + "<p>Thank you for choosing our hospital.</p>";
-        sendHtml(to, "Hospital Management - Bill Receipt #" + billId, body);
+        String body = "<p style='color:#374151;font-size:16px;margin:0 0 16px'>Dear <strong>" + patientName + "</strong>,</p>"
+            + "<p style='color:#374151;font-size:15px;line-height:1.7;margin:0 0 20px'>Your payment has been confirmed. Please find your prescription and bill details below.</p>"
+            + "<table width='100%' cellpadding='0' cellspacing='0' style='border-radius:12px;overflow:hidden;margin:0 0 24px'>"
+            + "<tr style='background:#f8fafc'><td style='padding:12px 16px;font-size:13px;font-weight:700;color:#64748b;border-bottom:1px solid #e8edf5'>BILL ID</td><td style='padding:12px 16px;font-size:14px;font-weight:700;color:#0f172a;border-bottom:1px solid #e8edf5'>#" + billId + "</td></tr>"
+            + "<tr><td style='padding:12px 16px;font-size:13px;font-weight:700;color:#64748b;border-bottom:1px solid #e8edf5'>DOCTOR</td><td style='padding:12px 16px;font-size:14px;color:#374151;border-bottom:1px solid #e8edf5'>" + doctorName + "</td></tr>"
+            + "<tr style='background:#f8fafc'><td style='padding:12px 16px;font-size:13px;font-weight:700;color:#64748b;border-bottom:1px solid #e8edf5'>DIAGNOSIS</td><td style='padding:12px 16px;font-size:14px;color:#374151;border-bottom:1px solid #e8edf5'>" + diagnosis + "</td></tr>"
+            + "<tr><td style='padding:12px 16px;font-size:13px;font-weight:700;color:#64748b;border-bottom:1px solid #e8edf5'>MEDICINES</td><td style='padding:12px 16px;font-size:14px;color:#374151;border-bottom:1px solid #e8edf5'>" + medicines + "</td></tr>"
+            + "<tr style='background:#f8fafc'><td style='padding:12px 16px;font-size:13px;font-weight:700;color:#64748b'>TOTAL AMOUNT</td><td style='padding:12px 16px;font-size:18px;font-weight:800;color:#0f172a'>₹" + String.format("%.2f", totalAmount) + "</td></tr>"
+            + "</table>"
+            + "<p style='color:#374151;font-size:14px;line-height:1.7;margin:0'>Thank you for choosing <strong>HealthCare Connect</strong>. We wish you a speedy recovery! 💙</p>";
+
+        sendHtml(to, "Payment Receipt & Prescription #" + billId + " - HealthCare Connect", wrap("#2b7cff,#1a5fd4", "🧾", "Payment Confirmed", body));
     }
 }

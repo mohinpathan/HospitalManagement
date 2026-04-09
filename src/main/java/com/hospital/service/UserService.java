@@ -161,6 +161,15 @@ public class UserService {
         jdbc.update("UPDATE " + tableFor(role) + " SET password=?,otp=NULL,otp_expiry=NULL WHERE email=?", hashed, email);
     }
 
+    public String getNameByEmail(String email, String role) {
+        try {
+            return jdbc.queryForObject(
+                "SELECT full_name FROM " + tableFor(role) + " WHERE email=?", String.class, email);
+        } catch (Exception e) {
+            return email;
+        }
+    }
+
     // ── Helpers ───────────────────────────────────────────────
     private String tableFor(String role) {
         return switch (role) {
