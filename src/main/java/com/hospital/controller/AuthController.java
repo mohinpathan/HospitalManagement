@@ -151,6 +151,7 @@ public class AuthController {
     public String forgotPassword(
             @RequestParam("email") String email,
             @RequestParam("role")  String role,
+            HttpSession session,
             RedirectAttributes ra) {
 
         boolean exists = userService.emailExists(email, role);
@@ -161,10 +162,12 @@ public class AuthController {
 
         String otp = OtpUtil.generate();
         userService.saveOtp(email, role, otp);
-        emailService.sendOtp(email, otp);   // beautiful OTP email
+        emailService.sendOtp(email, otp);
 
-        ra.addFlashAttribute("email", email);
-        ra.addFlashAttribute("role",  role);
+        // Store in session so they survive the redirect
+        session.setAttribute("otpEmail", email);
+        session.setAttribute("otpRole",  role);
+
         ra.addFlashAttribute("otpSent", true);
         return "redirect:/verifyOtp.jsp";
     }
@@ -172,47 +175,61 @@ public class AuthController {
     // ── Verify OTP ────────────────────────────────────────────
     @PostMapping("/verifyOtp")
     public String verifyOtp(
-            @RequestParam("email") String email,
-            @RequestParam("role")  String role,
-            @RequestParam("otp")   String otp,
+            @RequestParam("otp") String otp,
+            HttpSession session,
             RedirectAttributes ra) {
+
+        String email = (String) session.getAttribute("otpEmail");
+        String role  = (String) session.getAttribute("otpRole");
+
+        if (email == null || role == null) {
+            ra.addFlashAttribute("error", "Session expired. Please request a new OTP.");
+            return "redirect:/forgetpass.jsp";
+        }
 
         boolean valid = userService.verifyOtp(email, role, otp);
         if (!valid) {
             ra.addFlashAttribute("error", "Invalid or expired OTP. Please try again.");
-            ra.addFlashAttribute("email", email);
-            ra.addFlashAttribute("role",  role);
             return "redirect:/verifyOtp.jsp";
         }
 
-        // OTP verified — pass email+role to reset page
-        ra.addFlashAttribute("email",    email);
-        ra.addFlashAttribute("role",     role);
-        ra.addFlashAttribute("verified", true);
+        // Mark OTP as verified in session
+        session.setAttribute("otpVerified", true);
         return "redirect:/resetPassword.jsp";
     }
 
     // ── Reset Password ────────────────────────────────────────
     @PostMapping("/resetPassword")
     public String resetPassword(
-            @RequestParam("email")           String email,
-            @RequestParam("role")            String role,
             @RequestParam("newPassword")     String newPassword,
             @RequestParam("confirmPassword") String confirmPassword,
+            HttpSession session,
             RedirectAttributes ra) {
+
+        String email = (String) session.getAttribute("otpEmail");
+        String role  = (String) session.getAttribute("otpRole");
+        Boolean verified = (Boolean) session.getAttribute("otpVerified");
+
+        if (email == null || role == null || !Boolean.TRUE.equals(verified)) {
+            ra.addFlashAttribute("error", "Session expired. Please start the password reset again.");
+            return "redirect:/forgetpass.jsp";
+        }
 
         if (!newPassword.equals(confirmPassword)) {
             ra.addFlashAttribute("error", "Passwords do not match.");
-            ra.addFlashAttribute("email", email);
-            ra.addFlashAttribute("role",  role);
             return "redirect:/resetPassword.jsp";
         }
 
         userService.updatePassword(email, role, PasswordUtil.hash(newPassword));
 
-        // Send password reset success email with user's name
+        // Send success email
         String name = userService.getNameByEmail(email, role);
         emailService.sendPasswordResetSuccess(email, name);
+
+        // Clean up session
+        session.removeAttribute("otpEmail");
+        session.removeAttribute("otpRole");
+        session.removeAttribute("otpVerified");
 
         ra.addFlashAttribute("success", "Password reset successfully! You can now login with your new password.");
         return "redirect:/login.jsp";

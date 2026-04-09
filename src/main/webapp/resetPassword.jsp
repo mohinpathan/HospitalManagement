@@ -12,19 +12,19 @@ a{text-decoration:none}
 .card-icon{width:68px;height:68px;background:linear-gradient(135deg,#19b37a,#0d9668);border-radius:18px;display:flex;align-items:center;justify-content:center;font-size:28px;color:#fff;margin:0 auto 20px;box-shadow:0 8px 20px rgba(25,179,122,.35)}
 h2{text-align:center;font-size:24px;font-weight:800;color:#0f172a;margin-bottom:6px}
 .sub{text-align:center;color:#64748b;font-size:14px;margin-bottom:24px}
+.verified-badge{background:linear-gradient(135deg,#d1fae5,#a7f3d0);border:1px solid #6ee7b7;border-radius:12px;padding:12px 16px;margin-bottom:20px;display:flex;align-items:center;gap:10px;font-size:13px;font-weight:600;color:#065f46}
 .form-label{font-weight:600;font-size:13px;color:#374151;margin-bottom:6px;display:block}
-.form-control{background:#f8fafc;border:1.5px solid #e5e7eb;border-radius:10px;padding:11px 14px;font-size:14px;width:100%;outline:none;transition:border-color .2s,box-shadow .2s;margin-bottom:16px}
-.form-control:focus{border-color:#19b37a;box-shadow:0 0 0 3px rgba(25,179,122,.1)}
 .input-group{display:flex;align-items:stretch;margin-bottom:16px}
 .ig-icon{background:#f1f5f9;border:1.5px solid #e5e7eb;border-right:none;border-radius:10px 0 0 10px;padding:0 14px;display:flex;align-items:center;color:#64748b}
-.input-group .form-control{border-radius:0 10px 10px 0;margin-bottom:0}
-.btn-submit{width:100%;background:linear-gradient(135deg,#19b37a,#0d9668);color:#fff;border:none;border-radius:12px;padding:13px;font-size:15px;font-weight:700;cursor:pointer;transition:all .2s;margin-top:4px;display:flex;align-items:center;justify-content:center;gap:8px}
+.form-control{background:#f8fafc;border:1.5px solid #e5e7eb;border-radius:0 10px 10px 0;padding:11px 14px;font-size:14px;width:100%;outline:none;transition:border-color .2s,box-shadow .2s}
+.form-control:focus{border-color:#19b37a;box-shadow:0 0 0 3px rgba(25,179,122,.1)}
+.strength-bar{height:5px;border-radius:4px;background:#e5e7eb;margin-top:6px;overflow:hidden}
+.strength-fill{height:100%;border-radius:4px;transition:width .3s,background .3s;width:0}
+.strength-text{font-size:11px;color:#64748b;margin-top:4px;height:14px}
+.btn-submit{width:100%;background:linear-gradient(135deg,#19b37a,#0d9668);color:#fff;border:none;border-radius:12px;padding:13px;font-size:15px;font-weight:700;cursor:pointer;transition:all .2s;margin-top:8px;display:flex;align-items:center;justify-content:center;gap:8px}
 .btn-submit:hover{opacity:.92;transform:translateY(-1px)}
 .alert-msg{padding:11px 14px;border-radius:10px;font-size:14px;margin-bottom:16px;display:flex;align-items:center;gap:8px}
 .alert-danger{background:#fee2e2;color:#991b1b;border:1px solid #fecaca}
-.strength-bar{height:4px;border-radius:4px;background:#e5e7eb;margin-top:6px;overflow:hidden}
-.strength-fill{height:100%;border-radius:4px;transition:width .3s,background .3s;width:0}
-.strength-text{font-size:11px;color:#64748b;margin-top:4px}
 </style>
 <script>
 function checkStrength(val) {
@@ -37,32 +37,56 @@ function checkStrength(val) {
     if (/[0-9]/.test(val)) score++;
     if (/[^A-Za-z0-9]/.test(val)) score++;
     const levels = [
-        {w:'0%',c:'#e5e7eb',t:''},
-        {w:'25%',c:'#ef4444',t:'Weak'},
-        {w:'50%',c:'#f59e0b',t:'Fair'},
-        {w:'75%',c:'#2b7cff',t:'Good'},
-        {w:'100%',c:'#19b37a',t:'Strong'}
+        {w:'0%',  c:'#e5e7eb', t:''},
+        {w:'25%', c:'#ef4444', t:'Weak'},
+        {w:'50%', c:'#f59e0b', t:'Fair'},
+        {w:'75%', c:'#2b7cff', t:'Good'},
+        {w:'100%',c:'#19b37a', t:'Strong'}
     ];
     const l = levels[Math.min(score, 4)];
-    fill.style.width = l.w; fill.style.background = l.c;
+    fill.style.width = l.w;
+    fill.style.background = l.c;
     text.textContent = l.t ? 'Strength: ' + l.t : '';
+}
+function checkMatch() {
+    const np = document.getElementById('newPass').value;
+    const cp = document.getElementById('confirmPass').value;
+    const hint = document.getElementById('matchHint');
+    if (cp.length === 0) { hint.textContent = ''; return; }
+    if (np === cp) { hint.style.color='#19b37a'; hint.textContent='✓ Passwords match'; }
+    else           { hint.style.color='#ef4444'; hint.textContent='✗ Passwords do not match'; }
 }
 </script>
 </head><body>
 <jsp:include page="/header.jsp" />
 <div class="wrap">
 <div class="card">
+
+    <%-- Guard: if session is missing, redirect back --%>
+    <%
+        String otpEmail    = (String)  session.getAttribute("otpEmail");
+        Boolean otpVerified = (Boolean) session.getAttribute("otpVerified");
+        if (otpEmail == null || !Boolean.TRUE.equals(otpVerified)) {
+            response.sendRedirect("/HospitalManagement/forgetpass.jsp");
+            return;
+        }
+    %>
+
     <div class="card-icon"><i class="fa fa-lock-open"></i></div>
     <h2>Set New Password</h2>
-    <p class="sub">Choose a strong password for your account.</p>
+    <p class="sub">OTP verified. Choose a strong new password.</p>
+
+    <div class="verified-badge">
+        <i class="fa fa-circle-check" style="font-size:16px"></i>
+        Identity verified for <strong><%=otpEmail%></strong>
+    </div>
 
     <% if(request.getAttribute("error") != null){ %>
     <div class="alert-msg alert-danger"><i class="fa fa-exclamation-circle"></i> <%=request.getAttribute("error")%></div>
     <% } %>
 
     <form action="/HospitalManagement/resetPassword" method="post">
-        <input type="hidden" name="email" value="${email}">
-        <input type="hidden" name="role"  value="${role}">
+        <%-- No hidden fields needed — controller reads email/role from session --%>
 
         <div style="margin-bottom:4px">
             <label class="form-label">New Password *</label>
@@ -70,23 +94,25 @@ function checkStrength(val) {
                 <span class="ig-icon"><i class="fa fa-lock"></i></span>
                 <input type="password" name="newPassword" id="newPass" class="form-control"
                        placeholder="Min 6 characters" required minlength="6"
-                       oninput="checkStrength(this.value)">
+                       oninput="checkStrength(this.value); checkMatch()">
             </div>
             <div class="strength-bar"><div class="strength-fill" id="strengthFill"></div></div>
             <div class="strength-text" id="strengthText"></div>
         </div>
 
-        <div style="margin-top:16px">
+        <div style="margin-top:16px;margin-bottom:4px">
             <label class="form-label">Confirm Password *</label>
             <div class="input-group">
                 <span class="ig-icon"><i class="fa fa-key"></i></span>
                 <input type="password" name="confirmPassword" id="confirmPass" class="form-control"
-                       placeholder="Repeat your password" required minlength="6">
+                       placeholder="Repeat your password" required minlength="6"
+                       oninput="checkMatch()">
             </div>
+            <div class="strength-text" id="matchHint"></div>
         </div>
 
         <button type="submit" class="btn-submit">
-            <i class="fa fa-shield-halved"></i> Reset Password
+            <i class="fa fa-shield-halved"></i> Reset Password &amp; Login
         </button>
     </form>
 
