@@ -7,6 +7,9 @@ import com.hospital.service.UserService;
 import com.hospital.util.EmailService;
 import com.hospital.util.OtpUtil;
 import com.hospital.util.PasswordUtil;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -18,6 +21,11 @@ public class AuthController {
 
     @Autowired private UserService  userService;
     @Autowired private EmailService emailService;
+
+    // ── Cookie constants ──────────────────────────────────────
+    private static final String COOKIE_EMAIL = "hms_email";
+    private static final String COOKIE_ROLE  = "hms_role";
+    private static final int    COOKIE_AGE   = 60 * 60 * 24 * 30; // 30 days
 
     // ── Home ─────────────────────────────────────────────────
     @GetMapping("/")
@@ -73,7 +81,7 @@ public class AuthController {
                 }
             }
 
-            // Send welcome email (async-safe — errors are caught inside sendHtml)
+            // Send welcome email only (no login email)
             emailService.sendWelcome(email, fullName, role);
 
             ra.addFlashAttribute("success", "Registration successful! A welcome email has been sent. Please login.");
@@ -89,22 +97,32 @@ public class AuthController {
     // ── Login ─────────────────────────────────────────────────
     @PostMapping("/login")
     public String login(
-            @RequestParam("role")     String role,
-            @RequestParam("email")    String email,
-            @RequestParam("password") String password,
+            @RequestParam("role")       String role,
+            @RequestParam("email")      String email,
+            @RequestParam("password")   String password,
+            @RequestParam(value = "rememberMe", required = false) String rememberMe,
             HttpSession session,
+            HttpServletResponse response,
             RedirectAttributes ra) {
+
+        boolean remember = "on".equals(rememberMe);
 
         switch (role) {
             case "patient" -> {
                 Patient p = userService.findPatientByEmail(email);
                 if (p != null && PasswordUtil.verify(password, p.getPassword())) {
+                    // Set session (survives refresh)
                     session.setAttribute("role",        "patient");
                     session.setAttribute("patientId",   p.getId());
                     session.setAttribute("patientName", p.getFullName());
                     session.setAttribute("patientEmail",p.getEmail());
-                    // Send login notification
-                    emailService.sendLoginNotification(email, p.getFullName(), "patient");
+                    session.setMaxInactiveInterval(60 * 60 * 8); // 8 hours
+
+                    // Remember Me cookie
+                    if (remember) {
+                        setRememberCookie(response, email, role);
+                    }
+                    // NO login email — removed
                     return "redirect:/patient/dashboard";
                 }
             }
@@ -116,8 +134,9 @@ public class AuthController {
                     session.setAttribute("doctorName", d.getFullName());
                     session.setAttribute("doctorEmail",d.getEmail());
                     session.setAttribute("doctorDept", d.getDepartmentName());
-                    // Send login notification
-                    emailService.sendLoginNotification(email, d.getFullName(), "doctor");
+                    session.setMaxInactiveInterval(60 * 60 * 8);
+
+                    if (remember) setRememberCookie(response, email, role);
                     return "redirect:/doctor/dashboard";
                 }
             }
@@ -128,8 +147,9 @@ public class AuthController {
                     session.setAttribute("adminId",   a.getId());
                     session.setAttribute("adminName", a.getFullName());
                     session.setAttribute("adminEmail",a.getEmail());
-                    // Send login notification
-                    emailService.sendLoginNotification(email, a.getFullName(), "admin");
+                    session.setMaxInactiveInterval(60 * 60 * 8);
+
+                    if (remember) setRememberCookie(response, email, role);
                     return "redirect:/admin/dashboard";
                 }
             }
@@ -139,10 +159,66 @@ public class AuthController {
         return "redirect:/login.jsp";
     }
 
+    // ── Auto-login from Remember Me cookie ───────────────────
+    @GetMapping("/autoLogin")
+    public String autoLogin(HttpServletRequest request, HttpSession session) {
+        // If already logged in, go to dashboard
+        if (session.getAttribute("role") != null) {
+            return dashboardFor((String) session.getAttribute("role"));
+        }
+
+        // Try cookie
+        String email = getCookieValue(request, COOKIE_EMAIL);
+        String role  = getCookieValue(request, COOKIE_ROLE);
+
+        if (email == null || role == null) return "redirect:/login.jsp";
+
+        switch (role) {
+            case "patient" -> {
+                Patient p = userService.findPatientByEmail(email);
+                if (p != null) {
+                    session.setAttribute("role",        "patient");
+                    session.setAttribute("patientId",   p.getId());
+                    session.setAttribute("patientName", p.getFullName());
+                    session.setAttribute("patientEmail",p.getEmail());
+                    session.setMaxInactiveInterval(60 * 60 * 8);
+                    return "redirect:/patient/dashboard";
+                }
+            }
+            case "doctor" -> {
+                Doctor d = userService.findDoctorByEmail(email);
+                if (d != null) {
+                    session.setAttribute("role",       "doctor");
+                    session.setAttribute("doctorId",   d.getId());
+                    session.setAttribute("doctorName", d.getFullName());
+                    session.setAttribute("doctorEmail",d.getEmail());
+                    session.setAttribute("doctorDept", d.getDepartmentName());
+                    session.setMaxInactiveInterval(60 * 60 * 8);
+                    return "redirect:/doctor/dashboard";
+                }
+            }
+            case "admin" -> {
+                Admin a = userService.findAdminByEmail(email);
+                if (a != null) {
+                    session.setAttribute("role",      "admin");
+                    session.setAttribute("adminId",   a.getId());
+                    session.setAttribute("adminName", a.getFullName());
+                    session.setAttribute("adminEmail",a.getEmail());
+                    session.setMaxInactiveInterval(60 * 60 * 8);
+                    return "redirect:/admin/dashboard";
+                }
+            }
+        }
+        return "redirect:/login.jsp";
+    }
+
     // ── Logout ────────────────────────────────────────────────
     @GetMapping("/logout")
-    public String logout(HttpSession session) {
+    public String logout(HttpSession session, HttpServletResponse response) {
         session.invalidate();
+        // Clear remember-me cookies
+        clearCookie(response, COOKIE_EMAIL);
+        clearCookie(response, COOKIE_ROLE);
         return "redirect:/login.jsp";
     }
 
@@ -164,10 +240,9 @@ public class AuthController {
         userService.saveOtp(email, role, otp);
         emailService.sendOtp(email, otp);
 
-        // Store in session so they survive the redirect
+        // Store in session — survives redirect
         session.setAttribute("otpEmail", email);
         session.setAttribute("otpRole",  role);
-
         ra.addFlashAttribute("otpSent", true);
         return "redirect:/verifyOtp.jsp";
     }
@@ -193,7 +268,6 @@ public class AuthController {
             return "redirect:/verifyOtp.jsp";
         }
 
-        // Mark OTP as verified in session
         session.setAttribute("otpVerified", true);
         return "redirect:/resetPassword.jsp";
     }
@@ -206,8 +280,8 @@ public class AuthController {
             HttpSession session,
             RedirectAttributes ra) {
 
-        String email = (String) session.getAttribute("otpEmail");
-        String role  = (String) session.getAttribute("otpRole");
+        String email    = (String)  session.getAttribute("otpEmail");
+        String role     = (String)  session.getAttribute("otpRole");
         Boolean verified = (Boolean) session.getAttribute("otpVerified");
 
         if (email == null || role == null || !Boolean.TRUE.equals(verified)) {
@@ -222,16 +296,56 @@ public class AuthController {
 
         userService.updatePassword(email, role, PasswordUtil.hash(newPassword));
 
-        // Send success email
+        // Send password reset success email
         String name = userService.getNameByEmail(email, role);
         emailService.sendPasswordResetSuccess(email, name);
 
-        // Clean up session
+        // Clean up OTP session keys
         session.removeAttribute("otpEmail");
         session.removeAttribute("otpRole");
         session.removeAttribute("otpVerified");
 
         ra.addFlashAttribute("success", "Password reset successfully! You can now login with your new password.");
         return "redirect:/login.jsp";
+    }
+
+    // ── Helpers ───────────────────────────────────────────────
+    private void setRememberCookie(HttpServletResponse response, String email, String role) {
+        Cookie emailCookie = new Cookie(COOKIE_EMAIL, email);
+        emailCookie.setMaxAge(COOKIE_AGE);
+        emailCookie.setPath("/");
+        emailCookie.setHttpOnly(true);
+
+        Cookie roleCookie = new Cookie(COOKIE_ROLE, role);
+        roleCookie.setMaxAge(COOKIE_AGE);
+        roleCookie.setPath("/");
+        roleCookie.setHttpOnly(true);
+
+        response.addCookie(emailCookie);
+        response.addCookie(roleCookie);
+    }
+
+    private void clearCookie(HttpServletResponse response, String name) {
+        Cookie c = new Cookie(name, "");
+        c.setMaxAge(0);
+        c.setPath("/");
+        response.addCookie(c);
+    }
+
+    private String getCookieValue(HttpServletRequest request, String name) {
+        if (request.getCookies() == null) return null;
+        for (Cookie c : request.getCookies()) {
+            if (name.equals(c.getName())) return c.getValue();
+        }
+        return null;
+    }
+
+    private String dashboardFor(String role) {
+        return switch (role) {
+            case "patient" -> "redirect:/patient/dashboard";
+            case "doctor"  -> "redirect:/doctor/dashboard";
+            case "admin"   -> "redirect:/admin/dashboard";
+            default        -> "redirect:/login.jsp";
+        };
     }
 }
