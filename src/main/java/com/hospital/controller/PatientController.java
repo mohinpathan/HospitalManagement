@@ -32,11 +32,23 @@ public class PatientController {
     public String dashboard(HttpSession session, HttpServletRequest req) {
         if (!isPatient(session)) return "redirect:/login.jsp";
         int pid = (int) session.getAttribute("patientId");
+
+        // Stats
         req.setAttribute("totalAppts",     apptService.countByPatient(pid));
         req.setAttribute("upcomingAppts",  apptService.countByPatientAndStatus(pid, "approved"));
         req.setAttribute("completedAppts", apptService.countByPatientAndStatus(pid, "completed"));
+        req.setAttribute("cancelledAppts", apptService.countByPatientAndStatus(pid, "cancelled"));
+
+        // Recent data
         req.setAttribute("recentAppts",    apptService.getByPatient(pid));
         req.setAttribute("bills",          billService.getBillsByPatient(pid));
+
+        // Next upcoming appointment
+        req.setAttribute("nextAppt",       apptService.getNextApproved(pid));
+
+        // Patient profile for health summary
+        req.setAttribute("patient",        userService.getPatientById(pid));
+
         return "forward:/patientDashboard.jsp";
     }
 

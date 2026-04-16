@@ -7,6 +7,7 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class AppointmentService {
@@ -70,6 +71,44 @@ public class AppointmentService {
     }
     public int countAll() {
         return jdbc.queryForObject("SELECT COUNT(*) FROM appointments", Integer.class);
+    }
+
+    public int countToday() {
+        return jdbc.queryForObject(
+            "SELECT COUNT(*) FROM appointments WHERE appointment_date=CURDATE()", Integer.class);
+    }
+
+    public int countUniquePatients(int doctorId) {
+        Integer c = jdbc.queryForObject(
+            "SELECT COUNT(DISTINCT patient_id) FROM appointments WHERE doctor_id=?", Integer.class, doctorId);
+        return c != null ? c : 0;
+    }
+
+    public Appointment getNextApproved(int patientId) {
+        List<Appointment> list = jdbc.query(
+            BASE_SELECT + "WHERE a.patient_id=? AND a.status='approved' AND a.appointment_date >= CURDATE() " +
+            "ORDER BY a.appointment_date ASC, a.appointment_time ASC LIMIT 1",
+            mapper(), patientId);
+        return list.isEmpty() ? null : list.get(0);
+    }
+
+    public List<Appointment> getTodayByDoctor(int doctorId) {
+        return jdbc.query(
+            BASE_SELECT + "WHERE a.doctor_id=? AND a.appointment_date=CURDATE() ORDER BY a.appointment_time ASC",
+            mapper(), doctorId);
+    }
+
+    public List<java.util.Map<String,Object>> getMonthlyTrend() {
+        return jdbc.queryForList(
+            "SELECT DATE_FORMAT(appointment_date,'%Y-%m') AS month, COUNT(*) AS count " +
+            "FROM appointments GROUP BY month ORDER BY month DESC LIMIT 12");
+    }
+
+    public List<java.util.Map<String,Object>> getDeptStats() {
+        return jdbc.queryForList(
+            "SELECT dep.name, COUNT(a.id) AS count FROM appointments a " +
+            "LEFT JOIN departments dep ON a.department_id=dep.id " +
+            "GROUP BY dep.name ORDER BY count DESC");
     }
 
     private RowMapper<Appointment> mapper() {

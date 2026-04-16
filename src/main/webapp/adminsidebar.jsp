@@ -35,6 +35,12 @@
         <li class="<%= uri.contains("bills") ? "active" : "" %>">
             <a href="/HospitalManagement/admin/bills"><i class="fa fa-file-invoice-dollar"></i> Bills & Payments</a>
         </li>
+        <li class="<%= uri.contains("reports") ? "active" : "" %>">
+            <a href="/HospitalManagement/admin/reports"><i class="fa fa-chart-line"></i> Reports</a>
+        </li>
+        <li class="<%= uri.contains("feedback") ? "active" : "" %>">
+            <a href="/HospitalManagement/admin/feedback"><i class="fa fa-comments"></i> Feedback</a>
+        </li>
         <div class="sb-divider"></div>
         <li class="<%= uri.contains("profile") ? "active" : "" %>">
             <a href="/HospitalManagement/admin/profile"><i class="fa fa-user-cog"></i> My Profile</a>

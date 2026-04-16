@@ -25,6 +25,10 @@ a{text-decoration:none}
         <a href="/HospitalManagement/admin/dashboard"><i class="fa fa-th-large me-1"></i>Dashboard</a>
         <a href="/HospitalManagement/adminabout.jsp">About</a>
         <a href="/HospitalManagement/admincontact.jsp">Contact</a>
+        <a href="/HospitalManagement/notifications" style="position:relative">
+            <i class="fa fa-bell"></i>
+            <span id="notifBadge" style="display:none;position:absolute;top:-4px;right:-4px;background:#ef4444;color:#fff;border-radius:50%;width:16px;height:16px;font-size:9px;font-weight:700;align-items:center;justify-content:center">0</span>
+        </a>
         <div class="user-chip">
             <i class="fa fa-user-shield" style="color:#2b7cff"></i>
             <%= session.getAttribute("adminName") != null ? session.getAttribute("adminName") : "Admin" %>
@@ -33,3 +37,14 @@ a{text-decoration:none}
         <a href="/HospitalManagement/logout" class="btn-logout"><i class="fa fa-sign-out-alt me-1"></i>Logout</a>
     </div>
 </div>
+<script>
+// Poll notification count every 60 seconds
+function loadNotifCount(){
+    fetch('/HospitalManagement/notifications/count')
+    .then(r=>r.json()).then(d=>{
+        const b=document.getElementById('notifBadge');
+        if(b){b.textContent=d.count;b.style.display=d.count>0?'inline-flex':'none';}
+    }).catch(()=>{});
+}
+loadNotifCount(); setInterval(loadNotifCount,60000);
+</script>

@@ -75,6 +75,16 @@ public class UserService {
         return jdbc.query("SELECT * FROM patients ORDER BY created_at DESC", patientMapper());
     }
 
+    public List<Patient> getRecentPatients(int limit) {
+        return jdbc.query("SELECT * FROM patients ORDER BY created_at DESC LIMIT ?", patientMapper(), limit);
+    }
+
+    public List<Doctor> getRecentDoctors(int limit) {
+        return jdbc.query(
+            "SELECT d.*, dep.name AS dept_name FROM doctors d LEFT JOIN departments dep ON d.department_id=dep.id " +
+            "WHERE d.status='active' ORDER BY d.created_at DESC LIMIT ?", doctorMapper(), limit);
+    }
+
     public List<Doctor> getAllDoctors() {
         return jdbc.query(
             "SELECT d.*, dep.name AS dept_name FROM doctors d LEFT JOIN departments dep ON d.department_id=dep.id WHERE d.status='active' ORDER BY d.full_name",

@@ -96,6 +96,39 @@ public class BillService {
             billMapper(), patientId);
     }
 
+    public List<java.util.Map<String,Object>> getMonthlyRevenue() {
+        return jdbc.queryForList(
+            "SELECT DATE_FORMAT(created_at,'%Y-%m') AS month, SUM(total_amount) AS revenue, COUNT(*) AS count " +
+            "FROM bills WHERE payment_status IN ('confirmed','paid') " +
+            "GROUP BY month ORDER BY month DESC LIMIT 12");
+    }
+
+    public double getTotalRevenue() {
+        Double r = jdbc.queryForObject(
+            "SELECT COALESCE(SUM(total_amount),0) FROM bills WHERE payment_status IN ('confirmed','paid')",
+            Double.class);
+        return r != null ? r : 0.0;
+    }
+
+    public int countPending() {
+        Integer c = jdbc.queryForObject(
+            "SELECT COUNT(*) FROM bills WHERE payment_status='pending'", Integer.class);
+        return c != null ? c : 0;
+    }
+
+    public double getEarningsByDoctor(int doctorId) {
+        Double r = jdbc.queryForObject(
+            "SELECT COALESCE(SUM(total_amount),0) FROM bills WHERE doctor_id=? AND payment_status IN ('confirmed','paid') " +
+            "AND MONTH(created_at)=MONTH(CURDATE()) AND YEAR(created_at)=YEAR(CURDATE())",
+            Double.class, doctorId);
+        return r != null ? r : 0.0;
+    }
+
+    public int countUnreadFeedback() {
+        Integer c = jdbc.queryForObject("SELECT COUNT(*) FROM feedback", Integer.class);
+        return c != null ? c : 0;
+    }
+
     private RowMapper<Bill> billMapper() {
         return (rs, i) -> {
             Bill b = new Bill();

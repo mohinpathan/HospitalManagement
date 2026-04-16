@@ -3,24 +3,26 @@
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:context="http://www.springframework.org/schema/context"
        xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:task="http://www.springframework.org/schema/task"
        xsi:schemaLocation="
            http://www.springframework.org/schema/beans
                http://www.springframework.org/schema/beans/spring-beans.xsd
            http://www.springframework.org/schema/context
                http://www.springframework.org/schema/context/spring-context.xsd
            http://www.springframework.org/schema/mvc
-               http://www.springframework.org/schema/mvc/spring-mvc.xsd">
+               http://www.springframework.org/schema/mvc/spring-mvc.xsd
+           http://www.springframework.org/schema/task
+               http://www.springframework.org/schema/task/spring-task.xsd">
 
-    <!-- Scan all classes in com.hospital package for @Controller, @Service etc. -->
     <context:component-scan base-package="com.hospital" />
-
-    <!-- Enable Spring MVC annotations (@RequestMapping, @GetMapping etc.) -->
     <mvc:annotation-driven />
+    <task:annotation-driven />
 
-    <!-- Serve static resources (CSS, JS, images) directly -->
+    <!-- Static resources -->
     <mvc:resources mapping="/static/**" location="/static/" />
-    <mvc:resources mapping="/*.css"     location="/" />
-    <mvc:resources mapping="/*.js"      location="/" />
+    <mvc:resources mapping="/uploads/**" location="/uploads/" />
+    <mvc:resources mapping="/*.css"      location="/" />
+    <mvc:resources mapping="/*.js"       location="/" />
 
     <!-- JSP View Resolver -->
     <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
@@ -28,28 +30,27 @@
         <property name="suffix" value=".jsp" />
     </bean>
 
-    <!-- ===================================================
-         DataSource - XAMPP MySQL (no password by default)
-    ==================================================== -->
+    <!-- Multipart resolver for file uploads -->
+    <bean id="multipartResolver"
+          class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+        <property name="maxUploadSize" value="5242880" /> <!-- 5 MB -->
+    </bean>
+
+    <!-- DataSource -->
     <bean id="dataSource"
           class="org.springframework.jdbc.datasource.DriverManagerDataSource">
         <property name="driverClassName" value="com.mysql.cj.jdbc.Driver" />
-        <property name="url"
-                  value="jdbc:mysql://localhost:3306/hospital_db?useSSL=false&amp;serverTimezone=UTC" />
+        <property name="url" value="jdbc:mysql://localhost:3306/hospital_db?useSSL=false&amp;serverTimezone=UTC" />
         <property name="username" value="root" />
         <property name="password" value="" />
     </bean>
 
-    <!-- Spring JdbcTemplate -->
-    <bean id="jdbcTemplate"
-          class="org.springframework.jdbc.core.JdbcTemplate">
+    <!-- JdbcTemplate -->
+    <bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
         <property name="dataSource" ref="dataSource" />
     </bean>
 
-    <!-- ===================================================
-         JavaMail - lazy-init so startup won't fail before
-         spring-context-support jar is on the classpath
-    ==================================================== -->
+    <!-- JavaMail -->
     <bean id="mailSender"
           class="org.springframework.mail.javamail.JavaMailSenderImpl"
           lazy-init="true">

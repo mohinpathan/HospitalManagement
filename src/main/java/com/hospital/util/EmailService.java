@@ -140,6 +140,26 @@ public class EmailService {
         sendHtml(to, "Password Reset Successful ✅ - HealthCare Connect", wrap("#19b37a,#0d9668", "✅", "Password Reset Successful", body));
     }
 
+    // ── Appointment Reminder email ────────────────────────────
+    public void sendAppointmentReminder(String to, String patientName, String doctorName,
+                                         String dept, String date, String time, String reason) {
+        String body = "<p style='color:#374151;font-size:16px;margin:0 0 16px'>Dear <strong>" + patientName + "</strong>,</p>"
+            + "<p style='color:#374151;font-size:15px;line-height:1.7;margin:0 0 20px'>This is a friendly reminder that you have an appointment <strong>tomorrow</strong>.</p>"
+            + "<div style='background:#f8fafc;border-radius:12px;padding:20px 24px;margin:0 0 24px;border-left:4px solid #2b7cff'>"
+            + "<p style='color:#374151;font-size:14px;margin:0 0 8px'><strong>Appointment Details:</strong></p>"
+            + "<p style='color:#374151;font-size:14px;margin:0 0 4px'>👨‍⚕️ Doctor: <strong>" + doctorName + "</strong></p>"
+            + "<p style='color:#374151;font-size:14px;margin:0 0 4px'>🏥 Department: <strong>" + dept + "</strong></p>"
+            + "<p style='color:#374151;font-size:14px;margin:0 0 4px'>📅 Date: <strong>" + date + "</strong></p>"
+            + "<p style='color:#374151;font-size:14px;margin:0 0 4px'>🕐 Time: <strong>" + time + "</strong></p>"
+            + "<p style='color:#374151;font-size:14px;margin:0'>📋 Reason: <strong>" + reason + "</strong></p>"
+            + "</div>"
+            + "<div style='background:#fef3c7;border-radius:10px;padding:14px 18px;margin:0 0 20px'>"
+            + "<p style='color:#92400e;font-size:13px;margin:0'>⏰ Please arrive 10 minutes early. Bring any previous medical records if available.</p>"
+            + "</div>";
+        sendHtml(to, "Appointment Reminder for Tomorrow 📅 - HealthCare Connect",
+                 wrap("#2b7cff,#1a5fd4", "📅", "Appointment Reminder", body));
+    }
+
     // ── Bill receipt + prescription email ────────────────────
     public void sendBillReceipt(String to, String patientName,
                                  String doctorName, String diagnosis,

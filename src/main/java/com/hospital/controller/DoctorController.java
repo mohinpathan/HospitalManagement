@@ -26,11 +26,28 @@ public class DoctorController {
     public String dashboard(HttpSession session, HttpServletRequest req) {
         if (!isDoctor(session)) return "redirect:/login.jsp";
         int did = (int) session.getAttribute("doctorId");
+
+        // Stats
         req.setAttribute("totalAppts",     apptService.countByDoctor(did));
         req.setAttribute("todayAppts",     apptService.countByDoctorToday(did));
         req.setAttribute("pendingAppts",   apptService.countByDoctorAndStatus(did, "pending"));
         req.setAttribute("completedAppts", apptService.countByDoctorAndStatus(did, "completed"));
+
+        // Today's appointments
+        req.setAttribute("todayList",      apptService.getTodayByDoctor(did));
+
+        // All appointments for table
         req.setAttribute("appointments",   apptService.getByDoctor(did));
+
+        // Earnings this month
+        req.setAttribute("monthlyEarnings", billService.getEarningsByDoctor(did));
+
+        // Unique patients
+        req.setAttribute("uniquePatients", apptService.countUniquePatients(did));
+
+        // Doctor info (for rating display)
+        req.setAttribute("doctor",         userService.getDoctorById(did));
+
         return "forward:/doctorDashboard.jsp";
     }
 

@@ -3,6 +3,8 @@ package com.hospital.controller;
 import com.hospital.model.Doctor;
 import com.hospital.model.Patient;
 import com.hospital.service.AppointmentService;
+import com.hospital.service.NotificationService;
+import com.hospital.service.ReviewService;
 import com.hospital.service.BillService;
 import com.hospital.service.DepartmentService;
 import com.hospital.service.UserService;
@@ -22,6 +24,8 @@ public class AdminController {
     @Autowired private AppointmentService apptService;
     @Autowired private DepartmentService  deptService;
     @Autowired private BillService        billService;
+    @Autowired private NotificationService notifService;
+    @Autowired private ReviewService      reviewService;
 
     private boolean isAdmin(HttpSession s) { return "admin".equals(s.getAttribute("role")); }
 
@@ -29,12 +33,26 @@ public class AdminController {
     @GetMapping("/dashboard")
     public String dashboard(HttpSession session, HttpServletRequest req) {
         if (!isAdmin(session)) return "redirect:/login.jsp";
+
+        // Core stats
         req.setAttribute("totalDoctors",      userService.getAllDoctors().size());
         req.setAttribute("totalPatients",     userService.getAllPatients().size());
         req.setAttribute("totalAppointments", apptService.countAll());
         req.setAttribute("totalDepts",        deptService.countAll());
+
+        // New stats
+        req.setAttribute("todayAppts",        apptService.countToday());
+        req.setAttribute("totalRevenue",      billService.getTotalRevenue());
+        req.setAttribute("pendingBills",      billService.countPending());
+
+        // Panels
         req.setAttribute("pendingAppts",      apptService.getPending());
         req.setAttribute("departments",       deptService.getAll());
+        req.setAttribute("recentPatients",    userService.getRecentPatients(5));
+        req.setAttribute("recentDoctors",     userService.getRecentDoctors(5));
+        req.setAttribute("topDoctors",        reviewService.getTopDoctors(3));
+        req.setAttribute("unreadFeedback",    billService.countUnreadFeedback());
+
         return "forward:/adminDashboard.jsp";
     }
 
@@ -160,6 +178,15 @@ public class AdminController {
             HttpSession session, RedirectAttributes ra) {
         if (!isAdmin(session)) return "redirect:/login.jsp";
         apptService.updateStatus(id, status);
+
+        // Notify patient
+        try {
+            java.util.List<java.util.Map<String,Object>> rows = new org.springframework.jdbc.core.JdbcTemplate(
+                    ((org.springframework.jdbc.datasource.DriverManagerDataSource)
+                    apptService.getClass().getDeclaredField("jdbc").get(apptService))).queryForList(
+                    "SELECT patient_id FROM appointments WHERE id=?", id);
+        } catch (Exception ignored) {}
+
         ra.addFlashAttribute("success", "Appointment " + status + ".");
         return "redirect:/admin/appointments";
     }
@@ -205,6 +232,17 @@ public class AdminController {
         if (!isAdmin(session)) return "redirect:/login.jsp";
         req.setAttribute("bills", billService.getAllBills());
         return "forward:/managebills.jsp";
+    }
+
+    // ── REPORTS ──────────────────────────────────────────────
+    @GetMapping("/reports")
+    public String reports(HttpSession session, HttpServletRequest req) {
+        if (!isAdmin(session)) return "redirect:/login.jsp";
+        req.setAttribute("topDoctors",    reviewService.getTopDoctors(5));
+        req.setAttribute("monthlyRevenue", billService.getMonthlyRevenue());
+        req.setAttribute("apptTrend",      apptService.getMonthlyTrend());
+        req.setAttribute("deptStats",      apptService.getDeptStats());
+        return "forward:/adminreports.jsp";
     }
 
     // ── ADMIN PROFILE ────────────────────────────────────────
