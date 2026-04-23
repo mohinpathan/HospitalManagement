@@ -1,8 +1,8 @@
 ﻿<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ include file="/WEB-INF/lang.jsp" %>
 <%@ page import="java.util.*, com.hospital.model.*" %>
-<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Book Appointment</title>
+<!DOCTYPE html><html lang="<%=hi?"hi":"en"%>"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title><%=L(hi,"अपॉइंटमेंट बुक करें","Book Appointment")%></title>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
 <style>
@@ -31,8 +31,8 @@ body{background:#f0f4f8;margin:0;font-family:'Segoe UI',Arial,sans-serif}
 <div class="dash-main">
 
     <div class="page-hdr">
-        <h2><i class="fa fa-calendar-plus me-2" style="color:#7c3aed"></i>Book Appointment</h2>
-        <p>Schedule a consultation with one of our specialists.</p>
+        <h2><i class="fa fa-calendar-plus me-2" style="color:#7c3aed"></i><%=L(hi,"अपॉइंटमेंट बुक करें","Book Appointment")%></h2>
+        <p><%=L(hi,"हमारे विशेषज्ञों में से किसी के साथ परामर्श शेड्यूल करें।","Schedule a consultation with one of our specialists.")%></p>
     </div>
 
     <% String s=(String)request.getAttribute("success"); if(s!=null){ %><div class="alert-success"><i class="fa fa-check-circle"></i> <%=s%></div><% } %>
@@ -41,9 +41,9 @@ body{background:#f0f4f8;margin:0;font-family:'Segoe UI',Arial,sans-serif}
         <form action="/HospitalManagement/patient/bookAppointment" method="post">
             <div class="row g-3">
                 <div class="col-md-6">
-                    <label class="form-label">Department *</label>
+                    <label class="form-label"><%=L(hi,"विभाग *","Department *")%></label>
                     <select name="departmentId" class="form-select" required>
-                        <option value="">Select Department</option>
+                        <option value=""><%=L(hi,"विभाग चुनें","Select Department")%></option>
                         <%
                             List<Map<String,Object>> depts=(List<Map<String,Object>>)request.getAttribute("departments");
                             if(depts!=null)for(Map<String,Object> dept:depts){
@@ -51,9 +51,9 @@ body{background:#f0f4f8;margin:0;font-family:'Segoe UI',Arial,sans-serif}
                     </select>
                 </div>
                 <div class="col-md-6">
-                    <label class="form-label">Select Doctor *</label>
+                    <label class="form-label"><%=L(hi,"डॉक्टर चुनें *","Select Doctor *")%></label>
                     <select name="doctorId" class="form-select" required>
-                        <option value="">Select Doctor</option>
+                        <option value=""><%=L(hi,"डॉक्टर चुनें","Select Doctor")%></option>
                         <%
                             List<?> doctors=(List<?>)request.getAttribute("doctors");
                             int preselected=request.getAttribute("preselectedDoctorId")!=null?(int)request.getAttribute("preselectedDoctorId"):0;
@@ -64,24 +64,24 @@ body{background:#f0f4f8;margin:0;font-family:'Segoe UI',Arial,sans-serif}
                     </select>
                 </div>
                 <div class="col-md-6">
-                    <label class="form-label">Appointment Date *</label>
+                    <label class="form-label"><%=L(hi,"अपॉइंटमेंट तारीख *","Appointment Date *")%></label>
                     <input type="date" name="date" class="form-control" required min="<%= new java.text.SimpleDateFormat("yyyy-MM-dd").format(new java.util.Date()) %>">
                 </div>
                 <div class="col-md-6">
-                    <label class="form-label">Preferred Time *</label>
+                    <label class="form-label"><%=L(hi,"पसंदीदा समय *","Preferred Time *")%></label>
                     <input type="time" name="time" class="form-control" required>
                 </div>
                 <div class="col-12">
-                    <label class="form-label">Reason for Visit *</label>
-                    <textarea name="reason" class="form-control" rows="4" placeholder="Describe your symptoms or reason for consultation..." required></textarea>
+                    <label class="form-label"><%=L(hi,"मिलने का कारण *","Reason for Visit *")%></label>
+                    <textarea name="reason" class="form-control" rows="4" placeholder="<%=L(hi,"अपने लक्षण या परामर्श का कारण बताएं...","Describe your symptoms or reason for consultation...")%>" required></textarea>
                 </div>
                 <div class="col-12">
-                    <div class="note-box"><i class="fa fa-info-circle mt-1"></i><span>Your appointment request will be reviewed by the hospital staff. You will receive a confirmation once it's approved.</span></div>
+                    <div class="note-box"><i class="fa fa-info-circle mt-1"></i><span><%=L(hi,"आपके अपॉइंटमेंट अनुरोध की अस्पताल स्टाफ द्वारा समीक्षा की जाएगी। स्वीकृत होने पर आपको पुष्टि मिलेगी।","Your appointment request will be reviewed by the hospital staff. You will receive a confirmation once it's approved.")%></span></div>
                 </div>
             </div>
             <div style="display:flex;gap:12px;margin-top:24px;flex-wrap:wrap">
-                <button type="submit" class="btn-submit"><i class="fa fa-calendar-check"></i> Submit Request</button>
-                <a href="/HospitalManagement/patient/dashboard" class="btn-cancel-link"><i class="fa fa-arrow-left"></i> Cancel</a>
+                <button type="submit" class="btn-submit"><i class="fa fa-calendar-check"></i> <%=L(hi,"अनुरोध जमा करें","Submit Request")%></button>
+                <a href="/HospitalManagement/patient/dashboard" class="btn-cancel-link"><i class="fa fa-arrow-left"></i> <%=L(hi,"रद्द करें","Cancel")%></a>
             </div>
         </form>
     </div>
