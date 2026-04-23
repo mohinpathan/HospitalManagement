@@ -44,9 +44,13 @@
 <%!
     /**
      * Translation helper — call as L(hi, "English text", "हिंदी टेक्स्ट")
-     * 'hi' is the boolean from the scriptlet above
+     * Also available as t() — both work identically
      */
     public static String L(boolean isHindi, String en, String hiText) {
+        return isHindi ? hiText : en;
+    }
+    /** Alias for L() — some pages use t() */
+    public static String t(boolean isHindi, String en, String hiText) {
         return isHindi ? hiText : en;
     }
 %>

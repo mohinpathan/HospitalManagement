@@ -1,10 +1,10 @@
-﻿<%@ page language="java" contentType="text/html; charset=UTF-8"
+<%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Doctor Schedules</title>
+<title><%=L(hi,"डॉक्टर","Doctor")%> Schedules</title>
 
 
 <!-- Bootstrap + Icons -->
@@ -25,7 +25,7 @@ body {
     font-weight: 700;
 }
 
-/* ===== Doctor Card ===== */
+/* ===== <%=L(hi,"डॉक्टर","Doctor")%> Card ===== */
 .doc-card {
     background: white;
     border-radius: 14px;
@@ -79,11 +79,11 @@ body {
     <div class="content flex-grow-1">
 
         <div class="mb-4">
-            <h3 class="page-title">Doctor Schedules</h3>
-            <small>View availability schedules for all doctors</small>
+            <h3 class="page-title"><%=L(hi,"डॉक्टर","Doctor")%> Schedules</h3>
+            <small><%=L(hi,"देखें","View")%> availability schedules for all doctors</small>
         </div>
 
-        <!-- ================= Doctor 1 ================= -->
+        <!-- ================= <%=L(hi,"डॉक्टर","Doctor")%> 1 ================= -->
         <div class="doc-card">
 
             <div class="doc-name">Dr. Sarah Johnson</div>
@@ -127,7 +127,7 @@ body {
             </div>
         </div>
 
-        <!-- ================= Doctor 2 ================= -->
+        <!-- ================= <%=L(hi,"डॉक्टर","Doctor")%> 2 ================= -->
         <div class="doc-card">
 
             <div class="doc-name">Dr. Michael Chen</div>
@@ -160,7 +160,7 @@ body {
             </div>
         </div>
 
-        <!-- ================= Doctor 3 ================= -->
+        <!-- ================= <%=L(hi,"डॉक्टर","Doctor")%> 3 ================= -->
         <div class="doc-card">
 
             <div class="doc-name">Dr. Emily Davis</div>
