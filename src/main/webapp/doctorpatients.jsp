@@ -2,7 +2,7 @@
 <%@ include file="/WEB-INF/lang.jsp" %>
 <%@ page import="java.util.*" %>
 <!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>My Patients</title>
+<title><%=L(hi,"मेरे मरीज़","My <%=L(hi,"मरीज़","Patient")%>s")%></title>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
 <style>
@@ -38,7 +38,7 @@ body{background:#f0f4f8;margin:0;font-family:'Segoe UI',Arial,sans-serif}
 <div class="dash-main">
 
     <div class="page-hdr">
-        <h2><i class="fa fa-users me-2" style="color:#19b37a"></i>My Patients</h2>
+        <h2><i class="fa fa-users me-2" style="color:#19b37a"></i><%=L(hi,"मेरे मरीज़","My <%=L(hi,"मरीज़","Patient")%>s")%></h2>
         <p>All patients who have had appointments with you.</p>
     </div>
 
@@ -49,7 +49,7 @@ body{background:#f0f4f8;margin:0;font-family:'Segoe UI',Arial,sans-serif}
     <div class="empty-state">
         <i class="fa fa-users fa-3x mb-3" style="color:#e2e8f0;display:block"></i>
         <h4 style="font-size:18px;font-weight:700;color:#374151;margin-bottom:8px">No patients yet</h4>
-        <p>Patients will appear here after their appointments with you.</p>
+        <p><%=L(hi,"मरीज़","Patient")%>s will appear here after their appointments with you.</p>
     </div>
     <%}else{%>
     <div class="patient-grid">
@@ -68,13 +68,13 @@ body{background:#f0f4f8;margin:0;font-family:'Segoe UI',Arial,sans-serif}
             </div>
         </div>
         <div class="pat-info"><i class="fa fa-phone"></i> <%=p.get("phone")!=null?p.get("phone"):"—"%></div>
-        <div class="pat-info"><i class="fa fa-venus-mars"></i> <%=p.get("gender")!=null?p.get("gender"):"—"%> &nbsp;|&nbsp; Age: <%=p.get("age")!=null?p.get("age"):"—"%></div>
+        <div class="pat-info"><i class="fa fa-venus-mars"></i> <%=p.get("gender")!=null?p.get("gender"):"—"%> &nbsp;|&nbsp; <%=L(hi,"आयु","Age")%>: <%=p.get("age")!=null?p.get("age"):"—"%></div>
         <div class="pat-info"><i class="fa fa-tint" style="color:#ef4444"></i> <span class="blood-badge"><%=p.get("blood_group")!=null?p.get("blood_group"):"—"%></span></div>
         <div class="pat-stats">
             <div class="ps-item"><div class="ps-val"><%=visits%></div><div class="ps-label">Visits</div></div>
             <div class="ps-item"><div class="ps-val" style="font-size:12px;margin-top:4px"><%=p.get("last_visit")!=null?p.get("last_visit").toString().substring(0,10):"—"%></div><div class="ps-label">Last Visit</div></div>
         </div>
-        <a href="/HospitalManagement/doctor/patient/<%=p.get("id")%>" class="btn-view"><i class="fa fa-eye me-1"></i> View Patient</a>
+        <a href="/HospitalManagement/doctor/patient/<%=p.get("id")%>" class="btn-view"><i class="fa fa-eye me-1"></i> <%=L(hi,"देखें","View")%> <%=L(hi,"मरीज़","Patient")%></a>
     </div>
     <%}}%>
     </div>

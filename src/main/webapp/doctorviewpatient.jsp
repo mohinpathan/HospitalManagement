@@ -2,7 +2,7 @@
 <%@ include file="/WEB-INF/lang.jsp" %>
 <%@ page import="java.util.*, com.hospital.model.*" %>
 <!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Patient Details</title>
+<title><%=L(hi,"मरीज़","Patient")%> Details</title>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
 <style>
@@ -61,16 +61,16 @@ body{background:#f0f4f8;margin:0;font-family:'Segoe UI',Arial,sans-serif}
 <div class="dash-main">
 
     <div class="page-hdr">
-        <h2><i class="fa fa-user me-2" style="color:#19b37a"></i>Patient Details</h2>
+        <h2><i class="fa fa-user me-2" style="color:#19b37a"></i><%=L(hi,"मरीज़","Patient")%> Details</h2>
         <a href="/HospitalManagement/doctor/patients" class="btn-back"><i class="fa fa-arrow-left"></i> Back</a>
     </div>
 
     <% String s=(String)request.getAttribute("success"); if(s!=null){ %><div class="alert-success"><i class="fa fa-check-circle"></i> <%=s%></div><% } %>
 
     <%
-        Patient p=(Patient)request.getAttribute("patient");
+        <%=L(hi,"मरीज़","Patient")%> p=(<%=L(hi,"मरीज़","Patient")%>)request.getAttribute("patient");
         if(p==null){
-    %><div style="background:#fee2e2;color:#991b1b;border:1px solid #fecaca;border-radius:10px;padding:16px">Patient not found.</div><%
+    %><div style="background:#fee2e2;color:#991b1b;border:1px solid #fecaca;border-radius:10px;padding:16px"><%=L(hi,"मरीज़","Patient")%> not found.</div><%
     }else{
         List<?> appts=(List<?>)request.getAttribute("appointments");
         List<Map<String,Object>> reports=(List<Map<String,Object>>)request.getAttribute("reports");
@@ -87,23 +87,23 @@ body{background:#f0f4f8;margin:0;font-family:'Segoe UI',Arial,sans-serif}
                 <h4 style="font-weight:800;color:#0f172a;margin-bottom:4px"><%=p.getFullName()%></h4>
                 <p style="color:#64748b;font-size:13px;margin-bottom:12px"><%=p.getEmail()%></p>
                 <hr style="border-color:#f1f5f9;margin:12px 0">
-                <div class="info-row"><i class="fa fa-phone" style="color:#19b37a"></i> <%=p.getPhone()!=null?p.getPhone():"—"%></div>
-                <div class="info-row"><i class="fa fa-venus-mars" style="color:#7c3aed"></i> <%=p.getGender()!=null?p.getGender():"—"%></div>
-                <div class="info-row"><i class="fa fa-calendar" style="color:#f59e0b"></i> Age: <%=p.getAge()>0?p.getAge():"—"%></div>
+                <div class="info-row"><i class="fa fa-phone" style="color:#19b37a"></i> <%=p.get<%=L(hi,"फ़ोन","Phone")%>()!=null?p.get<%=L(hi,"फ़ोन","Phone")%>():"—"%></div>
+                <div class="info-row"><i class="fa fa-venus-mars" style="color:#7c3aed"></i> <%=p.get<%=L(hi,"लिंग","Gender")%>()!=null?p.get<%=L(hi,"लिंग","Gender")%>():"—"%></div>
+                <div class="info-row"><i class="fa fa-calendar" style="color:#f59e0b"></i> <%=L(hi,"आयु","Age")%>: <%=p.get<%=L(hi,"आयु","Age")%>()>0?p.get<%=L(hi,"आयु","Age")%>():"—"%></div>
                 <div class="info-row"><i class="fa fa-tint" style="color:#ef4444"></i> <span style="background:#fee2e2;color:#991b1b;padding:2px 8px;border-radius:20px;font-size:11px;font-weight:700"><%=p.getBloodGroup()!=null?p.getBloodGroup():"—"%></span></div>
-                <div class="info-row"><i class="fa fa-map-marker-alt" style="color:#64748b"></i> <span style="font-size:12px"><%=p.getAddress()!=null?p.getAddress():"—"%></span></div>
+                <div class="info-row"><i class="fa fa-map-marker-alt" style="color:#64748b"></i> <span style="font-size:12px"><%=p.get<%=L(hi,"पता","Address")%>()!=null?p.get<%=L(hi,"पता","Address")%>():"—"%></span></div>
             </div>
 
             <!-- Add Note -->
             <div class="upload-form">
-                <h5><i class="fa fa-sticky-note me-2" style="color:#2b7cff"></i>Add Private Note</h5>
+                <h5><i class="fa fa-sticky-note me-2" style="color:#2b7cff"></i><%=L(hi,"निजी नोट जोड़ें","Add Private Note")%></h5>
                 <form action="/HospitalManagement/doctor/patient/note" method="post">
                     <input type="hidden" name="patientId" value="<%=p.getId()%>">
                     <div class="mb-3">
                         <label class="form-label">Note</label>
                         <textarea name="note" class="form-control" rows="3" placeholder="Private note about this patient..." required></textarea>
                     </div>
-                    <button type="submit" class="btn-note w-100"><i class="fa fa-save"></i> Save Note</button>
+                    <button type="submit" class="btn-note w-100"><i class="fa fa-save"></i> <%=L(hi,"सहेजें","Save")%> Note</button>
                 </form>
             </div>
         </div>
@@ -113,7 +113,7 @@ body{background:#f0f4f8;margin:0;font-family:'Segoe UI',Arial,sans-serif}
 
             <!-- Upload Report -->
             <div class="upload-form">
-                <h5><i class="fa fa-upload me-2" style="color:#19b37a"></i>Upload Report / X-Ray</h5>
+                <h5><i class="fa fa-upload me-2" style="color:#19b37a"></i><%=L(hi,"रिपोर्ट / X-Ray अपलोड करें","Upload Report / X-Ray")%></h5>
                 <form action="/HospitalManagement/doctor/patient/uploadReport" method="post" enctype="multipart/form-data">
                     <input type="hidden" name="patientId" value="<%=p.getId()%>">
                     <div class="row g-3">
@@ -154,9 +154,9 @@ body{background:#f0f4f8;margin:0;font-family:'Segoe UI',Arial,sans-serif}
                 </form>
             </div>
 
-            <!-- Uploaded Reports -->
+            <!-- <%=L(hi,"अपलोड की गई रिपोर्ट","Uploaded Reports")%> -->
             <div class="panel">
-                <div class="ph"><span><i class="fa fa-folder-open me-2" style="color:#7c3aed"></i>Uploaded Reports</span></div>
+                <div class="ph"><span><i class="fa fa-folder-open me-2" style="color:#7c3aed"></i><%=L(hi,"अपलोड की गई रिपोर्ट","Uploaded Reports")%></span></div>
                 <%if(reports==null||reports.isEmpty()){%>
                 <div class="panel-empty">No reports uploaded yet.</div>
                 <%}else{for(Map<String,Object> r:reports){%>
@@ -177,22 +177,22 @@ body{background:#f0f4f8;margin:0;font-family:'Segoe UI',Arial,sans-serif}
                 <%}}%>
             </div>
 
-            <!-- Appointment History -->
+            <!-- <%=L(hi,"अपॉइंटमेंट इतिहास","Appointment History")%> -->
             <div class="panel">
-                <div class="ph"><span><i class="fa fa-calendar-check me-2" style="color:#2b7cff"></i>Appointment History</span></div>
+                <div class="ph"><span><i class="fa fa-calendar-check me-2" style="color:#2b7cff"></i><%=L(hi,"अपॉइंटमेंट इतिहास","Appointment History")%></span></div>
                 <%if(appts==null||appts.isEmpty()){%>
-                <div class="panel-empty">No appointments found.</div>
+                <div class="panel-empty"><%=L(hi,"कोई अपॉइंटमेंट नहीं मिला","No appointments found")%>.</div>
                 <%}else{%>
                 <div style="overflow-x:auto">
                 <table class="tbl">
-                    <thead><tr><th>Date</th><th>Time</th><th>Reason</th><th>Status</th></tr></thead>
+                    <thead><tr><th>Date</th><th>Time</th><th>Reason</th><th><%=L(hi,"स्थिति","Status")%></th></tr></thead>
                     <tbody>
                     <%for(Object obj:appts){com.hospital.model.Appointment a=(com.hospital.model.Appointment)obj;%>
                     <tr>
                         <td style="font-weight:600"><%=a.getAppointmentDate()%></td>
                         <td style="color:#64748b"><%=a.getAppointmentTime()%></td>
                         <td style="max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap"><%=a.getReason()%></td>
-                        <td><span class="badge badge-<%=a.getStatus()%>"><%=a.getStatus().toUpperCase()%></span></td>
+                        <td><span class="badge badge-<%=a.get<%=L(hi,"स्थिति","Status")%>()%>"><%=a.get<%=L(hi,"स्थिति","Status")%>().toUpperCase()%></span></td>
                     </tr>
                     <%}%>
                     </tbody>
@@ -203,7 +203,7 @@ body{background:#f0f4f8;margin:0;font-family:'Segoe UI',Arial,sans-serif}
 
             <!-- Private Notes -->
             <div class="panel">
-                <div class="ph"><span><i class="fa fa-sticky-note me-2" style="color:#f59e0b"></i>My Notes</span></div>
+                <div class="ph"><span><i class="fa fa-sticky-note me-2" style="color:#f59e0b"></i><%=L(hi,"मेरे नोट्स","My Notes")%></span></div>
                 <%if(notes==null||notes.isEmpty()){%>
                 <div class="panel-empty">No notes yet.</div>
                 <%}else{for(Map<String,Object> n:notes){%>

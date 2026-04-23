@@ -1,8 +1,8 @@
 ﻿<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ include file="/WEB-INF/lang.jsp" %>
-<%@ page import="com.hospital.model.Doctor" %>
+<%@ page import="com.hospital.model.<%=L(hi,"डॉक्टर","Doctor")%>" %>
 <!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Doctor Profile</title>
+<title><%=L(hi,"डॉक्टर","Doctor")%> Profile</title>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
 <style>
@@ -40,7 +40,7 @@ body{background:#f0f4f8;margin:0;font-family:'Segoe UI',Arial,sans-serif}
 <div class="dash-main">
 
     <div class="page-hdr">
-        <h2><i class="fa fa-user-md me-2" style="color:#19b37a"></i>My Profile</h2>
+        <h2><i class="fa fa-user-md me-2" style="color:#19b37a"></i><%=L(hi,"मेरी प्रोफ़ाइल","My Profile")%></h2>
         <p>Manage your professional information and account settings.</p>
     </div>
 
@@ -49,13 +49,13 @@ body{background:#f0f4f8;margin:0;font-family:'Segoe UI',Arial,sans-serif}
        if(e!=null){ %><div class="alert-danger"><i class="fa fa-exclamation-circle"></i> <%=e%></div><% } %>
 
     <%
-        Doctor d=(Doctor)request.getAttribute("doctor");
+        <%=L(hi,"डॉक्टर","Doctor")%> d=(<%=L(hi,"डॉक्टर","Doctor")%>)request.getAttribute("doctor");
         String name=d!=null?d.getFullName():"";
         String email=d!=null?d.getEmail():"";
-        String phone=d!=null?(d.getPhone()!=null?d.getPhone():""):"";
+        String phone=d!=null?(d.get<%=L(hi,"फ़ोन","Phone")%>()!=null?d.get<%=L(hi,"फ़ोन","Phone")%>():""):"";
         String spec=d!=null?(d.getSpecialization()!=null?d.getSpecialization():""):"";
-        String dept=d!=null?(d.getDepartmentName()!=null?d.getDepartmentName():""):"";
-        String addr=d!=null?(d.getAddress()!=null?d.getAddress():""):"";
+        String dept=d!=null?(d.get<%=L(hi,"विभाग","Department")%>Name()!=null?d.get<%=L(hi,"विभाग","Department")%>Name():""):"";
+        String addr=d!=null?(d.get<%=L(hi,"पता","Address")%>()!=null?d.get<%=L(hi,"पता","Address")%>():""):"";
         String qual=d!=null?(d.getQualification()!=null?d.getQualification():""):"";
         int exp=d!=null?d.getExperienceYrs():0;
         double fee=d!=null?d.getConsultationFee():0;
@@ -85,11 +85,11 @@ body{background:#f0f4f8;margin:0;font-family:'Segoe UI',Arial,sans-serif}
     <div class="row g-4">
         <div class="col-lg-7">
             <div class="form-card">
-                <div class="card-title"><i class="fa fa-user-edit"></i> Professional Information</div>
+                <div class="card-title"><i class="fa fa-user-edit"></i> <%=L(hi,"पेशेवर जानकारी","Professional Information")%></div>
                 <form action="/HospitalManagement/doctor/updateProfile" method="post">
                     <div class="row g-3">
                         <div class="col-md-6">
-                            <label class="form-label">Full Name *</label>
+                            <label class="form-label"><%=L(hi,"पूरा नाम","Full Name")%> *</label>
                             <div class="input-group"><span class="ig-icon"><i class="fa fa-user"></i></span><input type="text" name="name" class="form-control" value="<%=name%>" required></div>
                         </div>
                         <div class="col-md-6">
@@ -97,7 +97,7 @@ body{background:#f0f4f8;margin:0;font-family:'Segoe UI',Arial,sans-serif}
                             <div class="input-group"><span class="ig-icon"><i class="fa fa-envelope"></i></span><input type="email" class="form-control" value="<%=email%>" readonly></div>
                         </div>
                         <div class="col-md-6">
-                            <label class="form-label">Phone</label>
+                            <label class="form-label"><%=L(hi,"फ़ोन","Phone")%></label>
                             <div class="input-group"><span class="ig-icon"><i class="fa fa-phone"></i></span><input type="text" name="phone" class="form-control" value="<%=phone%>"></div>
                         </div>
                         <div class="col-md-6">
@@ -105,7 +105,7 @@ body{background:#f0f4f8;margin:0;font-family:'Segoe UI',Arial,sans-serif}
                             <input type="text" class="form-control" value="<%=spec%>" readonly>
                         </div>
                         <div class="col-md-6">
-                            <label class="form-label">Department (read-only)</label>
+                            <label class="form-label"><%=L(hi,"विभाग","Department")%> (read-only)</label>
                             <input type="text" class="form-control" value="<%=dept%>" readonly>
                         </div>
                         <div class="col-md-6">
@@ -113,12 +113,12 @@ body{background:#f0f4f8;margin:0;font-family:'Segoe UI',Arial,sans-serif}
                             <input type="text" class="form-control" value="<%=qual%>" readonly>
                         </div>
                         <div class="col-12">
-                            <label class="form-label">Address</label>
+                            <label class="form-label"><%=L(hi,"पता","Address")%></label>
                             <input type="text" name="address" class="form-control" value="<%=addr%>">
                         </div>
                     </div>
                     <div style="margin-top:20px">
-                        <button type="submit" class="btn-save"><i class="fa fa-save"></i> Save Changes</button>
+                        <button type="submit" class="btn-save"><i class="fa fa-save"></i> <%=L(hi,"बदलाव सहेजें","<%=L(hi,"सहेजें","Save")%> Changes")%></button>
                     </div>
                 </form>
             </div>
@@ -126,30 +126,30 @@ body{background:#f0f4f8;margin:0;font-family:'Segoe UI',Arial,sans-serif}
 
         <div class="col-lg-5">
             <div class="form-card">
-                <div class="card-title"><i class="fa fa-lock"></i> Change Password</div>
+                <div class="card-title"><i class="fa fa-lock"></i> <%=L(hi,"पासवर्ड बदलें","Change Password")%></div>
                 <form action="/HospitalManagement/doctor/changePassword" method="post">
                     <div class="mb-3">
-                        <label class="form-label">Current Password</label>
+                        <label class="form-label"><%=L(hi,"वर्तमान पासवर्ड","Current Password")%></label>
                         <div class="input-group"><span class="ig-icon"><i class="fa fa-lock"></i></span><input type="password" name="currentPass" class="form-control" required></div>
                     </div>
                     <div class="mb-3">
-                        <label class="form-label">New Password</label>
+                        <label class="form-label"><%=L(hi,"नया पासवर्ड","New Password")%></label>
                         <div class="input-group"><span class="ig-icon"><i class="fa fa-key"></i></span><input type="password" name="newPass" class="form-control" required minlength="6"></div>
                     </div>
                     <div class="mb-4">
-                        <label class="form-label">Confirm New Password</label>
+                        <label class="form-label">Confirm <%=L(hi,"नया पासवर्ड","New Password")%></label>
                         <div class="input-group"><span class="ig-icon"><i class="fa fa-key"></i></span><input type="password" name="confirmPass" class="form-control" required minlength="6"></div>
                     </div>
-                    <button type="submit" class="btn-save w-100"><i class="fa fa-shield-halved"></i> Update Password</button>
+                    <button type="submit" class="btn-save w-100"><i class="fa fa-shield-halved"></i> <%=L(hi,"पासवर्ड अपडेट करें","Update Password")%></button>
                 </form>
             </div>
 
             <div class="form-card">
-                <div class="card-title"><i class="fa fa-info-circle"></i> Professional Details</div>
+                <div class="card-title"><i class="fa fa-info-circle"></i> <%=L(hi,"पेशेवर विवरण","Professional Details")%></div>
                 <div style="font-size:14px;color:#374151">
                     <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid #f1f5f9"><span style="color:#64748b">Experience</span><strong><%=exp%> years</strong></div>
-                    <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid #f1f5f9"><span style="color:#64748b">Consultation Fee</span><strong style="color:#19b37a">₹<%=String.format("%.0f",fee)%></strong></div>
-                    <div style="display:flex;justify-content:space-between;padding:8px 0"><span style="color:#64748b">Status</span><span style="background:#d1fae5;color:#065f46;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:700">ACTIVE</span></div>
+                    <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid #f1f5f9"><span style="color:#64748b"><%=L(hi,"परामर्श शुल्क","Consultation Fee")%></span><strong style="color:#19b37a">₹<%=String.format("%.0f",fee)%></strong></div>
+                    <div style="display:flex;justify-content:space-between;padding:8px 0"><span style="color:#64748b"><%=L(hi,"स्थिति","Status")%></span><span style="background:#d1fae5;color:#065f46;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:700">ACTIVE</span></div>
                 </div>
             </div>
         </div>
