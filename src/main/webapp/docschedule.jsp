@@ -4,11 +4,13 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title><%=L(hi,"डॉक्टर","Doctor")%> Schedules</title>
+<title>Doctor Schedules</title>
 
 
 <!-- Bootstrap + Icons -->
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="/HospitalManagement/responsive.css">
+
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
 
 <style>
@@ -25,7 +27,7 @@ body {
     font-weight: 700;
 }
 
-/* ===== <%=L(hi,"डॉक्टर","Doctor")%> Card ===== */
+/* ===== Doctor Card ===== */
 .doc-card {
     background: white;
     border-radius: 14px;
@@ -79,11 +81,11 @@ body {
     <div class="content flex-grow-1">
 
         <div class="mb-4">
-            <h3 class="page-title"><%=L(hi,"डॉक्टर","Doctor")%> Schedules</h3>
-            <small><%=L(hi,"देखें","View")%> availability schedules for all doctors</small>
+            <h3 class="page-title">Doctor Schedules</h3>
+            <small>View availability schedules for all doctors</small>
         </div>
 
-        <!-- ================= <%=L(hi,"डॉक्टर","Doctor")%> 1 ================= -->
+        <!-- ================= Doctor 1 ================= -->
         <div class="doc-card">
 
             <div class="doc-name">Dr. Sarah Johnson</div>
@@ -127,7 +129,7 @@ body {
             </div>
         </div>
 
-        <!-- ================= <%=L(hi,"डॉक्टर","Doctor")%> 2 ================= -->
+        <!-- ================= Doctor 2 ================= -->
         <div class="doc-card">
 
             <div class="doc-name">Dr. Michael Chen</div>
@@ -160,7 +162,7 @@ body {
             </div>
         </div>
 
-        <!-- ================= <%=L(hi,"डॉक्टर","Doctor")%> 3 ================= -->
+        <!-- ================= Doctor 3 ================= -->
         <div class="doc-card">
 
             <div class="doc-name">Dr. Emily Davis</div>

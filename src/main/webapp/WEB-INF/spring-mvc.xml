@@ -19,10 +19,10 @@
     <task:annotation-driven />
 
     <!-- Static resources -->
-    <mvc:resources mapping="/static/**" location="/static/" />
-    <mvc:resources mapping="/uploads/**" location="/uploads/" />
-    <mvc:resources mapping="/*.css"      location="/" />
-    <mvc:resources mapping="/*.js"       location="/" />
+    <mvc:resources mapping="/static/**"      location="/static/" />
+    <mvc:resources mapping="/uploads/**"     location="/uploads/" />
+    <mvc:resources mapping="/*.css"          location="/" />
+    <mvc:resources mapping="/*.js"           location="/" />
 
     <!-- JSP View Resolver -->
     <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">

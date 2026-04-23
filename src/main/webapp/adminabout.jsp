@@ -210,7 +210,7 @@
         </div>
 
         <div class="facility-card">
-            <h3>Emergency <%=L(hi,"विभाग","Department")%></h3>
+            <h3>Emergency Department</h3>
             <p>Round-the-clock emergency care with rapid response team</p>
         </div>
 
@@ -220,7 +220,7 @@
         </div>
 
         <div class="facility-card">
-            <h3><%=L(hi,"मरीज़","Patient")%> Rooms</h3>
+            <h3>Patient Rooms</h3>
             <p>Comfortable private and semi-private rooms with modern amenities</p>
         </div>
 

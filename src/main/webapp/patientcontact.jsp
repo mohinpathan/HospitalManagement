@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ include file="/WEB-INF/lang.jsp" %>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -169,7 +169,7 @@
             <div class="info-item">
                 <div class="info-icon">📍</div>
                 <div>
-                    <b><%=L(hi,"पता","Address")%></b>
+                    <b>Address</b>
                     <p>123 Medical Center Drive<br>New York, NY 10001</p>
                 </div>
             </div>
@@ -177,7 +177,7 @@
             <div class="info-item">
                 <div class="info-icon">📞</div>
                 <div>
-                    <b><%=L(hi,"फ़ोन","Phone")%></b>
+                    <b>Phone</b>
                     <p>Emergency: +1 555 123 4567<br>Appointment: +1 555 987 6543</p>
                 </div>
             </div>
@@ -206,13 +206,13 @@
 
             <form action="ContactServlet" method="post">
 
-                <label><%=L(hi,"पूरा नाम","Full Name")%></label>
+                <label>Full Name</label>
                 <input type="text" name="name" required>
 
-                <label><%=L(hi,"ईमेल पता","Email <%=L(hi,"पता","Address")%>")%></label>
+                <label>Email Address</label>
                 <input type="email" name="email" required>
 
-                <label><%=L(hi,"फ़ोन","Phone")%> Number</label>
+                <label>Phone Number</label>
                 <input type="text" name="phone">
 
                 <label>Subject</label>

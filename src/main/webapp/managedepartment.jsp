@@ -1,9 +1,11 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ include file="/WEB-INF/lang.jsp" %>
+
 <%@ page import="java.util.*" %>
 <!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Manage <%=L(hi,"विभाग","<%=L(hi,"विभाग","Department")%>s")%></title>
+<title>Manage Departments</title>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="/HospitalManagement/responsive.css">
+
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
 <style>
 body{background:#f0f4f8;margin:0;font-family:'Segoe UI',Arial,sans-serif}
@@ -50,27 +52,27 @@ function toggleAddForm(){
 
     <div class="page-hdr">
         <div>
-            <h2><i class="fa fa-hospital me-2" style="color:#2b7cff"></i>Manage <%=L(hi,"विभाग","<%=L(hi,"विभाग","Department")%>s")%></h2>
+            <h2><i class="fa fa-hospital me-2" style="color:#2b7cff"></i>Manage Departments</h2>
             <p>Organize hospital departments and their information.</p>
         </div>
-        <button class="btn-add" onclick="toggleAddForm()"><i class="fa fa-plus"></i> Add <%=L(hi,"विभाग","Department")%></button>
+        <button class="btn-add" onclick="toggleAddForm()"><i class="fa fa-plus"></i> Add Department</button>
     </div>
 
     <% String s=(String)request.getAttribute("success"); if(s!=null){ %><div class="alert-success"><i class="fa fa-check-circle"></i> <%=s%></div><% } %>
 
     <!-- Add Form -->
     <div class="add-form-card" id="addForm">
-        <h5 style="font-weight:800;color:#0f172a;margin-bottom:16px">New <%=L(hi,"विभाग","Department")%></h5>
+        <h5 style="font-weight:800;color:#0f172a;margin-bottom:16px">New Department</h5>
         <form action="/HospitalManagement/admin/departments/add" method="post">
             <div class="row g-3">
-                <div class="col-md-4"><label class="form-label"><%=L(hi,"विभाग","Department")%> Name *</label><input type="text" name="name" class="form-control" placeholder="e.g. Cardiology" required></div>
+                <div class="col-md-4"><label class="form-label">Department Name *</label><input type="text" name="name" class="form-control" placeholder="e.g. Cardiology" required></div>
                 <div class="col-md-6"><label class="form-label">Description</label><input type="text" name="description" class="form-control" placeholder="Brief description"></div>
-                <div class="col-md-2 d-flex align-items-end"><button type="submit" class="btn-save w-100"><i class="fa fa-save"></i> <%=L(hi,"सहेजें","Save")%></button></div>
+                <div class="col-md-2 d-flex align-items-end"><button type="submit" class="btn-save w-100"><i class="fa fa-save"></i> Save</button></div>
             </div>
         </form>
     </div>
 
-    <!-- <%=L(hi,"विभाग","Department")%> Cards -->
+    <!-- Department Cards -->
     <div class="dept-grid">
     <%
         List<Map<String,Object>> depts=(List<Map<String,Object>>)request.getAttribute("departments");
@@ -80,11 +82,11 @@ function toggleAddForm(){
             String icon=icons[iconIdx%icons.length]; iconIdx++;
     %>
     <div class="dept-card">
-        <a href="/HospitalManagement/admin/departments/delete?id=<%=dept.get("id")%>" class="btn-del" onclick="return confirm('<%=L(hi,"हटाएं","Delete")%> this department?')"><i class="fa fa-trash"></i></a>
+        <a href="/HospitalManagement/admin/departments/delete?id=<%=dept.get("id")%>" class="btn-del" onclick="return confirm('Delete this department?')"><i class="fa fa-trash"></i></a>
         <div class="dept-icon"><i class="fa <%=icon%>"></i></div>
         <h5><%=dept.get("name")%></h5>
         <p><%=dept.get("description")!=null&&!dept.get("description").toString().isEmpty()?dept.get("description"):"No description provided"%></p>
-        <div class="doc-count"><i class="fa fa-user-md"></i> <%=dept.get("doctor_count")%> <%=L(hi,"डॉक्टर","Doctor")%>s</div>
+        <div class="doc-count"><i class="fa fa-user-md"></i> <%=dept.get("doctor_count")%> Doctors</div>
     </div>
     <% } %>
     </div>

@@ -1,9 +1,11 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ include file="/WEB-INF/lang.jsp" %>
+
 <%@ page import="java.util.*, com.hospital.model.*" %>
 <!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Doctor <%=L(hi,"डैशबोर्ड","Dashboard")%></title>
+<title>Doctor Dashboard</title>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="/HospitalManagement/responsive.css">
+
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
 <style>
 body{background:#f0f4f8;margin:0;font-family:'Segoe UI',Arial,sans-serif}
@@ -74,12 +76,12 @@ body{background:#f0f4f8;margin:0;font-family:'Segoe UI',Arial,sans-serif}
 <%
     Doctor doc = (Doctor) request.getAttribute("doctor");
     String dname = doc!=null?doc.getFullName():(String)session.getAttribute("doctorName");
-    String ddept = doc!=null&&doc.get<%=L(hi,"विभाग","Department")%>Name()!=null?doc.get<%=L(hi,"विभाग","Department")%>Name():(String)session.getAttribute("doctorDept");
+    String ddept = doc!=null&&doc.getDepartmentName()!=null?doc.getDepartmentName():(String)session.getAttribute("doctorDept");
     String dspec = doc!=null&&doc.getSpecialization()!=null?doc.getSpecialization():"";
     double dfee  = doc!=null?doc.getConsultationFee():0;
     int dexp     = doc!=null?doc.getExperienceYrs():0;
     double earnings = request.getAttribute("monthlyEarnings")!=null?((Number)request.getAttribute("monthlyEarnings")).doubleValue():0;
-    int uniquePats  = request.getAttribute("unique<%=L(hi,"मरीज़","Patient")%>s")!=null?((Number)request.getAttribute("unique<%=L(hi,"मरीज़","Patient")%>s")).intValue():0;
+    int uniquePats  = request.getAttribute("uniquePatients")!=null?((Number)request.getAttribute("uniquePatients")).intValue():0;
 %>
 
 <!-- Welcome Banner -->
@@ -105,7 +107,7 @@ body{background:#f0f4f8;margin:0;font-family:'Segoe UI',Arial,sans-serif}
 <!-- Stats -->
 <div class="stats-grid">
     <div class="scard">
-        <div><div class="label"><%=L(hi,"कुल अपॉइंटमेंट","Total <%=L(hi,"अपॉइंटमेंट","Appointments")%>")%></div><div class="value">${totalAppts}</div></div>
+        <div><div class="label">Total Appointments</div><div class="value">${totalAppts}</div></div>
         <div class="scard-icon ic-blue"><i class="fa fa-calendar"></i></div>
     </div>
     <div class="scard">
@@ -126,20 +128,20 @@ body{background:#f0f4f8;margin:0;font-family:'Segoe UI',Arial,sans-serif}
     </div>
 </div>
 
-<!-- Today's <%=L(hi,"अपॉइंटमेंट","Appointments")%> -->
+<!-- Today's Appointments -->
 <div class="today-panel">
     <div class="ph">
-        <span><i class="fa fa-sun me-2" style="color:#f59e0b"></i>Today's <%=L(hi,"अपॉइंटमेंट","Appointments")%></span>
-        <a href="/HospitalManagement/doctor/appointments"><%=L(hi,"सभी देखें","<%=L(hi,"देखें","View")%> All")%> →</a>
+        <span><i class="fa fa-sun me-2" style="color:#f59e0b"></i>Today's Appointments</span>
+        <a href="/HospitalManagement/doctor/appointments">View All →</a>
     </div>
     <%
         List<?> todayList=(List<?>)request.getAttribute("todayList");
         if(todayList==null||todayList.isEmpty()){
     %><div class="panel-empty"><i class="fa fa-calendar-day fa-2x mb-3" style="color:#e2e8f0;display:block"></i>No appointments scheduled for today.</div><%
-    }else{for(Object obj:todayList){Appointment a=(Appointment)obj;String st=a.get<%=L(hi,"स्थिति","Status")%>();%>
+    }else{for(Object obj:todayList){Appointment a=(Appointment)obj;String st=a.getStatus();%>
     <div class="today-item">
         <div>
-            <div class="t-patient"><%=a.get<%=L(hi,"मरीज़","Patient")%>Name()%></div>
+            <div class="t-patient"><%=a.getPatientName()%></div>
             <div class="t-meta"><i class="fa fa-clock fa-xs me-1"></i><%=a.getAppointmentTime()%> &nbsp;|&nbsp; <%=a.getReason()%></div>
         </div>
         <div style="display:flex;align-items:center;gap:10px">
@@ -152,26 +154,26 @@ body{background:#f0f4f8;margin:0;font-family:'Segoe UI',Arial,sans-serif}
     <%}}%>
 </div>
 
-<!-- All <%=L(hi,"अपॉइंटमेंट","Appointments")%> Table -->
+<!-- All Appointments Table -->
 <div class="table-panel">
     <div class="ph">
-        All <%=L(hi,"अपॉइंटमेंट","Appointments")%>
+        All Appointments
         <a href="/HospitalManagement/doctor/appointments">Full List →</a>
     </div>
     <%
         List<?> appts=(List<?>)request.getAttribute("appointments");
         if(appts==null||appts.isEmpty()){
-    %><div class="panel-empty"><%=L(hi,"कोई अपॉइंटमेंट नहीं मिला","No appointments found")%>.</div><%
+    %><div class="panel-empty">No appointments found.</div><%
     }else{%>
     <div style="overflow-x:auto">
     <table class="tbl">
-        <thead><tr><th>#</th><th><%=L(hi,"मरीज़","Patient")%></th><th>Date</th><th>Time</th><th>Reason</th><th><%=L(hi,"स्थिति","Status")%></th><th>Action</th></tr></thead>
+        <thead><tr><th>#</th><th>Patient</th><th>Date</th><th>Time</th><th>Reason</th><th>Status</th><th>Action</th></tr></thead>
         <tbody>
-        <%int idx=1;for(Object obj:appts){if(idx>8)break;Appointment a=(Appointment)obj;String st=a.get<%=L(hi,"स्थिति","Status")%>();
+        <%int idx=1;for(Object obj:appts){if(idx>8)break;Appointment a=(Appointment)obj;String st=a.getStatus();
           String cls="approved".equals(st)?"badge-approved":"completed".equals(st)?"badge-completed":"cancelled".equals(st)||"rejected".equals(st)?"badge-cancelled":"badge-pending";%>
         <tr>
             <td style="color:#94a3b8;font-size:12px"><%=idx++%></td>
-            <td><strong><%=a.get<%=L(hi,"मरीज़","Patient")%>Name()%></strong></td>
+            <td><strong><%=a.getPatientName()%></strong></td>
             <td><%=a.getAppointmentDate()%></td>
             <td style="color:#64748b"><%=a.getAppointmentTime()%></td>
             <td style="max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap"><%=a.getReason()%></td>

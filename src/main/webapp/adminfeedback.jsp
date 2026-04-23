@@ -1,9 +1,11 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ include file="/WEB-INF/lang.jsp" %>
+
 <%@ page import="java.util.*" %>
 <!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Feedback Messages</title>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="/HospitalManagement/responsive.css">
+
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
 <style>
 body{background:#f0f4f8;margin:0;font-family:'Segoe UI',Arial,sans-serif}
@@ -30,7 +32,7 @@ body{background:#f0f4f8;margin:0;font-family:'Segoe UI',Arial,sans-serif}
 <div class="dash-main">
 
     <div class="page-hdr">
-        <h2><i class="fa fa-comments me-2" style="color:#2b7cff"></i><%=L(hi,"फ़ीडबैक और संदेश","Feedback & Messages")%></h2>
+        <h2><i class="fa fa-comments me-2" style="color:#2b7cff"></i>Feedback & Messages</h2>
         <p>Messages received from patients and visitors.</p>
     </div>
 
@@ -47,7 +49,7 @@ body{background:#f0f4f8;margin:0;font-family:'Segoe UI',Arial,sans-serif}
     </div>
     <%}else{for(Map<String,Object> fb:feedbacks){%>
     <div class="fb-card">
-        <a href="/HospitalManagement/admin/feedback/delete/<%=fb.get("id")%>" class="btn-del" onclick="return confirm('<%=L(hi,"हटाएं","Delete")%> this message?')"><i class="fa fa-trash"></i></a>
+        <a href="/HospitalManagement/admin/feedback/delete/<%=fb.get("id")%>" class="btn-del" onclick="return confirm('Delete this message?')"><i class="fa fa-trash"></i></a>
         <div class="fb-name"><%=fb.get("name")!=null?fb.get("name"):"Anonymous"%></div>
         <div class="fb-email"><i class="fa fa-envelope fa-xs me-1"></i><%=fb.get("email")!=null?fb.get("email"):"—"%></div>
         <div class="fb-subject"><%=fb.get("subject")!=null?fb.get("subject"):"No Subject"%></div>

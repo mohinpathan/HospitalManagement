@@ -1,0 +1,149 @@
+/* ============================================================
+   GLOBAL RESPONSIVE CSS — HealthCare Connect
+   ============================================================ */
+
+/* ── Base ─────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; }
+body { font-family: 'Segoe UI', Arial, sans-serif; }
+img { max-width: 100%; height: auto; }
+a { text-decoration: none; }
+
+/* ── Dashboard Layout ─────────────────────────────────────── */
+.dash-body { display: flex; min-height: calc(100vh - 62px); }
+.dash-main  { flex: 1; padding: 24px 28px; overflow-y: auto; min-width: 0; }
+
+/* ── Tables ───────────────────────────────────────────────── */
+.table-responsive-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+.tbl { width: 100%; border-collapse: collapse; min-width: 500px; }
+
+/* ── Cards ────────────────────────────────────────────────── */
+.stats-grid  { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 20px; }
+.quick-grid  { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 20px; }
+.two-col     { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-bottom: 20px; }
+.three-col   { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 18px; margin-bottom: 20px; }
+.action-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+
+/* ── Tablet (≤ 1200px) ────────────────────────────────────── */
+@media (max-width: 1200px) {
+    .stats-grid  { grid-template-columns: repeat(2, 1fr); }
+    .quick-grid  { grid-template-columns: repeat(2, 1fr); }
+    .three-col   { grid-template-columns: 1fr 1fr; }
+}
+
+/* ── Tablet (≤ 992px) ─────────────────────────────────────── */
+@media (max-width: 992px) {
+    .dash-main { padding: 18px 20px; }
+    .two-col   { grid-template-columns: 1fr; }
+    .three-col { grid-template-columns: 1fr; }
+
+    /* Public navbar */
+    .pub-nav { padding: 0 20px; height: auto; padding: 12px 20px; flex-wrap: wrap; gap: 8px; }
+    .pub-nav .nav-links { flex-wrap: wrap; gap: 4px; }
+
+    /* Role header */
+    .role-nav { padding: 0 16px; height: auto; padding: 10px 16px; flex-wrap: wrap; gap: 8px; }
+    .role-nav .nav-right { flex-wrap: wrap; gap: 4px; }
+    .role-nav .user-chip { display: none; }
+}
+
+/* ── Mobile (≤ 768px) ─────────────────────────────────────── */
+@media (max-width: 768px) {
+    /* Hide sidebar on mobile */
+    .adm-sidebar, .pat-sidebar, .doc-sidebar { display: none; }
+    .dash-main { padding: 14px 16px; }
+
+    /* Stats */
+    .stats-grid  { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+    .quick-grid  { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+    .action-grid { grid-template-columns: 1fr; }
+
+    /* Welcome banners */
+    .welcome-banner, .welcome-bar { flex-direction: column; text-align: center; padding: 20px; }
+    .welcome-banner h2, .welcome-bar h2 { font-size: 18px; }
+
+    /* Cards */
+    .scard .value { font-size: 24px; }
+    .scard-icon   { width: 40px; height: 40px; font-size: 16px; }
+
+    /* Forms */
+    .form-card { padding: 18px; }
+    .row.g-3 > [class*="col-md"] { width: 100%; }
+
+    /* Tables */
+    .tbl thead th, .tbl tbody td { padding: 10px 12px; font-size: 12px; }
+
+    /* Profile pages */
+    .profile-hero { flex-direction: column; text-align: center; }
+
+    /* Buttons */
+    .btn-back, .btn-add, .btn-save, .btn-green { width: 100%; justify-content: center; }
+
+    /* Next appt card */
+    .next-appt-card { flex-direction: column; }
+
+    /* Doctor patient grid */
+    .patient-grid { grid-template-columns: 1fr; }
+    .doc-grid     { grid-template-columns: 1fr; }
+
+    /* Bill summary */
+    .bill-summary { flex-direction: column; }
+    .bill-summary .bs-amount { font-size: 32px; }
+
+    /* Payment method tabs */
+    .method-tabs { grid-template-columns: repeat(2, 1fr); display: grid; }
+
+    /* Footer */
+    .site-footer .f-grid { grid-template-columns: 1fr; padding: 0 16px 24px; }
+}
+
+/* ── Small Mobile (≤ 480px) ───────────────────────────────── */
+@media (max-width: 480px) {
+    .stats-grid { grid-template-columns: 1fr 1fr; gap: 10px; }
+    .quick-grid { grid-template-columns: 1fr 1fr; gap: 8px; }
+    .scard { padding: 14px; }
+    .scard .value { font-size: 22px; }
+    .qcard { padding: 14px 10px; }
+    .qcard .qc-icon { width: 36px; height: 36px; font-size: 15px; }
+    .pub-nav .nav-links .btn-reg { padding: 7px 12px !important; font-size: 13px; }
+    .dash-main { padding: 12px; }
+}
+
+/* ── Mobile Hamburger Menu ────────────────────────────────── */
+.mobile-menu-btn {
+    display: none;
+    background: none;
+    border: none;
+    font-size: 22px;
+    color: #374151;
+    cursor: pointer;
+    padding: 4px 8px;
+    border-radius: 8px;
+}
+.mobile-menu-btn:hover { background: #f1f5f9; }
+
+@media (max-width: 768px) {
+    .mobile-menu-btn { display: flex; align-items: center; }
+
+    /* Slide-in sidebar overlay */
+    .sidebar-overlay {
+        display: none;
+        position: fixed;
+        inset: 0;
+        background: rgba(0,0,0,.4);
+        z-index: 999;
+    }
+    .sidebar-overlay.open { display: block; }
+
+    .adm-sidebar.mobile-open,
+    .pat-sidebar.mobile-open,
+    .doc-sidebar.mobile-open {
+        display: flex !important;
+        flex-direction: column;
+        position: fixed;
+        top: 0; left: 0;
+        height: 100vh;
+        z-index: 1000;
+        box-shadow: 4px 0 20px rgba(0,0,0,.2);
+        overflow-y: auto;
+    }
+}

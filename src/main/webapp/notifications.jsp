@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ include file="/WEB-INF/lang.jsp" %>
+
 <%@ page import="java.util.*" %>
 <%
     String role = (String) session.getAttribute("role");
@@ -7,8 +7,10 @@
     String sidebar = "patient".equals(role) ? "/patientsidebar.jsp" : "doctor".equals(role) ? "/doctorsidebar.jsp" : "/adminsidebar.jsp";
 %>
 <!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title><%=L(hi,"सूचनाएं","Notifications")%></title>
+<title>Notifications</title>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="/HospitalManagement/responsive.css">
+
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
 <style>
 body{background:#f0f4f8;margin:0;font-family:'Segoe UI',Arial,sans-serif}
@@ -37,7 +39,7 @@ body{background:#f0f4f8;margin:0;font-family:'Segoe UI',Arial,sans-serif}
 <jsp:include page="<%=sidebar%>" />
 <div class="dash-main">
     <div class="page-hdr">
-        <h2><i class="fa fa-bell me-2" style="color:#f59e0b"></i><%=L(hi,"सूचनाएं","Notifications")%></h2>
+        <h2><i class="fa fa-bell me-2" style="color:#f59e0b"></i>Notifications</h2>
         <p>All your recent notifications.</p>
     </div>
     <%
@@ -47,8 +49,8 @@ body{background:#f0f4f8;margin:0;font-family:'Segoe UI',Arial,sans-serif}
     <div class="notif-card">
         <div class="empty-state">
             <i class="fa fa-bell-slash"></i>
-            <h4 style="font-size:18px;font-weight:700;color:#374151;margin-bottom:8px"><%=L(hi,"कोई सूचना नहीं","No notifications")%></h4>
-            <p><%=L(hi,"सब कुछ अपडेट है!","You're all caught up!")%></p>
+            <h4 style="font-size:18px;font-weight:700;color:#374151;margin-bottom:8px">No notifications</h4>
+            <p>You're all caught up!</p>
         </div>
     </div>
     <%}else{%>

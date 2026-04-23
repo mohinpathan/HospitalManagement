@@ -1,9 +1,11 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ include file="/WEB-INF/lang.jsp" %>
+
 <%@ page import="java.util.*, com.hospital.model.*" %>
 <!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>My <%=L(hi,"अपॉइंटमेंट","Appointments")%></title>
+<title>My Appointments</title>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="/HospitalManagement/responsive.css">
+
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
 <style>
 body{background:#f0f4f8;margin:0;font-family:'Segoe UI',Arial,sans-serif}
@@ -39,7 +41,7 @@ body{background:#f0f4f8;margin:0;font-family:'Segoe UI',Arial,sans-serif}
 <div class="dash-main">
 
     <div class="page-hdr">
-        <h2><i class="fa fa-calendar-check me-2" style="color:#19b37a"></i>My <%=L(hi,"अपॉइंटमेंट","Appointments")%></h2>
+        <h2><i class="fa fa-calendar-check me-2" style="color:#19b37a"></i>My Appointments</h2>
         <p>Manage your scheduled appointments and write prescriptions.</p>
     </div>
 
@@ -52,7 +54,7 @@ body{background:#f0f4f8;margin:0;font-family:'Segoe UI',Arial,sans-serif}
     <div class="table-card">
         <div class="empty-state">
             <i class="fa fa-calendar-xmark"></i>
-            <h4><%=L(hi,"कोई अपॉइंटमेंट नहीं मिला","No appointments found")%></h4>
+            <h4>No appointments found</h4>
             <p>Your appointments will appear here once patients book with you.</p>
         </div>
     </div>
@@ -60,20 +62,20 @@ body{background:#f0f4f8;margin:0;font-family:'Segoe UI',Arial,sans-serif}
     <div class="table-card">
         <div style="overflow-x:auto">
         <table class="tbl">
-            <thead><tr><th>#</th><th><%=L(hi,"मरीज़","Patient")%></th><th><%=L(hi,"विभाग","Department")%></th><th>Date</th><th>Time</th><th>Reason</th><th><%=L(hi,"स्थिति","Status")%></th><th>Action</th></tr></thead>
+            <thead><tr><th>#</th><th>Patient</th><th>Department</th><th>Date</th><th>Time</th><th>Reason</th><th>Status</th><th>Action</th></tr></thead>
             <tbody>
-            <% int idx=1; for(Object obj:appts){ Appointment a=(Appointment)obj; String st=a.get<%=L(hi,"स्थिति","Status")%>(); %>
+            <% int idx=1; for(Object obj:appts){ Appointment a=(Appointment)obj; String st=a.getStatus(); %>
             <tr>
                 <td style="color:#94a3b8;font-size:12px"><%=idx++%></td>
-                <td><strong style="color:#0f172a"><%=a.get<%=L(hi,"मरीज़","Patient")%>Name()%></strong></td>
-                <td><span style="background:#d1fae5;color:#065f46;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:700"><%=a.get<%=L(hi,"विभाग","Department")%>Name()!=null?a.get<%=L(hi,"विभाग","Department")%>Name():"—"%></span></td>
+                <td><strong style="color:#0f172a"><%=a.getPatientName()%></strong></td>
+                <td><span style="background:#d1fae5;color:#065f46;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:700"><%=a.getDepartmentName()!=null?a.getDepartmentName():"—"%></span></td>
                 <td style="font-weight:600"><%=a.getAppointmentDate()%></td>
                 <td style="color:#64748b"><%=a.getAppointmentTime()%></td>
                 <td style="max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap"><%=a.getReason()%></td>
                 <td><span class="badge badge-<%=st%>"><%=st.toUpperCase()%></span></td>
                 <td>
                     <% if("approved".equals(st)){ %>
-                    <a href="/HospitalManagement/doctor/prescription/<%=a.getId()%>" class="btn-prescribe"><i class="fa fa-file-prescription"></i> <%=L(hi,"पर्चा लिखें","Write Prescription")%></a>
+                    <a href="/HospitalManagement/doctor/prescription/<%=a.getId()%>" class="btn-prescribe"><i class="fa fa-file-prescription"></i> Write Prescription</a>
                     <% }else{ %><span style="color:#94a3b8;font-size:12px">—</span><% } %>
                 </td>
             </tr>

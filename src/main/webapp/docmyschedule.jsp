@@ -1,9 +1,11 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ include file="/WEB-INF/lang.jsp" %>
+
 <%@ page import="java.util.*" %>
 <!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title><%=L(hi,"मेरा शेड्यूल","My Schedule")%></title>
+<title>My Schedule</title>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="/HospitalManagement/responsive.css">
+
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
 <style>
 body{background:#f0f4f8;margin:0;font-family:'Segoe UI',Arial,sans-serif}
@@ -33,7 +35,7 @@ body{background:#f0f4f8;margin:0;font-family:'Segoe UI',Arial,sans-serif}
 <div class="dash-main">
 
     <div class="page-hdr">
-        <h2><i class="fa fa-clock me-2" style="color:#19b37a"></i><%=L(hi,"मेरा शेड्यूल","My Schedule")%></h2>
+        <h2><i class="fa fa-clock me-2" style="color:#19b37a"></i>My Schedule</h2>
         <p>Set your available days and times for patient appointments.</p>
     </div>
 
@@ -41,11 +43,11 @@ body{background:#f0f4f8;margin:0;font-family:'Segoe UI',Arial,sans-serif}
 
     <!-- Add Schedule Form -->
     <div class="form-card">
-        <h5 style="font-weight:700;color:#0f172a;margin-bottom:16px"><%=L(hi,"उपलब्धता जोड़ें","Add Availability")%></h5>
+        <h5 style="font-weight:700;color:#0f172a;margin-bottom:16px">Add Availability</h5>
         <form action="/HospitalManagement/doctor/schedule/save" method="post">
             <div class="row g-3">
                 <div class="col-md-4">
-                    <label class="form-label"><%=L(hi,"सप्ताह का दिन","Day of Week")%> *</label>
+                    <label class="form-label">Day of Week *</label>
                     <select name="dayOfWeek" class="form-select" required>
                         <option value="">Select Day</option>
                         <% String[] days={"Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"};
@@ -53,11 +55,11 @@ body{background:#f0f4f8;margin:0;font-family:'Segoe UI',Arial,sans-serif}
                     </select>
                 </div>
                 <div class="col-md-3">
-                    <label class="form-label"><%=L(hi,"शुरुआत का समय","Start Time")%> *</label>
+                    <label class="form-label">Start Time *</label>
                     <input type="time" name="startTime" class="form-control" required>
                 </div>
                 <div class="col-md-3">
-                    <label class="form-label"><%=L(hi,"समाप्ति का समय","End Time")%> *</label>
+                    <label class="form-label">End Time *</label>
                     <input type="time" name="endTime" class="form-control" required>
                 </div>
                 <div class="col-md-2 d-flex align-items-end">
@@ -67,15 +69,15 @@ body{background:#f0f4f8;margin:0;font-family:'Segoe UI',Arial,sans-serif}
         </form>
     </div>
 
-    <!-- <%=L(hi,"वर्तमान शेड्यूल","Current Schedule")%> -->
-    <h5 style="font-weight:700;color:#0f172a;margin-bottom:14px"><%=L(hi,"वर्तमान शेड्यूल","Current Schedule")%></h5>
+    <!-- Current Schedule -->
+    <h5 style="font-weight:700;color:#0f172a;margin-bottom:14px">Current Schedule</h5>
     <%
         List<Map<String,Object>> schedules=(List<Map<String,Object>>)request.getAttribute("schedules");
         if(schedules==null||schedules.isEmpty()){
     %>
     <div style="background:#fff;border-radius:14px;padding:40px;text-align:center;color:#94a3b8;box-shadow:0 2px 12px rgba(0,0,0,.06)">
         <i class="fa fa-calendar-xmark fa-2x mb-3" style="color:#e2e8f0;display:block"></i>
-        <%=L(hi,"अभी तक कोई शेड्यूल नहीं","No schedule set yet")%>. Add your availability above.
+        No schedule set yet. Add your availability above.
     </div>
     <%}else{%>
     <div class="schedule-grid">

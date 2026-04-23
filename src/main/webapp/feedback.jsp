@@ -4,11 +4,13 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title><%=L(hi,"मरीज़","Patient")%> Feedback</title>
+<title>Patient Feedback</title>
 
 
 <!-- Bootstrap + Icons -->
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="/HospitalManagement/responsive.css">
+
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
 
 <style>
@@ -112,7 +114,7 @@ function setRating(n){
     <div class="content flex-grow-1">
 
         <div class="mb-4">
-            <h3 class="page-title"><%=L(hi,"मरीज़","Patient")%> Feedback</h3>
+            <h3 class="page-title">Patient Feedback</h3>
             <small class="text-muted">
                 Help us improve our services by sharing your experience
             </small>
@@ -139,7 +141,7 @@ function setRating(n){
                     <label class="form-label">Feedback Category *</label>
                     <select name="category" class="form-select" required>
                         <option value="">Select Category</option>
-                        <option><%=L(hi,"डॉक्टर","Doctor")%></option>
+                        <option>Doctor</option>
                         <option>Staff</option>
                         <option>Facilities</option>
                         <option>Appointment Process</option>
@@ -171,10 +173,10 @@ function setRating(n){
                     Your feedback is valuable to us and will help improve our healthcare services.
                 </div>
 
-                <!-- <%=L(hi,"जमा करें","Submit")%> -->
+                <!-- Submit -->
                 <button type="submit" class="btn btn-purple w-100">
                     <i class="fa fa-paper-plane"></i>
-                    <%=L(hi,"जमा करें","Submit")%> Feedback
+                    Submit Feedback
                 </button>
 
             </form>

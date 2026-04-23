@@ -1,9 +1,11 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ include file="/WEB-INF/lang.jsp" %>
+
 <%@ page import="java.util.*, com.hospital.model.*" %>
 <!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Manage <%=L(hi,"अपॉइंटमेंट","Appointments")%></title>
+<title>Manage Appointments</title>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="/HospitalManagement/responsive.css">
+
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
 <style>
 body{background:#f0f4f8;margin:0;font-family:'Segoe UI',Arial,sans-serif}
@@ -43,8 +45,8 @@ body{background:#f0f4f8;margin:0;font-family:'Segoe UI',Arial,sans-serif}
 <div class="dash-main">
 
     <div class="page-hdr">
-        <h2><i class="fa fa-calendar-check me-2" style="color:#7c3aed"></i>Manage <%=L(hi,"अपॉइंटमेंट","Appointments")%></h2>
-        <p><%=L(hi,"स्वीकृत करें","Approve")%>, reject or delete appointment requests.</p>
+        <h2><i class="fa fa-calendar-check me-2" style="color:#7c3aed"></i>Manage Appointments</h2>
+        <p>Approve, reject or delete appointment requests.</p>
     </div>
 
     <% String s=(String)request.getAttribute("success"); if(s!=null){ %><div class="alert-success"><i class="fa fa-check-circle"></i> <%=s%></div><% } %>
@@ -52,18 +54,18 @@ body{background:#f0f4f8;margin:0;font-family:'Segoe UI',Arial,sans-serif}
     <div class="table-card">
         <div style="overflow-x:auto">
         <table class="tbl">
-            <thead><tr><th>#</th><th><%=L(hi,"मरीज़","Patient")%></th><th><%=L(hi,"डॉक्टर","Doctor")%></th><th><%=L(hi,"विभाग","Department")%></th><th>Date & Time</th><th>Reason</th><th><%=L(hi,"स्थिति","Status")%></th><th><%=L(hi,"कार्रवाई","Actions")%></th></tr></thead>
+            <thead><tr><th>#</th><th>Patient</th><th>Doctor</th><th>Department</th><th>Date & Time</th><th>Reason</th><th>Status</th><th>Actions</th></tr></thead>
             <tbody>
             <%
                 List<?> appts=(List<?>)request.getAttribute("appointments");
                 if(appts==null||appts.isEmpty()){
-            %><tr><td colspan="8"><div class="empty-state"><i class="fa fa-calendar"></i><p><%=L(hi,"कोई अपॉइंटमेंट नहीं मिला","No appointments found")%>.</p></div></td></tr><%
-            }else{ int idx=1; for(Object obj:appts){ Appointment a=(Appointment)obj; String st=a.get<%=L(hi,"स्थिति","Status")%>(); %>
+            %><tr><td colspan="8"><div class="empty-state"><i class="fa fa-calendar"></i><p>No appointments found.</p></div></td></tr><%
+            }else{ int idx=1; for(Object obj:appts){ Appointment a=(Appointment)obj; String st=a.getStatus(); %>
             <tr>
                 <td style="color:#94a3b8;font-size:12px"><%=idx++%></td>
-                <td style="font-weight:700;color:#0f172a"><%=a.get<%=L(hi,"मरीज़","Patient")%>Name()%></td>
-                <td style="color:#374151"><%=a.get<%=L(hi,"डॉक्टर","Doctor")%>Name()%></td>
-                <td><span class="badge badge-dept"><%=a.get<%=L(hi,"विभाग","Department")%>Name()!=null?a.get<%=L(hi,"विभाग","Department")%>Name():"—"%></span></td>
+                <td style="font-weight:700;color:#0f172a"><%=a.getPatientName()%></td>
+                <td style="color:#374151"><%=a.getDoctorName()%></td>
+                <td><span class="badge badge-dept"><%=a.getDepartmentName()!=null?a.getDepartmentName():"—"%></span></td>
                 <td style="font-size:13px">
                     <div style="font-weight:600"><%=a.getAppointmentDate()%></div>
                     <div style="color:#64748b"><%=a.getAppointmentTime()%></div>
@@ -75,14 +77,14 @@ body{background:#f0f4f8;margin:0;font-family:'Segoe UI',Arial,sans-serif}
                         <% if("pending".equals(st)){ %>
                         <form action="/HospitalManagement/admin/appointments/status" method="post" style="margin:0">
                             <input type="hidden" name="id" value="<%=a.getId()%>"><input type="hidden" name="status" value="approved">
-                            <button class="btn-approve"><i class="fa fa-check"></i> <%=L(hi,"स्वीकृत करें","Approve")%></button>
+                            <button class="btn-approve"><i class="fa fa-check"></i> Approve</button>
                         </form>
                         <form action="/HospitalManagement/admin/appointments/status" method="post" style="margin:0">
                             <input type="hidden" name="id" value="<%=a.getId()%>"><input type="hidden" name="status" value="rejected">
-                            <button class="btn-reject"><i class="fa fa-times"></i> <%=L(hi,"अस्वीकार करें","Reject")%></button>
+                            <button class="btn-reject"><i class="fa fa-times"></i> Reject</button>
                         </form>
                         <% } %>
-                        <a href="/HospitalManagement/admin/appointments/delete?id=<%=a.getId()%>" class="btn-del" onclick="return confirm('<%=L(hi,"हटाएं","Delete")%> this appointment?')"><i class="fa fa-trash"></i></a>
+                        <a href="/HospitalManagement/admin/appointments/delete?id=<%=a.getId()%>" class="btn-del" onclick="return confirm('Delete this appointment?')"><i class="fa fa-trash"></i></a>
                     </div>
                 </td>
             </tr>

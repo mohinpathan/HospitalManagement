@@ -1,9 +1,11 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ include file="/WEB-INF/lang.jsp" %>
-<%@ page import="com.hospital.model.Appointment, com.hospital.model.<%=L(hi,"डॉक्टर","Doctor")%>" %>
+
+<%@ page import="com.hospital.model.Appointment, com.hospital.model.Doctor" %>
 <!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title><%=L(hi,"पर्चा लिखें","Write Prescription")%></title>
+<title>Write Prescription</title>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="/HospitalManagement/responsive.css">
+
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
 <style>
 body{background:#f0f4f8;margin:0;font-family:'Segoe UI',Arial,sans-serif}
@@ -35,23 +37,23 @@ body{background:#f0f4f8;margin:0;font-family:'Segoe UI',Arial,sans-serif}
 <div class="dash-main">
 
     <div class="page-hdr">
-        <h2><i class="fa fa-file-prescription me-2" style="color:#19b37a"></i><%=L(hi,"पर्चा लिखें","Write Prescription")%> & Bill</h2>
+        <h2><i class="fa fa-file-prescription me-2" style="color:#19b37a"></i>Write Prescription & Bill</h2>
         <p>Complete the consultation and generate a bill for the patient.</p>
     </div>
 
     <%
         Appointment appt=(Appointment)request.getAttribute("appointment");
-        <%=L(hi,"डॉक्टर","Doctor")%> doc=(<%=L(hi,"डॉक्टर","Doctor")%>)request.getAttribute("doctor");
+        Doctor doc=(Doctor)request.getAttribute("doctor");
         if(appt==null){
     %>
     <div class="alert-danger"><i class="fa fa-exclamation-circle"></i> Appointment not found or already completed.</div>
-    <a href="/HospitalManagement/doctor/appointments" class="btn-back"><i class="fa fa-arrow-left"></i> Back to <%=L(hi,"अपॉइंटमेंट","Appointments")%></a>
+    <a href="/HospitalManagement/doctor/appointments" class="btn-back"><i class="fa fa-arrow-left"></i> Back to Appointments</a>
     <% }else{ %>
 
     <div class="patient-info-card">
         <div class="pi-icon"><i class="fa fa-user"></i></div>
         <div>
-            <div class="pi-name"><%=appt.get<%=L(hi,"मरीज़","Patient")%>Name()%></div>
+            <div class="pi-name"><%=appt.getPatientName()%></div>
             <div class="pi-detail"><i class="fa fa-calendar fa-xs me-1"></i><%=appt.getAppointmentDate()%> &nbsp;|&nbsp; <i class="fa fa-clock fa-xs me-1"></i><%=appt.getAppointmentTime()%></div>
             <div class="pi-detail" style="margin-top:3px"><i class="fa fa-notes-medical fa-xs me-1"></i><%=appt.getReason()%></div>
         </div>
@@ -59,27 +61,27 @@ body{background:#f0f4f8;margin:0;font-family:'Segoe UI',Arial,sans-serif}
 
     <form action="/HospitalManagement/createBill" method="post">
         <input type="hidden" name="appointmentId" value="<%=appt.getId()%>">
-        <input type="hidden" name="patientId" value="<%=appt.get<%=L(hi,"मरीज़","Patient")%>Id()%>">
-        <input type="hidden" name="doctorId" value="<%=appt.get<%=L(hi,"डॉक्टर","Doctor")%>Id()%>">
+        <input type="hidden" name="patientId" value="<%=appt.getPatientId()%>">
+        <input type="hidden" name="doctorId" value="<%=appt.getDoctorId()%>">
 
         <!-- Prescription -->
         <div class="form-card">
             <div class="section-title"><i class="fa fa-file-medical" style="color:#19b37a"></i> Prescription Details</div>
             <div class="row g-3">
                 <div class="col-12">
-                    <label class="form-label"><%=L(hi,"निदान","Diagnosis")%> *</label>
+                    <label class="form-label">Diagnosis *</label>
                     <textarea name="diagnosis" class="form-control" rows="2" placeholder="e.g. Viral fever with upper respiratory infection" required></textarea>
                 </div>
                 <div class="col-12">
-                    <label class="form-label"><%=L(hi,"दवाइयां","Medicines")%> / Prescription *</label>
+                    <label class="form-label">Medicines / Prescription *</label>
                     <textarea name="medicines" class="form-control" rows="3" placeholder="e.g. Paracetamol 500mg twice daily, Cetirizine 10mg at night..." required></textarea>
                 </div>
                 <div class="col-md-8">
-                    <label class="form-label"><%=L(hi,"निर्देश","Instructions")%> for <%=L(hi,"मरीज़","Patient")%></label>
+                    <label class="form-label">Instructions for Patient</label>
                     <textarea name="instructions" class="form-control" rows="2" placeholder="Rest, drink plenty of water, avoid cold food..."></textarea>
                 </div>
                 <div class="col-md-4">
-                    <label class="form-label"><%=L(hi,"फॉलो-अप तारीख","Follow-up Date")%></label>
+                    <label class="form-label">Follow-up Date</label>
                     <input type="date" name="followUpDate" class="form-control">
                 </div>
             </div>
@@ -90,11 +92,11 @@ body{background:#f0f4f8;margin:0;font-family:'Segoe UI',Arial,sans-serif}
             <div class="section-title"><i class="fa fa-file-invoice-dollar" style="color:#f59e0b"></i> Bill Details</div>
             <div class="row g-3">
                 <div class="col-md-3">
-                    <label class="form-label"><%=L(hi,"परामर्श शुल्क","Consultation Fee")%> (₹) *</label>
+                    <label class="form-label">Consultation Fee (₹) *</label>
                     <input type="number" step="0.01" name="consultationFee" class="form-control" value="<%=doc!=null?String.format("%.0f",doc.getConsultationFee()):"500"%>" required>
                 </div>
                 <div class="col-md-3">
-                    <label class="form-label"><%=L(hi,"दवा शुल्क","Medicine Charge")%> (₹)</label>
+                    <label class="form-label">Medicine Charge (₹)</label>
                     <input type="number" step="0.01" name="medicineCharge" class="form-control" value="0">
                 </div>
                 <div class="col-md-3">
@@ -102,7 +104,7 @@ body{background:#f0f4f8;margin:0;font-family:'Segoe UI',Arial,sans-serif}
                     <input type="number" step="0.01" name="otherCharge" class="form-control" value="0">
                 </div>
                 <div class="col-md-3">
-                    <label class="form-label"><%=L(hi,"भुगतान विधि","Payment Method")%></label>
+                    <label class="form-label">Payment Method</label>
                     <select name="paymentMethod" class="form-select">
                         <option value="cash">Cash</option>
                         <option value="card">Card</option>
@@ -114,8 +116,8 @@ body{background:#f0f4f8;margin:0;font-family:'Segoe UI',Arial,sans-serif}
         </div>
 
         <div style="display:flex;gap:12px;flex-wrap:wrap">
-            <button type="submit" class="btn-save"><i class="fa fa-save"></i> <%=L(hi,"सहेजें","Save")%> Prescription & Generate Bill</button>
-            <a href="/HospitalManagement/doctor/appointments" class="btn-back"><i class="fa fa-arrow-left"></i> <%=L(hi,"रद्द करें","Cancel")%></a>
+            <button type="submit" class="btn-save"><i class="fa fa-save"></i> Save Prescription & Generate Bill</button>
+            <a href="/HospitalManagement/doctor/appointments" class="btn-back"><i class="fa fa-arrow-left"></i> Cancel</a>
         </div>
     </form>
     <% } %>

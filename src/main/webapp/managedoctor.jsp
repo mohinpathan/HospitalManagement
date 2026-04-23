@@ -1,9 +1,11 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ include file="/WEB-INF/lang.jsp" %>
+
 <%@ page import="java.util.*, com.hospital.model.*" %>
 <!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title><%=L(hi,"डॉक्टर प्रबंधन","Manage <%=L(hi,"डॉक्टर","Doctor")%>s")%></title>
+<title>Manage Doctors</title>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="/HospitalManagement/responsive.css">
+
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
 <style>
 body{background:#f0f4f8;margin:0;font-family:'Segoe UI',Arial,sans-serif}
@@ -42,10 +44,10 @@ body{background:#f0f4f8;margin:0;font-family:'Segoe UI',Arial,sans-serif}
 
     <div class="page-hdr">
         <div>
-            <h2><i class="fa fa-user-md me-2" style="color:#2b7cff"></i><%=L(hi,"डॉक्टर प्रबंधन","Manage <%=L(hi,"डॉक्टर","Doctor")%>s")%></h2>
+            <h2><i class="fa fa-user-md me-2" style="color:#2b7cff"></i>Manage Doctors</h2>
             <p>Add, edit or remove doctors from the system.</p>
         </div>
-        <a href="/HospitalManagement/admin/doctors/add" class="btn-add"><i class="fa fa-plus"></i> <%=L(hi,"डॉक्टर जोड़ें","Add <%=L(hi,"डॉक्टर","Doctor")%>")%></a>
+        <a href="/HospitalManagement/admin/doctors/add" class="btn-add"><i class="fa fa-plus"></i> Add Doctor</a>
     </div>
 
     <% String s=(String)request.getAttribute("success"); String e=(String)request.getAttribute("error");
@@ -55,13 +57,13 @@ body{background:#f0f4f8;margin:0;font-family:'Segoe UI',Arial,sans-serif}
     <div class="table-card">
         <div style="overflow-x:auto">
         <table class="tbl">
-            <thead><tr><th>#</th><th><%=L(hi,"डॉक्टर","Doctor")%></th><th>Specialization</th><th><%=L(hi,"विभाग","Department")%></th><th>Exp.</th><th>Fee</th><th>Contact</th><th><%=L(hi,"स्थिति","Status")%></th><th><%=L(hi,"कार्रवाई","Actions")%></th></tr></thead>
+            <thead><tr><th>#</th><th>Doctor</th><th>Specialization</th><th>Department</th><th>Exp.</th><th>Fee</th><th>Contact</th><th>Status</th><th>Actions</th></tr></thead>
             <tbody>
             <%
                 List<?> doctors=(List<?>)request.getAttribute("doctors");
                 if(doctors==null||doctors.isEmpty()){
-            %><tr><td colspan="9"><div class="empty-state"><i class="fa fa-user-md"></i><p><%=L(hi,"कोई डॉक्टर नहीं मिला","No doctors found")%>. <a href="/HospitalManagement/admin/doctors/add" style="color:#2b7cff;font-weight:600">Add one now</a></p></div></td></tr><%
-            }else{ int idx=1; for(Object obj:doctors){ <%=L(hi,"डॉक्टर","Doctor")%> d=(<%=L(hi,"डॉक्टर","Doctor")%>)obj; %>
+            %><tr><td colspan="9"><div class="empty-state"><i class="fa fa-user-md"></i><p>No doctors found. <a href="/HospitalManagement/admin/doctors/add" style="color:#2b7cff;font-weight:600">Add one now</a></p></div></td></tr><%
+            }else{ int idx=1; for(Object obj:doctors){ Doctor d=(Doctor)obj; %>
             <tr>
                 <td style="color:#94a3b8;font-size:12px"><%=idx++%></td>
                 <td>
@@ -69,18 +71,18 @@ body{background:#f0f4f8;margin:0;font-family:'Segoe UI',Arial,sans-serif}
                     <div style="font-size:12px;color:#64748b"><%=d.getQualification()!=null?d.getQualification():""%></div>
                 </td>
                 <td><span class="badge badge-dept"><%=d.getSpecialization()!=null?d.getSpecialization():"—"%></span></td>
-                <td style="color:#374151"><%=d.get<%=L(hi,"विभाग","Department")%>Name()!=null?d.get<%=L(hi,"विभाग","Department")%>Name():"—"%></td>
+                <td style="color:#374151"><%=d.getDepartmentName()!=null?d.getDepartmentName():"—"%></td>
                 <td style="color:#374151"><%=d.getExperienceYrs()%> yrs</td>
                 <td style="font-weight:700;color:#0f172a">₹<%=String.format("%.0f",d.getConsultationFee())%></td>
                 <td style="font-size:12px">
                     <div><i class="fa fa-envelope fa-xs me-1" style="color:#2b7cff"></i><%=d.getEmail()%></div>
-                    <div><i class="fa fa-phone fa-xs me-1" style="color:#19b37a"></i><%=d.get<%=L(hi,"फ़ोन","Phone")%>()!=null?d.get<%=L(hi,"फ़ोन","Phone")%>():"—"%></div>
+                    <div><i class="fa fa-phone fa-xs me-1" style="color:#19b37a"></i><%=d.getPhone()!=null?d.getPhone():"—"%></div>
                 </td>
-                <td><span class="badge badge-<%=d.get<%=L(hi,"स्थिति","Status")%>()%>"><%=d.get<%=L(hi,"स्थिति","Status")%>().toUpperCase()%></span></td>
+                <td><span class="badge badge-<%=d.getStatus()%>"><%=d.getStatus().toUpperCase()%></span></td>
                 <td>
                     <div style="display:flex;gap:6px">
-                        <a href="/HospitalManagement/admin/doctors/edit?id=<%=d.getId()%>" class="btn-edit"><i class="fa fa-pen"></i> <%=L(hi,"संपादित करें","Edit")%></a>
-                        <a href="/HospitalManagement/admin/doctors/delete?id=<%=d.getId()%>" class="btn-del" onclick="return confirm('Remove this doctor?')"><i class="fa fa-trash"></i> <%=L(hi,"हटाएं","Delete")%></a>
+                        <a href="/HospitalManagement/admin/doctors/edit?id=<%=d.getId()%>" class="btn-edit"><i class="fa fa-pen"></i> Edit</a>
+                        <a href="/HospitalManagement/admin/doctors/delete?id=<%=d.getId()%>" class="btn-del" onclick="return confirm('Remove this doctor?')"><i class="fa fa-trash"></i> Delete</a>
                     </div>
                 </td>
             </tr>
