@@ -2,7 +2,7 @@
 <%@ include file="/WEB-INF/lang.jsp" %>
 <%@ page import="java.util.*" %>
 <!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Add Doctor</title>
+<title><%=L(hi,"डॉक्टर जोड़ें","Add <%=L(hi,"डॉक्टर","Doctor")%>")%></title>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
 <style>
@@ -31,7 +31,7 @@ body{background:#f0f4f8;margin:0;font-family:'Segoe UI',Arial,sans-serif}
 <div class="dash-main">
 
     <div class="page-hdr">
-        <h2><i class="fa fa-user-plus me-2" style="color:#2b7cff"></i>Add New Doctor</h2>
+        <h2><i class="fa fa-user-plus me-2" style="color:#2b7cff"></i>Add New <%=L(hi,"डॉक्टर","Doctor")%></h2>
         <p>Fill in the details to register a new doctor in the system.</p>
     </div>
 
@@ -39,19 +39,19 @@ body{background:#f0f4f8;margin:0;font-family:'Segoe UI',Arial,sans-serif}
 
     <div class="form-card">
         <form action="/HospitalManagement/admin/doctors/add" method="post">
-            <div class="section-title">Personal Information</div>
+            <div class="section-title"><%=L(hi,"व्यक्तिगत जानकारी","Personal Information")%></div>
             <div class="row g-3 mb-4">
-                <div class="col-md-6"><label class="form-label">Full Name *</label><input type="text" name="fullName" class="form-control" placeholder="Dr. John Doe" required></div>
+                <div class="col-md-6"><label class="form-label"><%=L(hi,"पूरा नाम","Full Name")%> *</label><input type="text" name="fullName" class="form-control" placeholder="Dr. John Doe" required></div>
                 <div class="col-md-6"><label class="form-label">Email *</label><input type="email" name="email" class="form-control" placeholder="doctor@hospital.com" required></div>
-                <div class="col-md-6"><label class="form-label">Phone *</label><input type="text" name="phone" class="form-control" placeholder="+91 98765 43210" required></div>
-                <div class="col-md-6"><label class="form-label">Gender *</label><select name="gender" class="form-select" required><option value="">Select</option><option>Male</option><option>Female</option><option>Other</option></select></div>
+                <div class="col-md-6"><label class="form-label"><%=L(hi,"फ़ोन","Phone")%> *</label><input type="text" name="phone" class="form-control" placeholder="+91 98765 43210" required></div>
+                <div class="col-md-6"><label class="form-label"><%=L(hi,"लिंग","Gender")%> *</label><select name="gender" class="form-select" required><option value="">Select</option><option>Male</option><option>Female</option><option>Other</option></select></div>
             </div>
 
-            <div class="section-title">Professional Details</div>
+            <div class="section-title"><%=L(hi,"पेशेवर विवरण","Professional Details")%></div>
             <div class="row g-3 mb-4">
                 <div class="col-md-6"><label class="form-label">Qualification *</label><input type="text" name="qualification" class="form-control" placeholder="MD, FACC" required></div>
                 <div class="col-md-6"><label class="form-label">Specialization *</label><input type="text" name="specialization" class="form-control" placeholder="Cardiologist" required></div>
-                <div class="col-md-4"><label class="form-label">Department *</label>
+                <div class="col-md-4"><label class="form-label"><%=L(hi,"विभाग","Department")%> *</label>
                     <select name="departmentId" class="form-select" required>
                         <option value="">Select</option>
                         <% List<Map<String,Object>> depts=(List<Map<String,Object>>)request.getAttribute("departments");
@@ -59,8 +59,8 @@ body{background:#f0f4f8;margin:0;font-family:'Segoe UI',Arial,sans-serif}
                     </select>
                 </div>
                 <div class="col-md-4"><label class="form-label">Experience (Years)</label><input type="number" name="experienceYrs" class="form-control" value="0" min="0"></div>
-                <div class="col-md-4"><label class="form-label">Consultation Fee (₹)</label><input type="number" step="0.01" name="consultationFee" class="form-control" value="500"></div>
-                <div class="col-12"><label class="form-label">Address</label><input type="text" name="address" class="form-control" placeholder="Hospital address"></div>
+                <div class="col-md-4"><label class="form-label"><%=L(hi,"परामर्श शुल्क","Consultation Fee")%> (₹)</label><input type="number" step="0.01" name="consultationFee" class="form-control" value="500"></div>
+                <div class="col-12"><label class="form-label"><%=L(hi,"पता","Address")%></label><input type="text" name="address" class="form-control" placeholder="Hospital address"></div>
             </div>
 
             <div class="section-title">Account Password</div>
@@ -70,8 +70,8 @@ body{background:#f0f4f8;margin:0;font-family:'Segoe UI',Arial,sans-serif}
             </div>
 
             <div style="display:flex;gap:12px;flex-wrap:wrap">
-                <button type="submit" class="btn-save"><i class="fa fa-save"></i> Save Doctor</button>
-                <a href="/HospitalManagement/admin/doctors" class="btn-back"><i class="fa fa-arrow-left"></i> Cancel</a>
+                <button type="submit" class="btn-save"><i class="fa fa-save"></i> <%=L(hi,"सहेजें","Save")%> <%=L(hi,"डॉक्टर","Doctor")%></button>
+                <a href="/HospitalManagement/admin/doctors" class="btn-back"><i class="fa fa-arrow-left"></i> <%=L(hi,"रद्द करें","Cancel")%></a>
             </div>
         </form>
     </div>

@@ -2,7 +2,7 @@
 <%@ include file="/WEB-INF/lang.jsp" %>
 <%@ page import="java.util.*, com.hospital.model.*" %>
 <!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Bills & Payments</title>
+<title><%=L(hi,"बिल और भुगतान","Bills & Payments")%></title>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
 <style>
@@ -37,7 +37,7 @@ body{background:#f0f4f8;margin:0;font-family:'Segoe UI',Arial,sans-serif}
 <div class="dash-main">
 
     <div class="page-hdr">
-        <h2><i class="fa fa-file-invoice-dollar me-2" style="color:#f59e0b"></i>Bills & Payments</h2>
+        <h2><i class="fa fa-file-invoice-dollar me-2" style="color:#f59e0b"></i><%=L(hi,"बिल और भुगतान","Bills & Payments")%></h2>
         <p>Confirm patient bills and send payment receipts via email.</p>
     </div>
 
@@ -46,29 +46,29 @@ body{background:#f0f4f8;margin:0;font-family:'Segoe UI',Arial,sans-serif}
     <div class="table-card">
         <div style="overflow-x:auto">
         <table class="tbl">
-            <thead><tr><th>#</th><th>Patient</th><th>Doctor</th><th>Consult.</th><th>Medicine</th><th>Other</th><th>Total</th><th>Method</th><th>Status</th><th>Receipt</th><th>Action</th></tr></thead>
+            <thead><tr><th>#</th><th><%=L(hi,"मरीज़","Patient")%></th><th><%=L(hi,"डॉक्टर","Doctor")%></th><th>Consult.</th><th>Medicine</th><th>Other</th><th>Total</th><th>Method</th><th><%=L(hi,"स्थिति","Status")%></th><th>Receipt</th><th>Action</th></tr></thead>
             <tbody>
             <%
                 List<?> bills=(List<?>)request.getAttribute("bills");
                 if(bills==null||bills.isEmpty()){
-            %><tr><td colspan="11"><div class="empty-state"><i class="fa fa-file-invoice"></i><p>No bills found.</p></div></td></tr><%
+            %><tr><td colspan="11"><div class="empty-state"><i class="fa fa-file-invoice"></i><p><%=L(hi,"कोई बिल नहीं मिला","No bills found")%>.</p></div></td></tr><%
             }else{ int idx=1; for(Object obj:bills){ Bill b=(Bill)obj; %>
             <tr>
                 <td style="color:#94a3b8;font-size:12px"><%=idx++%></td>
-                <td style="font-weight:700;color:#0f172a"><%=b.getPatientName()%></td>
-                <td style="color:#374151"><%=b.getDoctorName()%></td>
+                <td style="font-weight:700;color:#0f172a"><%=b.get<%=L(hi,"मरीज़","Patient")%>Name()%></td>
+                <td style="color:#374151"><%=b.get<%=L(hi,"डॉक्टर","Doctor")%>Name()%></td>
                 <td>₹<%=String.format("%.0f",b.getConsultationFee())%></td>
                 <td>₹<%=String.format("%.0f",b.getMedicineCharge())%></td>
                 <td>₹<%=String.format("%.0f",b.getOtherCharge())%></td>
                 <td style="font-weight:800;color:#0f172a">₹<%=String.format("%.0f",b.getTotalAmount())%></td>
                 <td style="text-transform:capitalize;font-size:13px"><%=b.getPaymentMethod()%></td>
-                <td><span class="badge badge-<%=b.getPaymentStatus()%>"><%=b.getPaymentStatus().toUpperCase()%></span></td>
+                <td><span class="badge badge-<%=b.getPayment<%=L(hi,"स्थिति","Status")%>()%>"><%=b.getPayment<%=L(hi,"स्थिति","Status")%>().toUpperCase()%></span></td>
                 <td><%if(b.isReceiptSent()){%><span class="receipt-sent"><i class="fa fa-check"></i> Sent</span><%}else{%><span style="color:#94a3b8;font-size:12px">Not sent</span><%}%></td>
                 <td>
-                    <%if("pending".equals(b.getPaymentStatus())){%>
+                    <%if("pending".equals(b.getPayment<%=L(hi,"स्थिति","Status")%>())){%>
                     <form action="/HospitalManagement/admin/confirmBill" method="post" style="margin:0">
                         <input type="hidden" name="billId" value="<%=b.getId()%>">
-                        <button class="btn-confirm"><i class="fa fa-check"></i> Confirm & Email</button>
+                        <button class="btn-confirm"><i class="fa fa-check"></i> <%=L(hi,"पुष्टि करें और ईमेल करें","Confirm & Email")%></button>
                     </form>
                     <%}else{%><span style="color:#94a3b8;font-size:12px">Done</span><%}%>
                 </td>
