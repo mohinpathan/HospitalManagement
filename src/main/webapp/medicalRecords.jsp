@@ -2,7 +2,7 @@
 <%@ include file="/WEB-INF/lang.jsp" %>
 <%@ page import="java.util.*, com.hospital.model.*" %>
 <!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Medical Records</title>
+<title><%=L(hi,"चिकित्सा रिकॉर्ड","Medical Records")%></title>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
 <style>
@@ -60,7 +60,7 @@ body{background:#f0f4f8;margin:0;font-family:'Segoe UI',Arial,sans-serif}
 <div class="dash-main">
 
     <div class="page-hdr">
-        <h2><i class="fa fa-file-medical me-2" style="color:#7c3aed"></i>Medical Records</h2>
+        <h2><i class="fa fa-file-medical me-2" style="color:#7c3aed"></i><%=L(hi,"चिकित्सा रिकॉर्ड","Medical Records")%></h2>
         <p>Your complete prescription, billing history and online payments.</p>
     </div>
 
@@ -81,48 +81,48 @@ body{background:#f0f4f8;margin:0;font-family:'Segoe UI',Arial,sans-serif}
             <div class="doc-info">
                 <div class="doc-avatar"><i class="fa fa-user-md"></i></div>
                 <div>
-                    <div class="doc-name"><%=b.getDoctorName()%></div>
+                    <div class="doc-name"><%=b.get<%=L(hi,"डॉक्टर","Doctor")%>Name()%></div>
                     <div class="doc-date"><i class="fa fa-calendar fa-xs me-1"></i>Bill #<%=b.getId()%></div>
                 </div>
             </div>
             <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
-                <span class="badge badge-<%=b.getPaymentStatus()%>"><%=b.getPaymentStatus().toUpperCase()%></span>
-                <% if(b.isReceiptSent()){ %><span class="receipt-sent"><i class="fa fa-envelope-circle-check"></i> Receipt Sent</span><% } %>
+                <span class="badge badge-<%=b.getPayment<%=L(hi,"स्थिति","Status")%>()%>"><%=b.getPayment<%=L(hi,"स्थिति","Status")%>().toUpperCase()%></span>
+                <% if(b.isReceiptSent()){ %><span class="receipt-sent"><i class="fa fa-envelope-circle-check"></i> <%=L(hi,"रसीद भेजी गई","Receipt Sent")%></span><% } %>
             </div>
         </div>
         <div class="record-body">
             <div class="info-grid">
                 <div class="info-item">
-                    <div class="info-label">Diagnosis</div>
-                    <div class="info-value"><%=b.getDiagnosis()!=null?b.getDiagnosis():"—"%></div>
+                    <div class="info-label"><%=L(hi,"निदान","Diagnosis")%></div>
+                    <div class="info-value"><%=b.get<%=L(hi,"निदान","Diagnosis")%>()!=null?b.get<%=L(hi,"निदान","Diagnosis")%>():"—"%></div>
                 </div>
                 <div class="info-item">
-                    <div class="info-label">Payment Method</div>
+                    <div class="info-label"><%=L(hi,"भुगतान विधि","Payment Method")%></div>
                     <div class="info-value" style="text-transform:capitalize"><%=b.getPaymentMethod()!=null?b.getPaymentMethod():"—"%></div>
                 </div>
             </div>
-            <% if(b.getMedicines()!=null&&!b.getMedicines().isEmpty()){ %>
+            <% if(b.get<%=L(hi,"दवाइयां","Medicines")%>()!=null&&!b.get<%=L(hi,"दवाइयां","Medicines")%>().isEmpty()){ %>
             <div class="medicines-box">
-                <div class="med-label"><i class="fa fa-pills me-1"></i>Prescribed Medicines</div>
-                <div class="med-value"><%=b.getMedicines()%></div>
+                <div class="med-label"><i class="fa fa-pills me-1"></i>Prescribed <%=L(hi,"दवाइयां","Medicines")%></div>
+                <div class="med-value"><%=b.get<%=L(hi,"दवाइयां","Medicines")%>()%></div>
             </div>
             <% } %>
             <div class="bill-summary">
                 <div class="bill-item"><div class="b-label">Consultation</div><div class="b-value">₹<%=String.format("%.0f",b.getConsultationFee())%></div></div>
                 <div class="bill-item"><div class="b-label">Medicine</div><div class="b-value">₹<%=String.format("%.0f",b.getMedicineCharge())%></div></div>
                 <div class="bill-item"><div class="b-label">Other</div><div class="b-value">₹<%=String.format("%.0f",b.getOtherCharge())%></div></div>
-                <div class="bill-item total"><div class="b-label">Total Amount</div><div class="b-value">₹<%=String.format("%.0f",b.getTotalAmount())%></div></div>
+                <div class="bill-item total"><div class="b-label"><%=L(hi,"कुल राशि","Total Amount")%></div><div class="b-value">₹<%=String.format("%.0f",b.getTotalAmount())%></div></div>
             </div>
             <div class="action-row">
                 <a href="/HospitalManagement/patient/bill/pdf/<%=b.getId()%>" class="btn-pdf" target="_blank">
-                    <i class="fa fa-file-pdf"></i> Download PDF
+                    <i class="fa fa-file-pdf"></i> <%=L(hi,"PDF डाउनलोड करें","Download PDF")%>
                 </a>
-                <% if("pending".equals(b.getPaymentStatus())){ %>
+                <% if("pending".equals(b.getPayment<%=L(hi,"स्थिति","Status")%>())){ %>
                 <a href="/HospitalManagement/patient/payment/<%=b.getId()%>" class="btn-pay">
-                    <i class="fa fa-credit-card"></i> Pay Online
+                    <i class="fa fa-credit-card"></i> <%=L(hi,"ऑनलाइन भुगतान करें","Pay Online")%>
                 </a>
-                <% }else if("paid".equals(b.getPaymentStatus())||"confirmed".equals(b.getPaymentStatus())){ %>
-                <span class="btn-paid"><i class="fa fa-circle-check"></i> Payment Complete</span>
+                <% }else if("paid".equals(b.getPayment<%=L(hi,"स्थिति","Status")%>())||"confirmed".equals(b.getPayment<%=L(hi,"स्थिति","Status")%>())){ %>
+                <span class="btn-paid"><i class="fa fa-circle-check"></i> <%=L(hi,"भुगतान पूर्ण","Payment Complete")%></span>
                 <% } %>
             </div>
         </div>

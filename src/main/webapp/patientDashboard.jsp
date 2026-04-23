@@ -2,7 +2,7 @@
 <%@ page import="java.util.*, com.hospital.model.*" %>
 <%@ include file="/WEB-INF/lang.jsp" %>
 <!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Patient Dashboard</title>
+<title>Patient <%=L(hi,"डैशबोर्ड","Dashboard")%></title>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
 <style>
@@ -81,7 +81,7 @@ body{background:#f0f4f8;margin:0;font-family:'Segoe UI',Arial,sans-serif}
     Patient pat = (Patient) request.getAttribute("patient");
     String pname = pat!=null?pat.getFullName():(String)session.getAttribute("patientName");
     String blood = pat!=null&&pat.getBloodGroup()!=null?pat.getBloodGroup():"—";
-    int age = pat!=null?pat.getAge():0;
+    int age = pat!=null?pat.get<%=L(hi,"आयु","Age")%>():0;
     Appointment nextAppt = (Appointment) request.getAttribute("nextAppt");
 %>
 
@@ -92,12 +92,12 @@ body{background:#f0f4f8;margin:0;font-family:'Segoe UI',Arial,sans-serif}
         <p><%=L(hi,"आज आपके स्वास्थ्य का अवलोकन यहाँ है।","Here's your health overview for today.")%></p>
         <div class="health-chips">
             <span class="health-chip"><i class="fa fa-tint"></i> Blood: <%=blood%></span>
-            <% if(age>0){ %><span class="health-chip"><i class="fa fa-calendar"></i> Age: <%=age%></span><% } %>
+            <% if(age>0){ %><span class="health-chip"><i class="fa fa-calendar"></i> <%=L(hi,"आयु","Age")%>: <%=age%></span><% } %>
             <span class="health-chip"><i class="fa fa-circle-check" style="color:#a7f3d0"></i> Active Patient</span>
         </div>
     </div>
     <a href="/HospitalManagement/patient/bookAppointment" class="btn-book-now">
-        <i class="fa fa-calendar-plus"></i> Book Appointment
+        <i class="fa fa-calendar-plus"></i> <%=L(hi,"अपॉइंटमेंट बुक करें","Book Appointment")%>
     </a>
 </div>
 
@@ -107,9 +107,9 @@ body{background:#f0f4f8;margin:0;font-family:'Segoe UI',Arial,sans-serif}
     <div class="na-icon"><i class="fa fa-calendar-check"></i></div>
     <div style="flex:1">
         <div class="na-label">Next Upcoming Appointment</div>
-        <div class="na-doc"><%=nextAppt.getDoctorName()%></div>
+        <div class="na-doc"><%=nextAppt.get<%=L(hi,"डॉक्टर","Doctor")%>Name()%></div>
         <div class="na-meta">
-            <i class="fa fa-hospital fa-xs me-1"></i><%=nextAppt.getDepartmentName()%>
+            <i class="fa fa-hospital fa-xs me-1"></i><%=nextAppt.get<%=L(hi,"विभाग","Department")%>Name()%>
             &nbsp;|&nbsp;
             <i class="fa fa-calendar fa-xs me-1"></i><%=nextAppt.getAppointmentDate()%>
             &nbsp;|&nbsp;
@@ -123,7 +123,7 @@ body{background:#f0f4f8;margin:0;font-family:'Segoe UI',Arial,sans-serif}
 <!-- Stats -->
 <div class="stats-grid">
     <div class="scard">
-        <div><div class="label">Total Appointments</div><div class="value">${totalAppts}</div></div>
+        <div><div class="label"><%=L(hi,"कुल अपॉइंटमेंट","Total <%=L(hi,"अपॉइंटमेंट","Appointments")%>")%></div><div class="value">${totalAppts}</div></div>
         <div class="scard-icon ic-purple"><i class="fa fa-calendar"></i></div>
     </div>
     <div class="scard">
@@ -140,42 +140,42 @@ body{background:#f0f4f8;margin:0;font-family:'Segoe UI',Arial,sans-serif}
     </div>
 </div>
 
-<!-- Quick Actions -->
+<!-- Quick <%=L(hi,"कार्रवाई","Actions")%> -->
 <div class="action-grid">
-    <a href="/HospitalManagement/patient/findDoctors" class="acard ac-purple">
+    <a href="/HospitalManagement/patient/find<%=L(hi,"डॉक्टर","Doctor")%>s" class="acard ac-purple">
         <div class="ac-icon"><i class="fa fa-search"></i></div>
-        <h5>Find a Doctor</h5>
-        <p>Search by specialization, department or fee</p>
+        <h5><%=L(hi,"डॉक्टर खोजें","Find a <%=L(hi,"डॉक्टर","Doctor")%>")%></h5>
+        <p><%=L(hi,"खोजें","Search")%> by specialization, department or fee</p>
     </a>
     <a href="/HospitalManagement/patient/bookAppointment" class="acard ac-blue">
         <div class="ac-icon"><i class="fa fa-calendar-plus"></i></div>
-        <h5>Book Appointment</h5>
+        <h5><%=L(hi,"अपॉइंटमेंट बुक करें","Book Appointment")%></h5>
         <p>Schedule your next consultation</p>
     </a>
     <a href="/HospitalManagement/patient/medicalRecords" class="acard ac-green">
         <div class="ac-icon"><i class="fa fa-file-medical"></i></div>
-        <h5>Medical Records</h5>
-        <p>View prescriptions and bills</p>
+        <h5><%=L(hi,"चिकित्सा रिकॉर्ड","Medical Records")%></h5>
+        <p><%=L(hi,"देखें","View")%> prescriptions and bills</p>
     </a>
 </div>
 
-<!-- Recent Appointments + Prescriptions -->
+<!-- Recent <%=L(hi,"अपॉइंटमेंट","Appointments")%> + Prescriptions -->
 <div class="two-col">
     <div class="panel">
         <div class="panel-head">
-            Recent Appointments
-            <a href="/HospitalManagement/patient/appointments">View All →</a>
+            Recent <%=L(hi,"अपॉइंटमेंट","Appointments")%>
+            <a href="/HospitalManagement/patient/appointments"><%=L(hi,"सभी देखें","<%=L(hi,"देखें","View")%> All")%> →</a>
         </div>
         <%
             List<?> appts=(List<?>)request.getAttribute("recentAppts");
             if(appts==null||appts.isEmpty()){
         %><div class="panel-empty"><i class="fa fa-calendar-xmark fa-2x mb-3" style="color:#e2e8f0;display:block"></i>No appointments yet.</div><%
-        }else{int shown=0;for(Object obj:appts){if(shown++>=5)break;Appointment a=(Appointment)obj;String st=a.getStatus();
+        }else{int shown=0;for(Object obj:appts){if(shown++>=5)break;Appointment a=(Appointment)obj;String st=a.get<%=L(hi,"स्थिति","Status")%>();
               String cls="approved".equals(st)?"badge-approved":"completed".equals(st)?"badge-completed":"rejected".equals(st)||"cancelled".equals(st)?"badge-rejected":"badge-pending";%>
         <div class="appt-row">
             <div>
-                <div class="appt-doc"><%=a.getDoctorName()%></div>
-                <div class="appt-dept"><%=a.getDepartmentName()%></div>
+                <div class="appt-doc"><%=a.get<%=L(hi,"डॉक्टर","Doctor")%>Name()%></div>
+                <div class="appt-dept"><%=a.get<%=L(hi,"विभाग","Department")%>Name()%></div>
                 <div class="appt-meta"><i class="fa fa-calendar fa-xs"></i> <%=a.getAppointmentDate()%> &nbsp;<i class="fa fa-clock fa-xs"></i> <%=a.getAppointmentTime()%></div>
             </div>
             <span class="badge <%=cls%>"><%=st.toUpperCase()%></span>
@@ -185,8 +185,8 @@ body{background:#f0f4f8;margin:0;font-family:'Segoe UI',Arial,sans-serif}
 
     <div class="panel">
         <div class="panel-head">
-            Recent Prescriptions
-            <a href="/HospitalManagement/patient/medicalRecords">View All →</a>
+            <%=L(hi,"हाल के पर्चे","Recent Prescriptions")%>
+            <a href="/HospitalManagement/patient/medicalRecords"><%=L(hi,"सभी देखें","<%=L(hi,"देखें","View")%> All")%> →</a>
         </div>
         <%
             List<?> bills=(List<?>)request.getAttribute("bills");
@@ -195,11 +195,11 @@ body{background:#f0f4f8;margin:0;font-family:'Segoe UI',Arial,sans-serif}
         }else{for(Object obj:bills){com.hospital.model.Bill b=(com.hospital.model.Bill)obj;%>
         <div class="appt-row">
             <div>
-                <div class="appt-doc"><%=b.getDoctorName()%></div>
-                <div class="appt-dept" style="color:#19b37a"><%=b.getDiagnosis()!=null?b.getDiagnosis():"Prescription"%></div>
+                <div class="appt-doc"><%=b.get<%=L(hi,"डॉक्टर","Doctor")%>Name()%></div>
+                <div class="appt-dept" style="color:#19b37a"><%=b.get<%=L(hi,"निदान","Diagnosis")%>()!=null?b.get<%=L(hi,"निदान","Diagnosis")%>():"Prescription"%></div>
                 <div class="appt-meta">Total: ₹<%=String.format("%.0f",b.getTotalAmount())%></div>
             </div>
-            <span class="badge <%="confirmed".equals(b.getPaymentStatus())?"badge-approved":"badge-pending"%>"><%=b.getPaymentStatus().toUpperCase()%></span>
+            <span class="badge <%="confirmed".equals(b.getPayment<%=L(hi,"स्थिति","Status")%>())?"badge-approved":"badge-pending"%>"><%=b.getPayment<%=L(hi,"स्थिति","Status")%>().toUpperCase()%></span>
         </div>
         <%}}%>
     </div>

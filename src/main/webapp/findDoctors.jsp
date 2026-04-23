@@ -2,7 +2,7 @@
 <%@ include file="/WEB-INF/lang.jsp" %>
 <%@ page import="java.util.*, com.hospital.model.*" %>
 <!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Find Doctors</title>
+<title>Find <%=L(hi,"डॉक्टर","Doctor")%>s</title>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
 <style>
@@ -12,7 +12,7 @@ body{background:#f0f4f8;margin:0;font-family:'Segoe UI',Arial,sans-serif}
 .page-hdr{margin-bottom:20px}
 .page-hdr h2{font-size:22px;font-weight:800;color:#0f172a}
 .page-hdr p{font-size:14px;color:#64748b;margin-top:3px}
-/* Filter Card */
+/* <%=L(hi,"फ़िल्टर","Filter")%> Card */
 .filter-card{background:#fff;border-radius:16px;padding:20px 24px;box-shadow:0 2px 16px rgba(0,0,0,.07);border:1px solid #e8edf5;margin-bottom:24px}
 .filter-card .form-label{font-weight:600;font-size:13px;color:#374151;margin-bottom:6px;display:block}
 .filter-card .form-control,.filter-card .form-select{background:#f8fafc;border:1.5px solid #e5e7eb;border-radius:10px;padding:10px 14px;font-size:14px;width:100%;outline:none;transition:border-color .2s}
@@ -24,7 +24,7 @@ body{background:#f0f4f8;margin:0;font-family:'Segoe UI',Arial,sans-serif}
 /* Results info */
 .results-info{font-size:14px;color:#64748b;margin-bottom:16px;font-weight:500}
 .results-info span{color:#7c3aed;font-weight:700}
-/* Doctor Grid */
+/* <%=L(hi,"डॉक्टर","Doctor")%> Grid */
 .doc-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:20px}
 .doc-card{background:#fff;border-radius:18px;box-shadow:0 2px 16px rgba(0,0,0,.07);border:1px solid #e8edf5;overflow:hidden;transition:all .25s;display:flex;flex-direction:column}
 .doc-card:hover{transform:translateY(-5px);box-shadow:0 12px 32px rgba(0,0,0,.12)}
@@ -55,22 +55,22 @@ body{background:#f0f4f8;margin:0;font-family:'Segoe UI',Arial,sans-serif}
 <div class="dash-main">
 
     <div class="page-hdr">
-        <h2><i class="fa fa-search me-2" style="color:#7c3aed"></i>Find a Doctor</h2>
-        <p>Search and filter doctors by specialization, department, or consultation fee.</p>
+        <h2><i class="fa fa-search me-2" style="color:#7c3aed"></i><%=L(hi,"डॉक्टर खोजें","Find a <%=L(hi,"डॉक्टर","Doctor")%>")%></h2>
+        <p><%=L(hi,"खोजें","Search")%> and filter doctors by specialization, department, or consultation fee.</p>
     </div>
 
-    <!-- Filter Card -->
+    <!-- <%=L(hi,"फ़िल्टर","Filter")%> Card -->
     <div class="filter-card">
-        <form action="/HospitalManagement/patient/findDoctors" method="get">
+        <form action="/HospitalManagement/patient/find<%=L(hi,"डॉक्टर","Doctor")%>s" method="get">
             <div class="row g-3 align-items-end">
                 <div class="col-md-3 col-sm-6">
-                    <label class="form-label">Search by Name</label>
-                    <input type="text" name="search" class="form-control" placeholder="Doctor name..." value="<%= request.getParameter("search")!=null?request.getParameter("search"):"" %>">
+                    <label class="form-label"><%=L(hi,"खोजें","Search")%> by Name</label>
+                    <input type="text" name="search" class="form-control" placeholder="<%=L(hi,"डॉक्टर","Doctor")%> name..." value="<%= request.getParameter("search")!=null?request.getParameter("search"):"" %>">
                 </div>
                 <div class="col-md-3 col-sm-6">
-                    <label class="form-label">Department</label>
+                    <label class="form-label"><%=L(hi,"विभाग","Department")%></label>
                     <select name="dept" class="form-select">
-                        <option value="0">All Departments</option>
+                        <option value="0">All <%=L(hi,"विभाग","<%=L(hi,"विभाग","Department")%>s")%></option>
                         <%
                             List<Map<String,Object>> depts=(List<Map<String,Object>>)request.getAttribute("departments");
                             String selDept=request.getParameter("dept");
@@ -84,7 +84,7 @@ body{background:#f0f4f8;margin:0;font-family:'Segoe UI',Arial,sans-serif}
                     <input type="number" name="maxFee" class="form-control" placeholder="e.g. 1000" value="<%= request.getParameter("maxFee")!=null?request.getParameter("maxFee"):"" %>">
                 </div>
                 <div class="col-md-2 col-sm-6">
-                    <label class="form-label">Sort By</label>
+                    <label class="form-label"><%=L(hi,"क्रमबद्ध करें","Sort By")%></label>
                     <select name="sort" class="form-select">
                         <option value="">Default</option>
                         <option value="fee_asc" <%="fee_asc".equals(request.getParameter("sort"))?"selected":""%>>Fee: Low to High</option>
@@ -94,8 +94,8 @@ body{background:#f0f4f8;margin:0;font-family:'Segoe UI',Arial,sans-serif}
                 </div>
                 <div class="col-md-2 col-sm-12">
                     <div style="display:flex;gap:8px">
-                        <button type="submit" class="btn-filter"><i class="fa fa-search"></i> Search</button>
-                        <a href="/HospitalManagement/patient/findDoctors" class="btn-clear"><i class="fa fa-times"></i></a>
+                        <button type="submit" class="btn-filter"><i class="fa fa-search"></i> <%=L(hi,"खोजें","Search")%></button>
+                        <a href="/HospitalManagement/patient/find<%=L(hi,"डॉक्टर","Doctor")%>s" class="btn-clear"><i class="fa fa-times"></i></a>
                     </div>
                 </div>
             </div>
@@ -112,28 +112,28 @@ body{background:#f0f4f8;margin:0;font-family:'Segoe UI',Arial,sans-serif}
     <% if(doctors==null||doctors.isEmpty()){ %>
     <div class="empty-state">
         <i class="fa fa-user-md"></i>
-        <h4>No doctors found</h4>
+        <h4><%=L(hi,"कोई डॉक्टर नहीं मिला","No doctors found")%></h4>
         <p>Try adjusting your search filters.</p>
-        <a href="/HospitalManagement/patient/findDoctors" class="btn-clear mt-3">Clear Filters</a>
+        <a href="/HospitalManagement/patient/find<%=L(hi,"डॉक्टर","Doctor")%>s" class="btn-clear mt-3">Clear <%=L(hi,"फ़िल्टर","Filter")%>s</a>
     </div>
     <% }else{ %>
     <div class="doc-grid">
-    <% for(Object obj:doctors){ Doctor d=(Doctor)obj; %>
+    <% for(Object obj:doctors){ <%=L(hi,"डॉक्टर","Doctor")%> d=(<%=L(hi,"डॉक्टर","Doctor")%>)obj; %>
     <div class="doc-card">
         <div class="doc-card-top"></div>
         <div class="doc-card-body">
             <div style="display:flex;justify-content:space-between;align-items:flex-start">
                 <div class="doc-avatar"><i class="fa fa-user-md"></i></div>
-                <span class="doc-badge"><%=d.getDepartmentName()!=null?d.getDepartmentName():"General"%></span>
+                <span class="doc-badge"><%=d.get<%=L(hi,"विभाग","Department")%>Name()!=null?d.get<%=L(hi,"विभाग","Department")%>Name():"General"%></span>
             </div>
             <div class="doc-name"><%=d.getFullName()%></div>
             <div class="doc-spec"><%=d.getSpecialization()!=null?d.getSpecialization():"Specialist"%></div>
             <div class="doc-info-row"><i class="fa fa-graduation-cap"></i> <%=d.getQualification()!=null?d.getQualification():"—"%></div>
-            <div class="doc-info-row"><i class="fa fa-briefcase-medical"></i> <%=d.getExperienceYrs()%> years experience</div>
-            <div class="doc-info-row"><i class="fa fa-phone"></i> <%=d.getPhone()!=null?d.getPhone():"—"%></div>
+            <div class="doc-info-row"><i class="fa fa-briefcase-medical"></i> <%=d.getExperienceYrs()%> <%=L(hi,"वर्ष अनुभव","years experience")%></div>
+            <div class="doc-info-row"><i class="fa fa-phone"></i> <%=d.get<%=L(hi,"फ़ोन","Phone")%>()!=null?d.get<%=L(hi,"फ़ोन","Phone")%>():"—"%></div>
             <div class="doc-info-row"><i class="fa fa-envelope"></i> <%=d.getEmail()%></div>
-            <div class="doc-fee">₹<%=String.format("%.0f",d.getConsultationFee())%> <span>/ consultation</span></div>
-            <a href="/HospitalManagement/patient/bookAppointment?doctorId=<%=d.getId()%>" class="btn-book"><i class="fa fa-calendar-plus me-2"></i>Book Appointment</a>
+            <div class="doc-fee">₹<%=String.format("%.0f",d.getConsultationFee())%> <span><%=L(hi,"/ परामर्श","/ consultation")%></span></div>
+            <a href="/HospitalManagement/patient/bookAppointment?doctorId=<%=d.getId()%>" class="btn-book"><i class="fa fa-calendar-plus me-2"></i><%=L(hi,"अपॉइंटमेंट बुक करें","Book Appointment")%></a>
         </div>
     </div>
     <% }} %>
