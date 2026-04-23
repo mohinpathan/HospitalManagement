@@ -1,4 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ include file="/WEB-INF/lang.jsp" %>
 <%@ page import="java.util.*" %>
 <%
     String role = (String) session.getAttribute("role");

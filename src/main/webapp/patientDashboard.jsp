@@ -1,5 +1,6 @@
 ﻿<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ page import="java.util.*, com.hospital.model.*" %>
+<%@ include file="/WEB-INF/lang.jsp" %>
 <!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Patient Dashboard</title>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -87,8 +88,8 @@ body{background:#f0f4f8;margin:0;font-family:'Segoe UI',Arial,sans-serif}
 <!-- Welcome Banner -->
 <div class="welcome-banner">
     <div>
-        <h2>Welcome back, <%=pname%> 👋</h2>
-        <p>Here's your health overview for today.</p>
+        <h2><%=L(hi,"नमस्ते,","Welcome back,")%> <%=pname%> 👋</h2>
+        <p><%=L(hi,"आज आपके स्वास्थ्य का अवलोकन यहाँ है।","Here's your health overview for today.")%></p>
         <div class="health-chips">
             <span class="health-chip"><i class="fa fa-tint"></i> Blood: <%=blood%></span>
             <% if(age>0){ %><span class="health-chip"><i class="fa fa-calendar"></i> Age: <%=age%></span><% } %>
