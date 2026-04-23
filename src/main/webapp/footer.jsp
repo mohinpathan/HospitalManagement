@@ -1,5 +1,4 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ include file="/WEB-INF/lang.jsp" %>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
 <style>
 .site-footer{background:linear-gradient(160deg,#0f172a 0%,#1e293b 100%);color:#cbd5e1;padding:60px 0 0;margin-top:auto}

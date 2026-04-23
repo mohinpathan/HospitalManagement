@@ -1,8 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ include file="/WEB-INF/lang.jsp" %>
-<%@ page import="com.hospital.model.<%=L(hi,"मरीज़","Patient")%>" %>
+<%@ page import="com.hospital.model.Patient" %>
 <!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title><%=L(hi,"मेरी प्रोफ़ाइल","My Profile")%></title>
+<title>My Profile</title>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
 <style>
@@ -43,7 +42,7 @@ body{background:#f0f4f8;margin:0;font-family:'Segoe UI',Arial,sans-serif}
 <div class="dash-main">
 
     <div class="page-hdr">
-        <h2><i class="fa fa-user me-2" style="color:#7c3aed"></i><%=L(hi,"मेरी प्रोफ़ाइल","My Profile")%></h2>
+        <h2><i class="fa fa-user me-2" style="color:#7c3aed"></i>My Profile</h2>
         <p>Manage your personal information and account settings.</p>
     </div>
 
@@ -52,35 +51,23 @@ body{background:#f0f4f8;margin:0;font-family:'Segoe UI',Arial,sans-serif}
        if(e!=null){ %><div class="alert-danger"><i class="fa fa-exclamation-circle"></i> <%=e%></div><% } %>
 
     <%
-        <%=L(hi,"मरीज़","Patient")%> p=(<%=L(hi,"मरीज़","Patient")%>)request.getAttribute("patient");
+        Patient p=(Patient)request.getAttribute("patient");
         String name=p!=null?p.getFullName():"";
         String email=p!=null?p.getEmail():"";
-        String phone=p!=null?(p.get<%=L(hi,"फ़ोन","Phone")%>()!=null?p.get<%=L(hi,"फ़ोन","Phone")%>():""):"";
+        String phone=p!=null?(p.getPhone()!=null?p.getPhone():""):"";
         String blood=p!=null?(p.getBloodGroup()!=null?p.getBloodGroup():""):"";
-        String addr=p!=null?(p.get<%=L(hi,"पता","Address")%>()!=null?p.get<%=L(hi,"पता","Address")%>():""):"";
-        int age=p!=null?p.get<%=L(hi,"आयु","Age")%>():0;
-        String gender=p!=null?(p.get<%=L(hi,"लिंग","Gender")%>()!=null?p.get<%=L(hi,"लिंग","Gender")%>():""):"";
+        String addr=p!=null?(p.getAddress()!=null?p.getAddress():""):"";
+        int age=p!=null?p.getAge():0;
+        String gender=p!=null?(p.getGender()!=null?p.getGender():""):"";
     %>
 
     <!-- Profile Hero -->
     <div class="profile-hero">
-        <div class="profile-avatar">
-            <% if(p!=null && p.getPhoto()!=null && !p.getPhoto().isEmpty()){ %>
-            <img src="<%=p.getPhoto()%>" alt="Profile Photo" style="width:100%;height:100%;object-fit:cover;border-radius:50%">
-            <% }else{ %>
-            <i class="fa fa-user"></i>
-            <% } %>
-        </div>
+        <div class="profile-avatar"><i class="fa fa-user"></i></div>
         <div>
             <h3><%=name%></h3>
             <p><%=email%></p>
             <span class="badge-role">PATIENT</span>
-            <div style="margin-top:10px">
-                <form action="/HospitalManagement/upload/photo" method="post" enctype="multipart/form-data" style="display:inline-flex;align-items:center;gap:8px">
-                    <input type="file" name="photo" accept="image/*" style="font-size:12px;color:rgba(255,255,255,.8);background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.3);border-radius:8px;padding:4px 8px;cursor:pointer" onchange="this.form.submit()">
-                    <span style="font-size:11px;opacity:.7">Change Photo</span>
-                </form>
-            </div>
         </div>
     </div>
 
@@ -88,11 +75,11 @@ body{background:#f0f4f8;margin:0;font-family:'Segoe UI',Arial,sans-serif}
         <!-- Profile Info -->
         <div class="col-lg-7">
             <div class="form-card">
-                <div class="card-title"><i class="fa fa-user-edit"></i> <%=L(hi,"व्यक्तिगत जानकारी","Personal Information")%></div>
+                <div class="card-title"><i class="fa fa-user-edit"></i> Personal Information</div>
                 <form action="/HospitalManagement/patient/updateProfile" method="post">
                     <div class="row g-3">
                         <div class="col-md-6">
-                            <label class="form-label"><%=L(hi,"पूरा नाम","Full Name")%> *</label>
+                            <label class="form-label">Full Name *</label>
                             <div class="input-group"><span class="ig-icon"><i class="fa fa-user"></i></span><input type="text" name="name" class="form-control" value="<%=name%>" required></div>
                         </div>
                         <div class="col-md-6">
@@ -100,61 +87,61 @@ body{background:#f0f4f8;margin:0;font-family:'Segoe UI',Arial,sans-serif}
                             <div class="input-group"><span class="ig-icon"><i class="fa fa-envelope"></i></span><input type="email" class="form-control" value="<%=email%>" readonly></div>
                         </div>
                         <div class="col-md-6">
-                            <label class="form-label"><%=L(hi,"फ़ोन","Phone")%></label>
+                            <label class="form-label">Phone</label>
                             <div class="input-group"><span class="ig-icon"><i class="fa fa-phone"></i></span><input type="text" name="phone" class="form-control" value="<%=phone%>"></div>
                         </div>
                         <div class="col-md-3">
-                            <label class="form-label"><%=L(hi,"आयु","Age")%></label>
+                            <label class="form-label">Age</label>
                             <input type="number" name="age" class="form-control" value="<%=age%>" min="0" max="150">
                         </div>
                         <div class="col-md-3">
-                            <label class="form-label"><%=L(hi,"रक्त समूह","Blood Group")%></label>
+                            <label class="form-label">Blood Group</label>
                             <select name="bloodGroup" class="form-select">
                                 <% String[] bgs={"O+","A+","B+","AB+","O-","A-","B-","AB-"};
                                    for(String bg:bgs){ %><option <%=bg.equals(blood)?"selected":""%>><%=bg%></option><% } %>
                             </select>
                         </div>
                         <div class="col-12">
-                            <label class="form-label"><%=L(hi,"पता","Address")%></label>
+                            <label class="form-label">Address</label>
                             <textarea name="address" class="form-control" rows="2"><%=addr%></textarea>
                         </div>
                     </div>
                     <div style="margin-top:20px">
-                        <button type="submit" class="btn-save"><i class="fa fa-save"></i> <%=L(hi,"बदलाव सहेजें","<%=L(hi,"सहेजें","Save")%> Changes")%></button>
+                        <button type="submit" class="btn-save"><i class="fa fa-save"></i> Save Changes</button>
                     </div>
                 </form>
             </div>
         </div>
 
-        <!-- <%=L(hi,"पासवर्ड बदलें","Change Password")%> -->
+        <!-- Change Password -->
         <div class="col-lg-5">
             <div class="form-card">
-                <div class="card-title"><i class="fa fa-lock"></i> <%=L(hi,"पासवर्ड बदलें","Change Password")%></div>
+                <div class="card-title"><i class="fa fa-lock"></i> Change Password</div>
                 <form action="/HospitalManagement/patient/changePassword" method="post">
                     <div class="mb-3">
-                        <label class="form-label"><%=L(hi,"वर्तमान पासवर्ड","Current Password")%></label>
+                        <label class="form-label">Current Password</label>
                         <div class="input-group"><span class="ig-icon"><i class="fa fa-lock"></i></span><input type="password" name="currentPass" class="form-control" required></div>
                     </div>
                     <div class="mb-3">
-                        <label class="form-label"><%=L(hi,"नया पासवर्ड","New Password")%></label>
+                        <label class="form-label">New Password</label>
                         <div class="input-group"><span class="ig-icon"><i class="fa fa-key"></i></span><input type="password" name="newPass" class="form-control" required minlength="6"></div>
                     </div>
                     <div class="mb-4">
-                        <label class="form-label">Confirm <%=L(hi,"नया पासवर्ड","New Password")%></label>
+                        <label class="form-label">Confirm New Password</label>
                         <div class="input-group"><span class="ig-icon"><i class="fa fa-key"></i></span><input type="password" name="confirmPass" class="form-control" required minlength="6"></div>
                     </div>
-                    <button type="submit" class="btn-save w-100"><i class="fa fa-shield-halved"></i> <%=L(hi,"पासवर्ड अपडेट करें","Update Password")%></button>
+                    <button type="submit" class="btn-save w-100"><i class="fa fa-shield-halved"></i> Update Password</button>
                 </form>
             </div>
 
-            <!-- <%=L(hi,"खाता जानकारी","Account Info")%> Card -->
+            <!-- Account Info Card -->
             <div class="form-card">
-                <div class="card-title"><i class="fa fa-info-circle"></i> <%=L(hi,"खाता जानकारी","Account Info")%></div>
+                <div class="card-title"><i class="fa fa-info-circle"></i> Account Info</div>
                 <div style="font-size:14px;color:#374151">
-                    <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid #f1f5f9"><span style="color:#64748b"><%=L(hi,"लिंग","Gender")%></span><strong><%=gender.isEmpty()?"—":gender%></strong></div>
-                    <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid #f1f5f9"><span style="color:#64748b"><%=L(hi,"रक्त समूह","Blood Group")%></span><strong style="color:#dc2626"><%=blood.isEmpty()?"—":blood%></strong></div>
-                    <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid #f1f5f9"><span style="color:#64748b"><%=L(hi,"आयु","Age")%></span><strong><%=age==0?"—":age+" years"%></strong></div>
-                    <div style="display:flex;justify-content:space-between;padding:8px 0"><span style="color:#64748b"><%=L(hi,"स्थिति","Status")%></span><span style="background:#d1fae5;color:#065f46;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:700">ACTIVE</span></div>
+                    <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid #f1f5f9"><span style="color:#64748b">Gender</span><strong><%=gender.isEmpty()?"—":gender%></strong></div>
+                    <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid #f1f5f9"><span style="color:#64748b">Blood Group</span><strong style="color:#dc2626"><%=blood.isEmpty()?"—":blood%></strong></div>
+                    <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid #f1f5f9"><span style="color:#64748b">Age</span><strong><%=age==0?"—":age+" years"%></strong></div>
+                    <div style="display:flex;justify-content:space-between;padding:8px 0"><span style="color:#64748b">Status</span><span style="background:#d1fae5;color:#065f46;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:700">ACTIVE</span></div>
                 </div>
             </div>
         </div>

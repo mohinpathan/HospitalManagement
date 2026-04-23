@@ -1,5 +1,4 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ include file="/WEB-INF/lang.jsp" %>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
 <style>
@@ -12,37 +11,34 @@ a{text-decoration:none}
 .role-nav .nav-right{display:flex;align-items:center;gap:4px}
 .role-nav .nav-right a{padding:7px 13px;border-radius:9px;color:#374151;font-weight:500;font-size:14px;transition:all .2s}
 .role-nav .nav-right a:hover{background:#eff6ff;color:#2b7cff}
-.user-chip{display:flex;align-items:center;gap:8px;padding:6px 14px;background:#f8fafc;border-radius:30px;border:1px solid #e5e7eb;font-size:14px;font-weight:500;color:#374151}
-.badge-admin{background:#fef3c7;color:#92400e;font-size:10px;font-weight:700;padding:3px 8px;border-radius:20px}
-.btn-logout{background:#fee2e2;color:#dc2626!important;padding:7px 14px!important;border-radius:9px!important;font-weight:600!important;border:1px solid #fecaca}
-.btn-logout:hover{background:#fecaca!important}
-.lang-sw{display:flex;align-items:center;gap:4px;background:#f8fafc;border:1.5px solid #e5e7eb;border-radius:30px;padding:3px 5px;margin-left:6px}
-.lang-sw a{padding:4px 10px;border-radius:20px;font-size:11px;font-weight:700;text-decoration:none;color:#64748b;transition:all .2s}
-.lang-sw a.on{background:linear-gradient(135deg,#2b7cff,#1a5fd4);color:#fff}
-.lang-sw a:hover:not(.on){background:#f1f5f9}
+.role-nav .user-chip{display:flex;align-items:center;gap:8px;padding:6px 14px;background:#f8fafc;border-radius:30px;border:1px solid #e5e7eb;font-size:14px;font-weight:500;color:#374151}
+.role-nav .badge-admin{background:#fef3c7;color:#92400e;font-size:10px;font-weight:700;padding:3px 8px;border-radius:20px;letter-spacing:.5px}
+.role-nav .btn-logout{background:#fee2e2;color:#dc2626!important;padding:7px 14px!important;border-radius:9px!important;font-weight:600!important;border:1px solid #fecaca}
+.role-nav .btn-logout:hover{background:#fecaca!important}
 </style>
 <div class="role-nav">
     <div class="brand">
         <span class="brand-box">H+</span>
-        <%=t(hi,"HealthCare Connect","हेल्थकेयर कनेक्ट")%>
+        HealthCare Connect
     </div>
     <div class="nav-right">
-        <a href="/HospitalManagement/admin/dashboard"><i class="fa fa-th-large me-1"></i><%=t(hi,"Dashboard","डैशबोर्ड")%></a>
-        <a href="/HospitalManagement/adminabout.jsp"><%=t(hi,"About","हमारे बारे में")%></a>
-        <a href="/HospitalManagement/admincontact.jsp"><%=t(hi,"Contact","संपर्क")%></a>
+        <a href="/HospitalManagement/admin/dashboard"><i class="fa fa-th-large me-1"></i>Dashboard</a>
+        <a href="/HospitalManagement/adminabout.jsp">About</a>
+        <a href="/HospitalManagement/admincontact.jsp">Contact</a>
+        <a href="/HospitalManagement/notifications" style="position:relative">
+            <i class="fa fa-bell"></i>
+            <span id="notifBadge" style="display:none;position:absolute;top:-4px;right:-4px;background:#ef4444;color:#fff;border-radius:50%;width:16px;height:16px;font-size:9px;font-weight:700;align-items:center;justify-content:center">0</span>
+        </a>
         <div class="user-chip">
             <i class="fa fa-user-shield" style="color:#2b7cff"></i>
             <%= session.getAttribute("adminName") != null ? session.getAttribute("adminName") : "Admin" %>
             <span class="badge-admin">ADMIN</span>
         </div>
-        <a href="/HospitalManagement/logout" class="btn-logout"><i class="fa fa-sign-out-alt me-1"></i><%=t(hi,"Logout","लॉगआउट")%></a>
-        <div class="lang-sw">
-            <a href="/HospitalManagement/changeLang?lang=en" class="<%=!hi?"on":""%>">EN</a>
-            <a href="/HospitalManagement/changeLang?lang=hi" class="<%=hi?"on":""%>">हि</a>
-        </div>
+        <a href="/HospitalManagement/logout" class="btn-logout"><i class="fa fa-sign-out-alt me-1"></i>Logout</a>
     </div>
 </div>
 <script>
+// Poll notification count every 60 seconds
 function loadNotifCount(){
     fetch('/HospitalManagement/notifications/count')
     .then(r=>r.json()).then(d=>{

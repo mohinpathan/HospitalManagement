@@ -2,6 +2,7 @@ package com.hospital.controller;
 
 import com.hospital.model.Bill;
 import com.hospital.service.BillService;
+import com.hospital.service.NotificationService;
 import com.hospital.util.EmailService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -17,9 +18,10 @@ import java.util.UUID;
 @RequestMapping("/patient/payment")
 public class PaymentController {
 
-    @Autowired private JdbcTemplate  jdbc;
-    @Autowired private BillService   billService;
-    @Autowired private EmailService  emailService;
+    @Autowired private BillService         billService;
+    @Autowired private NotificationService notifService;
+    @Autowired private EmailService        emailService;
+    @Autowired private JdbcTemplate        jdbc;
 
     /** Show payment page for a bill */
     @GetMapping("/{billId}")
@@ -33,12 +35,13 @@ public class PaymentController {
         return "forward:/payonline.jsp";
     }
 
-    /** Process online payment */
+    /** Process payment */
     @PostMapping("/process")
     public String processPayment(
-            @RequestParam("billId")        int    billId,
-            @RequestParam("paymentMethod") String method,
-            @RequestParam("cardName")      String cardName,
+            @RequestParam("billId")        int billId,
+            @RequestParam("paymentMethod") String paymentMethod,
+            @RequestParam(value = "cardNumber",  required = false) String cardNumber,
+            @RequestParam(value = "upiId",       required = false) String upiId,
             HttpSession session, RedirectAttributes ra) {
 
         if (!"patient".equals(session.getAttribute("role"))) return "redirect:/login.jsp";
@@ -50,31 +53,38 @@ public class PaymentController {
             return "redirect:/patient/medicalRecords";
         }
 
-        if ("paid".equals(bill.getPaymentStatus()) || "confirmed".equals(bill.getPaymentStatus())) {
+        if ("confirmed".equals(bill.getPaymentStatus()) || "paid".equals(bill.getPaymentStatus())) {
             ra.addFlashAttribute("error", "This bill has already been paid.");
             return "redirect:/patient/medicalRecords";
         }
 
         // Generate transaction ID
-        String txnId = "TXN" + System.currentTimeMillis() + UUID.randomUUID().toString().substring(0,6).toUpperCase();
+        String txnId = "TXN" + UUID.randomUUID().toString().replace("-","").substring(0,12).toUpperCase();
 
         // Save payment record
-        try {
-            jdbc.update(
-                "INSERT INTO payments (bill_id, patient_id, amount, payment_method, transaction_id, status) VALUES (?,?,?,?,?,'success')",
-                billId, pid, bill.getTotalAmount(), method, txnId);
-        } catch (Exception ignored) {}
+        jdbc.update(
+            "INSERT INTO payments (bill_id, patient_id, amount, payment_method, transaction_id, status) VALUES (?,?,?,?,?,'success')",
+            billId, pid, bill.getTotalAmount(), paymentMethod, txnId);
 
         // Update bill status to paid
-        jdbc.update("UPDATE bills SET payment_status='paid', payment_method=? WHERE id=?", method, billId);
+        jdbc.update("UPDATE bills SET payment_status='paid', payment_method=? WHERE id=?", paymentMethod, billId);
 
-        // Send confirmation email
-        String patientName  = (String) session.getAttribute("patientName");
-        String patientEmail = (String) session.getAttribute("patientEmail");
-        emailService.sendPaymentConfirmation(patientEmail, patientName,
-                bill.getDoctorName(), bill.getTotalAmount(), txnId, method);
+        // Send receipt email
+        emailService.sendBillReceipt(
+            bill.getPatientEmail(), bill.getPatientName(),
+            bill.getDoctorName(), bill.getDiagnosis(),
+            bill.getMedicines(), bill.getTotalAmount(), billId);
 
-        ra.addFlashAttribute("success", "Payment successful! Transaction ID: " + txnId);
+        // Mark receipt sent
+        billService.markReceiptSent(billId);
+
+        // Notify patient
+        notifService.create(pid, "patient",
+            "Payment Successful ✅",
+            "Your payment of ₹" + String.format("%.0f", bill.getTotalAmount()) + " was successful. TXN: " + txnId,
+            "success");
+
+        ra.addFlashAttribute("success", "Payment successful! Transaction ID: " + txnId + ". Receipt sent to your email.");
         ra.addFlashAttribute("txnId", txnId);
         return "redirect:/patient/medicalRecords";
     }

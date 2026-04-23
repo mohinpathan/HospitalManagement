@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ include file="/WEB-INF/lang.jsp" %>
-<!DOCTYPE html><html lang="<%=hi?"hi":"en"%>"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title><%=L(hi,"नया पासवर्ड सेट करें","Reset Password")%> - HealthCare Connect</title>
+<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Reset Password - HealthCare Connect</title>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
 <style>
@@ -37,24 +37,33 @@ function checkStrength(val) {
     if (/[A-Z]/.test(val)) score++;
     if (/[0-9]/.test(val)) score++;
     if (/[^A-Za-z0-9]/.test(val)) score++;
-    const levels = [{w:'0%',c:'#e5e7eb',t:''},{w:'25%',c:'#ef4444',t:'<%=L(hi,"कमज़ोर","Weak")%>'},{w:'50%',c:'#f59e0b',t:'<%=L(hi,"ठीक","Fair")%>'},{w:'75%',c:'#2b7cff',t:'<%=L(hi,"अच्छा","Good")%>'},{w:'100%',c:'#19b37a',t:'<%=L(hi,"मज़बूत","Strong")%>'}];
+    const levels = [
+        {w:'0%',  c:'#e5e7eb', t:''},
+        {w:'25%', c:'#ef4444', t:'Weak'},
+        {w:'50%', c:'#f59e0b', t:'Fair'},
+        {w:'75%', c:'#2b7cff', t:'Good'},
+        {w:'100%',c:'#19b37a', t:'Strong'}
+    ];
     const l = levels[Math.min(score, 4)];
-    fill.style.width = l.w; fill.style.background = l.c;
-    text.textContent = l.t ? '<%=L(hi,"मज़बूती:","Strength:")%> ' + l.t : '';
+    fill.style.width = l.w;
+    fill.style.background = l.c;
+    text.textContent = l.t ? 'Strength: ' + l.t : '';
 }
 function checkMatch() {
     const np = document.getElementById('newPass').value;
     const cp = document.getElementById('confirmPass').value;
     const hint = document.getElementById('matchHint');
     if (cp.length === 0) { hint.textContent = ''; return; }
-    if (np === cp) { hint.style.color='#19b37a'; hint.textContent='✓ <%=L(hi,"पासवर्ड मेल खाते हैं","Passwords match")%>'; }
-    else           { hint.style.color='#ef4444'; hint.textContent='✗ <%=L(hi,"पासवर्ड मेल नहीं खाते","Passwords do not match")%>'; }
+    if (np === cp) { hint.style.color='#19b37a'; hint.textContent='✓ Passwords match'; }
+    else           { hint.style.color='#ef4444'; hint.textContent='✗ Passwords do not match'; }
 }
 </script>
 </head><body>
 <jsp:include page="/header.jsp" />
 <div class="wrap">
 <div class="card">
+
+    <%-- Guard: if session is missing, redirect back --%>
     <%
         String otpEmail    = (String)  session.getAttribute("otpEmail");
         Boolean otpVerified = (Boolean) session.getAttribute("otpVerified");
@@ -63,38 +72,53 @@ function checkMatch() {
             return;
         }
     %>
+
     <div class="card-icon"><i class="fa fa-lock-open"></i></div>
-    <h2><%=L(hi,"नया पासवर्ड सेट करें","Set New Password")%></h2>
-    <p class="sub"><%=L(hi,"OTP सत्यापित हो गया। एक मज़बूत नया पासवर्ड चुनें।","OTP verified. Choose a strong new password.")%></p>
+    <h2>Set New Password</h2>
+    <p class="sub">OTP verified. Choose a strong new password.</p>
+
     <div class="verified-badge">
         <i class="fa fa-circle-check" style="font-size:16px"></i>
-        <%=L(hi,"पहचान सत्यापित:","Identity verified for")%> <strong><%=otpEmail%></strong>
+        Identity verified for <strong><%=otpEmail%></strong>
     </div>
+
     <% if(request.getAttribute("error") != null){ %>
     <div class="alert-msg alert-danger"><i class="fa fa-exclamation-circle"></i> <%=request.getAttribute("error")%></div>
     <% } %>
+
     <form action="/HospitalManagement/resetPassword" method="post">
+        <%-- No hidden fields needed — controller reads email/role from session --%>
+
         <div style="margin-bottom:4px">
-            <label class="form-label"><%=L(hi,"नया पासवर्ड *","New Password *")%></label>
+            <label class="form-label">New Password *</label>
             <div class="input-group">
                 <span class="ig-icon"><i class="fa fa-lock"></i></span>
-                <input type="password" name="newPassword" id="newPass" class="form-control" placeholder="<%=L(hi,"कम से कम 6 अक्षर","Min 6 characters")%>" required minlength="6" oninput="checkStrength(this.value); checkMatch()">
+                <input type="password" name="newPassword" id="newPass" class="form-control"
+                       placeholder="Min 6 characters" required minlength="6"
+                       oninput="checkStrength(this.value); checkMatch()">
             </div>
             <div class="strength-bar"><div class="strength-fill" id="strengthFill"></div></div>
             <div class="strength-text" id="strengthText"></div>
         </div>
+
         <div style="margin-top:16px;margin-bottom:4px">
-            <label class="form-label"><%=L(hi,"पासवर्ड की पुष्टि करें *","Confirm Password *")%></label>
+            <label class="form-label">Confirm Password *</label>
             <div class="input-group">
                 <span class="ig-icon"><i class="fa fa-key"></i></span>
-                <input type="password" name="confirmPassword" id="confirmPass" class="form-control" placeholder="<%=L(hi,"पासवर्ड दोहराएं","Repeat your password")%>" required minlength="6" oninput="checkMatch()">
+                <input type="password" name="confirmPassword" id="confirmPass" class="form-control"
+                       placeholder="Repeat your password" required minlength="6"
+                       oninput="checkMatch()">
             </div>
             <div class="strength-text" id="matchHint"></div>
         </div>
-        <button type="submit" class="btn-submit"><i class="fa fa-shield-halved"></i> <%=L(hi,"पासवर्ड रीसेट करें","Reset Password")%></button>
+
+        <button type="submit" class="btn-submit">
+            <i class="fa fa-shield-halved"></i> Reset Password &amp; Login
+        </button>
     </form>
+
     <p style="text-align:center;margin-top:20px;font-size:14px;color:#64748b">
-        <a href="/HospitalManagement/login.jsp" style="color:#19b37a;font-weight:600">← <%=L(hi,"लॉगिन पर वापस जाएं","Back to Login")%></a>
+        <a href="/HospitalManagement/login.jsp" style="color:#19b37a;font-weight:600">← Back to Login</a>
     </p>
 </div>
 </div>

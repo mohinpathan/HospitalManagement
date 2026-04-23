@@ -1,5 +1,4 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ include file="/WEB-INF/lang.jsp" %>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
 <% String uri = request.getRequestURI(); %>
 <style>
@@ -15,13 +14,13 @@
 .pat-sidebar .btn-logout-sb:hover{background:#fee2e2!important}
 </style>
 <aside class="pat-sidebar">
-    <div class="sb-title"><%=t(hi,"मरीज़ पोर्टल","Patient Portal")%></div>
-    <a href="/HospitalManagement/patient/dashboard"       class="<%= uri.contains("dashboard") ? "active" : "" %>"><i class="fa fa-th-large"></i> <%=t(hi,"डैशबोर्ड","Dashboard")%></a>
-    <a href="/HospitalManagement/patient/findDoctors"     class="<%= uri.contains("findDoctors") ? "active" : "" %>"><i class="fa fa-search"></i> <%=t(hi,"डॉक्टर खोजें","Find Doctors")%></a>
-    <a href="/HospitalManagement/patient/bookAppointment" class="<%= uri.contains("bookAppointment") ? "active" : "" %>"><i class="fa fa-calendar-plus"></i> <%=t(hi,"अपॉइंटमेंट बुक करें","Book Appointment")%></a>
-    <a href="/HospitalManagement/patient/appointments"    class="<%= uri.contains("appointments") ? "active" : "" %>"><i class="fa fa-history"></i> <%=t(hi,"मेरे अपॉइंटमेंट","My Appointments")%></a>
-    <a href="/HospitalManagement/patient/medicalRecords"  class="<%= uri.contains("medical") ? "active" : "" %>"><i class="fa fa-file-medical"></i> <%=t(hi,"चिकित्सा रिकॉर्ड","Medical Records")%></a>
+    <div class="sb-title">Patient Portal</div>
+    <a href="/HospitalManagement/patient/dashboard"       class="<%= uri.contains("dashboard") ? "active" : "" %>"><i class="fa fa-th-large"></i> Dashboard</a>
+    <a href="/HospitalManagement/patient/findDoctors"     class="<%= uri.contains("findDoctors") ? "active" : "" %>"><i class="fa fa-search"></i> Find Doctors</a>
+    <a href="/HospitalManagement/patient/bookAppointment" class="<%= uri.contains("bookAppointment") ? "active" : "" %>"><i class="fa fa-calendar-plus"></i> Book Appointment</a>
+    <a href="/HospitalManagement/patient/appointments"    class="<%= uri.contains("appointments") ? "active" : "" %>"><i class="fa fa-history"></i> My Appointments</a>
+    <a href="/HospitalManagement/patient/medicalRecords"  class="<%= uri.contains("medical") ? "active" : "" %>"><i class="fa fa-file-medical"></i> Medical Records</a>
     <div class="sb-divider"></div>
-    <a href="/HospitalManagement/patient/profile"         class="<%= uri.contains("profile") ? "active" : "" %>"><i class="fa fa-user"></i> <%=t(hi,"मेरी प्रोफ़ाइल","My Profile")%></a>
-    <a href="/HospitalManagement/logout" class="btn-logout-sb"><i class="fa fa-sign-out-alt"></i> <%=t(hi,"लॉगआउट","Logout")%></a>
+    <a href="/HospitalManagement/patient/profile"         class="<%= uri.contains("profile") ? "active" : "" %>"><i class="fa fa-user"></i> My Profile</a>
+    <a href="/HospitalManagement/logout" class="btn-logout-sb"><i class="fa fa-sign-out-alt"></i> Logout</a>
 </aside>

@@ -1,5 +1,5 @@
 -- ============================================================
---  New Features SQL — run after hospital_db.sql + features_db.sql
+--  New Features — run after hospital_db.sql + features_db.sql
 -- ============================================================
 USE hospital_db;
 
@@ -13,7 +13,7 @@ CREATE TABLE IF NOT EXISTS patient_reports (
     file_name       VARCHAR(255) NOT NULL,
     file_path       VARCHAR(500) NOT NULL,
     description     TEXT,
-    email_sent      TINYINT(1) DEFAULT 0,
+    send_email      TINYINT(1) DEFAULT 0,
     created_at      TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (patient_id) REFERENCES patients(id) ON DELETE CASCADE,
     FOREIGN KEY (doctor_id)  REFERENCES doctors(id)  ON DELETE CASCADE
@@ -33,8 +33,8 @@ CREATE TABLE IF NOT EXISTS payments (
     FOREIGN KEY (patient_id) REFERENCES patients(id) ON DELETE CASCADE
 );
 
--- Doctor's Patient Notes (private notes per patient)
-CREATE TABLE IF NOT EXISTS doctor_patient_notes (
+-- Doctor Notes per patient
+CREATE TABLE IF NOT EXISTS doctor_notes (
     id          INT AUTO_INCREMENT PRIMARY KEY,
     doctor_id   INT NOT NULL,
     patient_id  INT NOT NULL,
@@ -44,11 +44,11 @@ CREATE TABLE IF NOT EXISTS doctor_patient_notes (
     FOREIGN KEY (patient_id) REFERENCES patients(id) ON DELETE CASCADE
 );
 
--- Add photo columns if not already added
+-- Ensure photo columns exist
 ALTER TABLE patients ADD COLUMN IF NOT EXISTS photo VARCHAR(255) DEFAULT NULL;
 ALTER TABLE doctors  ADD COLUMN IF NOT EXISTS photo VARCHAR(255) DEFAULT NULL;
 ALTER TABLE admins   ADD COLUMN IF NOT EXISTS photo VARCHAR(255) DEFAULT NULL;
 
--- Add report_files column to prescriptions for file attachments
-ALTER TABLE prescriptions ADD COLUMN IF NOT EXISTS report_files TEXT DEFAULT NULL;
+-- ============================================================
+-- END
 -- ============================================================

@@ -18,9 +18,6 @@
     <mvc:annotation-driven />
     <task:annotation-driven />
 
-    <!-- NOTE: We use custom session+cookie language switching (LangController)
-         NOT Spring's i18n beans — they conflict with our approach -->
-
     <!-- Static resources -->
     <mvc:resources mapping="/static/**" location="/static/" />
     <mvc:resources mapping="/uploads/**" location="/uploads/" />

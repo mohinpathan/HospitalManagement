@@ -1,5 +1,4 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ include file="/WEB-INF/lang.jsp" %>
 <%@ page import="com.hospital.model.Admin" %>
 <!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Admin Profile</title>
@@ -52,35 +51,25 @@ body{background:#f0f4f8;margin:0;font-family:'Segoe UI',Arial,sans-serif}
         Admin a=(Admin)request.getAttribute("admin");
         String name=a!=null?a.getFullName():"";
         String email=a!=null?a.getEmail():"";
-        String phone=a!=null?(a.get<%=L(hi,"फ़ोन","Phone")%>()!=null?a.get<%=L(hi,"फ़ोन","Phone")%>():""):"";
+        String phone=a!=null?(a.getPhone()!=null?a.getPhone():""):"";
     %>
 
     <div class="profile-hero">
-        <div class="profile-avatar">
-            <% com.hospital.model.Admin adminObj=(com.hospital.model.Admin)request.getAttribute("admin");
-               String adminPhoto=adminObj!=null&&adminObj.get<%=L(hi,"फ़ोन","Phone")%>()!=null?null:null; // photo not in Admin model yet %>
-            <i class="fa fa-user-shield"></i>
-        </div>
+        <div class="profile-avatar"><i class="fa fa-user-shield"></i></div>
         <div>
             <h3><%=name%></h3>
             <p><%=email%></p>
             <span class="badge-role">ADMINISTRATOR</span>
-            <div style="margin-top:10px">
-                <form action="/HospitalManagement/upload/photo" method="post" enctype="multipart/form-data" style="display:inline-flex;align-items:center;gap:8px">
-                    <input type="file" name="photo" accept="image/*" style="font-size:12px;color:rgba(255,255,255,.8);background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.3);border-radius:8px;padding:4px 8px;cursor:pointer" onchange="this.form.submit()">
-                    <span style="font-size:11px;opacity:.7">Change Photo</span>
-                </form>
-            </div>
         </div>
     </div>
 
     <div class="row g-4">
         <div class="col-lg-6">
             <div class="form-card">
-                <div class="card-title"><i class="fa fa-user-edit"></i> <%=L(hi,"प्रोफ़ाइल जानकारी","Profile Information")%></div>
+                <div class="card-title"><i class="fa fa-user-edit"></i> Profile Information</div>
                 <form action="/HospitalManagement/admin/updateProfile" method="post">
                     <div class="mb-3">
-                        <label class="form-label"><%=L(hi,"पूरा नाम","Full Name")%></label>
+                        <label class="form-label">Full Name</label>
                         <div class="input-group"><span class="ig-icon"><i class="fa fa-user"></i></span><input type="text" name="fullName" class="form-control" value="<%=name%>" required></div>
                     </div>
                     <div class="mb-3">
@@ -88,30 +77,30 @@ body{background:#f0f4f8;margin:0;font-family:'Segoe UI',Arial,sans-serif}
                         <div class="input-group"><span class="ig-icon"><i class="fa fa-envelope"></i></span><input type="email" class="form-control" value="<%=email%>" readonly></div>
                     </div>
                     <div class="mb-4">
-                        <label class="form-label"><%=L(hi,"फ़ोन","Phone")%></label>
+                        <label class="form-label">Phone</label>
                         <div class="input-group"><span class="ig-icon"><i class="fa fa-phone"></i></span><input type="text" name="phone" class="form-control" value="<%=phone%>"></div>
                     </div>
-                    <button type="submit" class="btn-save"><i class="fa fa-save"></i> <%=L(hi,"बदलाव सहेजें","<%=L(hi,"सहेजें","Save")%> Changes")%></button>
+                    <button type="submit" class="btn-save"><i class="fa fa-save"></i> Save Changes</button>
                 </form>
             </div>
         </div>
         <div class="col-lg-6">
             <div class="form-card">
-                <div class="card-title"><i class="fa fa-lock"></i> <%=L(hi,"पासवर्ड बदलें","Change Password")%></div>
+                <div class="card-title"><i class="fa fa-lock"></i> Change Password</div>
                 <form action="/HospitalManagement/admin/changePassword" method="post">
                     <div class="mb-3">
-                        <label class="form-label"><%=L(hi,"वर्तमान पासवर्ड","Current Password")%></label>
+                        <label class="form-label">Current Password</label>
                         <div class="input-group"><span class="ig-icon"><i class="fa fa-lock"></i></span><input type="password" name="currentPassword" class="form-control" required></div>
                     </div>
                     <div class="mb-3">
-                        <label class="form-label"><%=L(hi,"नया पासवर्ड","New Password")%></label>
+                        <label class="form-label">New Password</label>
                         <div class="input-group"><span class="ig-icon"><i class="fa fa-key"></i></span><input type="password" name="newPassword" class="form-control" required minlength="6"></div>
                     </div>
                     <div class="mb-4">
-                        <label class="form-label">Confirm <%=L(hi,"नया पासवर्ड","New Password")%></label>
+                        <label class="form-label">Confirm New Password</label>
                         <div class="input-group"><span class="ig-icon"><i class="fa fa-key"></i></span><input type="password" name="confirmPassword" class="form-control" required minlength="6"></div>
                     </div>
-                    <button type="submit" class="btn-save w-100"><i class="fa fa-shield-halved"></i> <%=L(hi,"पासवर्ड अपडेट करें","Update Password")%></button>
+                    <button type="submit" class="btn-save w-100"><i class="fa fa-shield-halved"></i> Update Password</button>
                 </form>
             </div>
         </div>

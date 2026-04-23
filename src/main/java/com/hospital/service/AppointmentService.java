@@ -98,6 +98,20 @@ public class AppointmentService {
             mapper(), doctorId);
     }
 
+    public List<Appointment> getByPatientAndDoctor(int patientId, int doctorId) {
+        return jdbc.query(
+            BASE_SELECT + "WHERE a.patient_id=? AND a.doctor_id=? ORDER BY a.appointment_date DESC",
+            mapper(), patientId, doctorId);
+    }
+
+    public List<Map<String, Object>> getPatientsByDoctor(int doctorId) {
+        return jdbc.queryForList(
+            "SELECT DISTINCT p.id, p.full_name, p.email, p.phone, p.gender, p.age, p.blood_group, p.photo, " +
+            "COUNT(a.id) AS visit_count, MAX(a.appointment_date) AS last_visit " +
+            "FROM appointments a JOIN patients p ON a.patient_id=p.id " +
+            "WHERE a.doctor_id=? GROUP BY p.id ORDER BY last_visit DESC", doctorId);
+    }
+
     public List<java.util.Map<String,Object>> getMonthlyTrend() {
         return jdbc.queryForList(
             "SELECT DATE_FORMAT(appointment_date,'%Y-%m') AS month, COUNT(*) AS count " +

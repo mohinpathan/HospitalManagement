@@ -1,7 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ include file="/WEB-INF/lang.jsp" %>
-<!DOCTYPE html><html lang="<%=hi?"hi":"en"%>"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title><%=t(hi,"हेल्थकेयर कनेक्ट","HealthCare Connect")%> - <%=t(hi,"अस्पताल प्रबंधन","Hospital Management")%></title>
+<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>HealthCare Connect - Hospital Management</title>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
 <style>
@@ -67,11 +66,11 @@ a{text-decoration:none}
 <!-- HERO -->
 <section class="hero-section">
     <div class="hero-text">
-        <h1><%=t(hi,"आपका स्वास्थ्य,","Your Health,")%><br><span><%=t(hi,"हमारी जिम्मेदारी","Our Priority")%></span></h1>
-        <p><%=t(hi,"हमारे विशेषज्ञ डॉक्टरों और अत्याधुनिक सुविधाओं के साथ विश्व स्तरीय स्वास्थ्य सेवा का अनुभव करें। आज ही अपना अपॉइंटमेंट बुक करें।","Experience world-class healthcare with our team of expert doctors and state-of-the-art facilities. Book your appointment today and take the first step toward better health.")%></p>
+        <h1>Your Health,<br><span>Our Priority</span></h1>
+        <p>Experience world-class healthcare with our team of expert doctors and state-of-the-art facilities. Book your appointment today and take the first step toward better health.</p>
         <div class="hero-btns">
-            <a href="/HospitalManagement/register.jsp" class="btn-hero-primary"><i class="fa fa-user-plus"></i> <%=t(hi,"शुरू करें","Get Started")%></a>
-            <a href="/HospitalManagement/about.jsp" class="btn-hero-outline"><i class="fa fa-info-circle"></i> <%=t(hi,"और जानें","Learn More")%></a>
+            <a href="/HospitalManagement/register.jsp" class="btn-hero-primary"><i class="fa fa-user-plus"></i> Get Started</a>
+            <a href="/HospitalManagement/about.jsp" class="btn-hero-outline"><i class="fa fa-info-circle"></i> Learn More</a>
         </div>
     </div>
     <div class="hero-img">
@@ -81,37 +80,39 @@ a{text-decoration:none}
 
 <!-- STATS -->
 <section class="stats-bar">
-    <div class="stat-item"><div class="stat-icon">👨‍⚕️</div><div class="stat-num">50+</div><div class="stat-label"><%=t(hi,"विशेषज्ञ डॉक्टर","Expert Doctors")%></div></div>
-    <div class="stat-item"><div class="stat-icon">💙</div><div class="stat-num">10k+</div><div class="stat-label"><%=t(hi,"खुश मरीज़","Happy Patients")%></div></div>
-    <div class="stat-item"><div class="stat-icon">🏆</div><div class="stat-num">25+</div><div class="stat-label"><%=t(hi,"पुरस्कार","Awards Won")%></div></div>
-    <div class="stat-item"><div class="stat-icon">⏰</div><div class="stat-num">24/7</div><div class="stat-label"><%=t(hi,"आपातकालीन देखभाल","Emergency Care")%></div></div>
+    <div class="stat-item"><div class="stat-icon">👨‍⚕️</div><div class="stat-num">50+</div><div class="stat-label">Expert Doctors</div></div>
+    <div class="stat-item"><div class="stat-icon">💙</div><div class="stat-num">10k+</div><div class="stat-label">Happy Patients</div></div>
+    <div class="stat-item"><div class="stat-icon">🏆</div><div class="stat-num">25+</div><div class="stat-label">Awards Won</div></div>
+    <div class="stat-item"><div class="stat-icon">⏰</div><div class="stat-num">24/7</div><div class="stat-label">Emergency Care</div></div>
 </section>
 
-<div class="section-header"><h2><%=t(hi,"हमारी चिकित्सा सेवाएं","Our Medical Services")%></h2><p><%=t(hi,"आपकी जरूरतों के अनुसार व्यापक स्वास्थ्य सेवाएं","Comprehensive healthcare services tailored to your needs")%></p></div>
+<!-- SERVICES -->
+<div class="section-header"><h2>Our Medical Services</h2><p>Comprehensive healthcare services tailored to your needs</p></div>
 <div style="background:#f0f4f8;padding:32px 0 64px">
 <div class="services-grid">
-    <div class="svc-card"><div class="svc-icon cardio"><i class="fa fa-heart-pulse"></i></div><h3><%=t(hi,"हृदय रोग","Cardiology")%></h3><p><%=t(hi,"अनुभवी हृदय रोग विशेषज्ञों के साथ उन्नत हृदय देखभाल।","Advanced cardiac care with experienced cardiologists using cutting-edge technology.")%></p><a href="/HospitalManagement/register.jsp"><%=t(hi,"विशेषज्ञ खोजें","Find Specialists")%> <i class="fa fa-arrow-right"></i></a></div>
-    <div class="svc-card"><div class="svc-icon neuro"><i class="fa fa-brain"></i></div><h3><%=t(hi,"तंत्रिका विज्ञान","Neurology")%></h3><p><%=t(hi,"मस्तिष्क, रीढ़ और तंत्रिका तंत्र विकारों के लिए विशेषज्ञ देखभाल।","Expert neurological care for brain, spine and nervous system disorders.")%></p><a href="/HospitalManagement/register.jsp"><%=t(hi,"विशेषज्ञ खोजें","Find Specialists")%> <i class="fa fa-arrow-right"></i></a></div>
-    <div class="svc-card"><div class="svc-icon peds"><i class="fa fa-baby"></i></div><h3><%=t(hi,"बाल रोग","Pediatrics")%></h3><p><%=t(hi,"शिशुओं, बच्चों और किशोरों के लिए विशेष देखभाल।","Compassionate and specialized care for infants, children and adolescents.")%></p><a href="/HospitalManagement/register.jsp"><%=t(hi,"विशेषज्ञ खोजें","Find Specialists")%> <i class="fa fa-arrow-right"></i></a></div>
-    <div class="svc-card"><div class="svc-icon ortho"><i class="fa fa-bone"></i></div><h3><%=t(hi,"हड्डी रोग","Orthopedics")%></h3><p><%=t(hi,"उन्नत शल्य चिकित्सा विकल्पों के साथ हड्डी, जोड़ और मांसपेशियों की देखभाल।","Comprehensive bone, joint and muscle care with advanced surgical options.")%></p><a href="/HospitalManagement/register.jsp"><%=t(hi,"विशेषज्ञ खोजें","Find Specialists")%> <i class="fa fa-arrow-right"></i></a></div>
+    <div class="svc-card"><div class="svc-icon cardio"><i class="fa fa-heart-pulse"></i></div><h3>Cardiology</h3><p>Advanced cardiac care with experienced cardiologists using cutting-edge technology.</p><a href="/HospitalManagement/register.jsp">Find Specialists <i class="fa fa-arrow-right"></i></a></div>
+    <div class="svc-card"><div class="svc-icon neuro"><i class="fa fa-brain"></i></div><h3>Neurology</h3><p>Expert neurological care for brain, spine and nervous system disorders.</p><a href="/HospitalManagement/register.jsp">Find Specialists <i class="fa fa-arrow-right"></i></a></div>
+    <div class="svc-card"><div class="svc-icon peds"><i class="fa fa-baby"></i></div><h3>Pediatrics</h3><p>Compassionate and specialized care for infants, children and adolescents.</p><a href="/HospitalManagement/register.jsp">Find Specialists <i class="fa fa-arrow-right"></i></a></div>
+    <div class="svc-card"><div class="svc-icon ortho"><i class="fa fa-bone"></i></div><h3>Orthopedics</h3><p>Comprehensive bone, joint and muscle care with advanced surgical options.</p><a href="/HospitalManagement/register.jsp">Find Specialists <i class="fa fa-arrow-right"></i></a></div>
 </div>
 </div>
 
 <!-- HOW IT WORKS -->
 <section class="how-section">
-    <h2><%=t(hi,"यह कैसे काम करता है","How It Works")%></h2>
-    <p class="sub"><%=t(hi,"देखभाल पाने के लिए सरल कदम","Simple steps to get the care you need")%></p>
+    <h2>How It Works</h2>
+    <p class="sub">Simple steps to get the care you need</p>
     <div class="how-grid">
-        <div class="how-step"><div class="step-num">1</div><h3><%=t(hi,"रजिस्टर करें","Register")%></h3><p><%=t(hi,"मिनटों में अपना खाता बनाएं और स्वास्थ्य प्रोफ़ाइल पूरी करें।","Create your account and complete your health profile in minutes.")%></p></div>
-        <div class="how-step"><div class="step-num">2</div><h3><%=t(hi,"डॉक्टर खोजें","Find a Doctor")%></h3><p><%=t(hi,"विशेषज्ञता, विभाग या उपलब्धता के अनुसार डॉक्टर खोजें।","Search doctors by specialization, department or availability.")%></p></div>
-        <div class="how-step"><div class="step-num">3</div><h3><%=t(hi,"बुक करें और परामर्श लें","Book & Consult")%></h3><p><%=t(hi,"अपना अपॉइंटमेंट शेड्यूल करें और विशेषज्ञ चिकित्सा देखभाल प्राप्त करें।","Schedule your appointment and receive expert medical care.")%></p></div>
+        <div class="how-step"><div class="step-num">1</div><h3>Register</h3><p>Create your account and complete your health profile in minutes.</p></div>
+        <div class="how-step"><div class="step-num">2</div><h3>Find a Doctor</h3><p>Search doctors by specialization, department or availability.</p></div>
+        <div class="how-step"><div class="step-num">3</div><h3>Book & Consult</h3><p>Schedule your appointment and receive expert medical care.</p></div>
     </div>
 </section>
 
+<!-- CTA -->
 <section class="cta-section">
-    <h2><%=t(hi,"शुरू करने के लिए तैयार हैं?","Ready to Get Started?")%></h2>
-    <p><%=t(hi,"हजारों मरीजों से जुड़ें जो अपनी चिकित्सा जरूरतों के लिए हेल्थकेयर कनेक्ट पर भरोसा करते हैं।","Join thousands of patients who trust HealthCare Connect for their medical needs.")%></p>
-    <a href="/HospitalManagement/register.jsp" class="btn-cta"><%=t(hi,"मुफ्त खाता बनाएं","Create Free Account")%></a>
+    <h2>Ready to Get Started?</h2>
+    <p>Join thousands of patients who trust HealthCare Connect for their medical needs.</p>
+    <a href="/HospitalManagement/register.jsp" class="btn-cta">Create Free Account</a>
 </section>
 
 <jsp:include page="/footer.jsp" />

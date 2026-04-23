@@ -16,10 +16,8 @@ public class Doctor {
     private String address;
     private String bio;
     private String status;
-    private String photo;
 
-    public String getPhoto() { return photo; }
-    public void setPhoto(String photo) { this.photo = photo; }
+    // Getters & Setters
     public int getId() { return id; }
     public void setId(int id) { this.id = id; }
 

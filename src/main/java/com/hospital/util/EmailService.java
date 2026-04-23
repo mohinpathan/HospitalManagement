@@ -144,40 +144,18 @@ public class EmailService {
     public void sendReportNotification(String to, String patientName, String doctorName,
                                         String reportType, String description) {
         String body = "<p style='color:#374151;font-size:16px;margin:0 0 16px'>Dear <strong>" + patientName + "</strong>,</p>"
-            + "<p style='color:#374151;font-size:15px;line-height:1.7;margin:0 0 20px'>Your doctor <strong>" + doctorName + "</strong> has uploaded a new medical report for you.</p>"
+            + "<p style='color:#374151;font-size:15px;line-height:1.7;margin:0 0 20px'>Dr. <strong>" + doctorName + "</strong> has uploaded a new medical report for you.</p>"
             + "<div style='background:#f8fafc;border-radius:12px;padding:20px 24px;margin:0 0 24px;border-left:4px solid #7c3aed'>"
             + "<p style='color:#374151;font-size:14px;margin:0 0 8px'><strong>Report Details:</strong></p>"
             + "<p style='color:#374151;font-size:14px;margin:0 0 4px'>📋 Type: <strong style='text-transform:capitalize'>" + reportType + "</strong></p>"
-            + "<p style='color:#374151;font-size:14px;margin:0'>📝 Description: <strong>" + (description!=null&&!description.isEmpty()?description:"—") + "</strong></p>"
+            + "<p style='color:#374151;font-size:14px;margin:0'>📝 Description: <strong>" + (description != null && !description.isEmpty() ? description : "—") + "</strong></p>"
             + "</div>"
-            + "<p style='color:#374151;font-size:14px;line-height:1.7;margin:0 0 20px'>Please login to your patient portal to view and download your report.</p>"
+            + "<p style='color:#374151;font-size:14px;line-height:1.7;margin:0 0 20px'>Please log in to your patient portal to view and download your report.</p>"
             + "<div style='text-align:center;margin:24px 0'>"
-            + "<a href='http://localhost:8081/HospitalManagement/patient/medicalRecords' style='background:linear-gradient(135deg,#7c3aed,#6d28d9);color:#fff;padding:13px 28px;border-radius:10px;text-decoration:none;font-weight:700;font-size:14px;display:inline-block'>View My Reports →</a>"
+            + "<a href='http://localhost:8081/HospitalManagement/patient/medicalRecords' style='background:linear-gradient(135deg,#7c3aed,#8b5cf6);color:#fff;padding:13px 28px;border-radius:10px;text-decoration:none;font-weight:700;font-size:14px;display:inline-block'>View My Reports →</a>"
             + "</div>";
-        sendHtml(to, "New Medical Report Uploaded 📋 - HealthCare Connect",
-                 wrap("#7c3aed,#6d28d9", "📋", "New Report Available", body));
-    }
-
-    // ── Online payment confirmation ───────────────────────────
-    public void sendPaymentConfirmation(String to, String patientName, String doctorName,
-                                         double amount, String txnId, String method) {
-        String body = "<p style='color:#374151;font-size:16px;margin:0 0 16px'>Dear <strong>" + patientName + "</strong>,</p>"
-            + "<p style='color:#374151;font-size:15px;line-height:1.7;margin:0 0 20px'>Your online payment has been processed successfully.</p>"
-            + "<div style='background:#f8fafc;border-radius:12px;padding:20px 24px;margin:0 0 24px;border-left:4px solid #19b37a'>"
-            + "<p style='color:#374151;font-size:14px;margin:0 0 8px'><strong>Payment Details:</strong></p>"
-            + "<p style='color:#374151;font-size:14px;margin:0 0 4px'>🏥 Doctor: <strong>" + doctorName + "</strong></p>"
-            + "<p style='color:#374151;font-size:14px;margin:0 0 4px'>💳 Method: <strong style='text-transform:capitalize'>" + method + "</strong></p>"
-            + "<p style='color:#374151;font-size:14px;margin:0 0 4px'>🔖 Transaction ID: <strong style='font-family:monospace'>" + txnId + "</strong></p>"
-            + "<p style='color:#374151;font-size:18px;font-weight:800;margin:12px 0 0'>Total Paid: ₹" + String.format("%.2f", amount) + "</p>"
-            + "</div>"
-            + "<div style='background:#d1fae5;border-radius:10px;padding:14px 18px;margin:0 0 20px'>"
-            + "<p style='color:#065f46;font-size:13px;margin:0'>✅ Payment successful. Please keep this transaction ID for your records.</p>"
-            + "</div>"
-            + "<div style='text-align:center;margin:24px 0'>"
-            + "<a href='http://localhost:8081/HospitalManagement/patient/medicalRecords' style='background:linear-gradient(135deg,#19b37a,#0d9668);color:#fff;padding:13px 28px;border-radius:10px;text-decoration:none;font-weight:700;font-size:14px;display:inline-block'>View Medical Records →</a>"
-            + "</div>";
-        sendHtml(to, "Payment Successful ✅ ₹" + String.format("%.0f", amount) + " - HealthCare Connect",
-                 wrap("#19b37a,#0d9668", "✅", "Payment Confirmed", body));
+        sendHtml(to, "New Medical Report Available 📋 - HealthCare Connect",
+                 wrap("#7c3aed,#8b5cf6", "📋", "New Report Uploaded", body));
     }
 
     // ── Appointment Reminder email ────────────────────────────
