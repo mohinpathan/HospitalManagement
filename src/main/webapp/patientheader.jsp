@@ -35,6 +35,7 @@ a{text-decoration:none}
             <span class="badge-patient">PATIENT</span>
         </div>
         <a href="/HospitalManagement/logout" class="btn-logout"><i class="fa fa-sign-out-alt me-1"></i>Logout</a>
+        <jsp:include page="/langswitcher.jsp" />
     </div>
 </div>
 <script>

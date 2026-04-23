@@ -26,5 +26,6 @@ a{text-decoration:none}
         <a href="/HospitalManagement/contact.jsp">Contact</a>
         <a href="/HospitalManagement/login.jsp"><i class="fa fa-sign-in-alt me-1"></i>Login</a>
         <a href="/HospitalManagement/register.jsp" class="btn-reg"><i class="fa fa-user-plus me-1"></i>Register</a>
+        <jsp:include page="/langswitcher.jsp" />
     </div>
 </nav>
