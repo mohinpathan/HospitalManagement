@@ -49,6 +49,11 @@ ALTER TABLE patients ADD COLUMN IF NOT EXISTS photo VARCHAR(255) DEFAULT NULL;
 ALTER TABLE doctors  ADD COLUMN IF NOT EXISTS photo VARCHAR(255) DEFAULT NULL;
 ALTER TABLE admins   ADD COLUMN IF NOT EXISTS photo VARCHAR(255) DEFAULT NULL;
 
+-- Expand bills payment_method ENUM to support online payment methods
+ALTER TABLE bills
+MODIFY COLUMN payment_method
+ENUM('cash','card','online','insurance','upi','netbanking','wallet') DEFAULT 'cash';
+
 -- ============================================================
 -- END
 -- ============================================================

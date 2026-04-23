@@ -70,8 +70,18 @@ public class PaymentController {
             // payments table may not exist yet — continue anyway
         }
 
+        // Map payment method to valid ENUM value in bills table
+        String billPaymentMethod = switch (paymentMethod) {
+            case "card"       -> "card";
+            case "upi"        -> "online";
+            case "netbanking" -> "online";
+            case "wallet"     -> "online";
+            default           -> "cash";
+        };
+
         // Update bill status to paid
-        jdbc.update("UPDATE bills SET payment_status='paid', payment_method=? WHERE id=?", paymentMethod, billId);
+        jdbc.update("UPDATE bills SET payment_status='paid', payment_method=? WHERE id=?",
+                    billPaymentMethod, billId);
 
         // Send receipt email
         emailService.sendBillReceipt(
