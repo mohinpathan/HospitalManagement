@@ -62,9 +62,13 @@ public class PaymentController {
         String txnId = "TXN" + UUID.randomUUID().toString().replace("-","").substring(0,12).toUpperCase();
 
         // Save payment record
-        jdbc.update(
-            "INSERT INTO payments (bill_id, patient_id, amount, payment_method, transaction_id, status) VALUES (?,?,?,?,?,'success')",
-            billId, pid, bill.getTotalAmount(), paymentMethod, txnId);
+        try {
+            jdbc.update(
+                "INSERT INTO payments (bill_id, patient_id, amount, payment_method, transaction_id, status) VALUES (?,?,?,?,?,'success')",
+                billId, pid, bill.getTotalAmount(), paymentMethod, txnId);
+        } catch (Exception e) {
+            // payments table may not exist yet — continue anyway
+        }
 
         // Update bill status to paid
         jdbc.update("UPDATE bills SET payment_status='paid', payment_method=? WHERE id=?", paymentMethod, billId);

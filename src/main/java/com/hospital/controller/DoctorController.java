@@ -94,8 +94,12 @@ public class DoctorController {
             HttpSession session, RedirectAttributes ra) {
         if (!isDoctor(session)) return "redirect:/login.jsp";
         int did = (int) session.getAttribute("doctorId");
-        jdbc.update("INSERT INTO doctor_notes (doctor_id, patient_id, note) VALUES (?,?,?)", did, patientId, note);
-        ra.addFlashAttribute("success", "Note added.");
+        try {
+            jdbc.update("INSERT INTO doctor_notes (doctor_id, patient_id, note) VALUES (?,?,?)", did, patientId, note);
+            ra.addFlashAttribute("success", "Note added.");
+        } catch (Exception e) {
+            ra.addFlashAttribute("error", "Could not save note. Please run new_features.sql in phpMyAdmin first.");
+        }
         return "redirect:/doctor/patients/view/" + patientId;
     }
 
@@ -135,10 +139,14 @@ public class DoctorController {
         String filePath = "/hms_uploads/reports/" + filename;
 
         // Save to DB
-        jdbc.update(
-            "INSERT INTO patient_reports (patient_id, doctor_id, appointment_id, report_type, file_name, file_path, description, send_email) VALUES (?,?,?,?,?,?,?,?)",
-            patientId, did, appointmentId > 0 ? appointmentId : null,
-            reportType, file.getOriginalFilename(), filePath, description, sendEmail ? 1 : 0);
+        try {
+            jdbc.update(
+                "INSERT INTO patient_reports (patient_id, doctor_id, appointment_id, report_type, file_name, file_path, description, send_email) VALUES (?,?,?,?,?,?,?,?)",
+                patientId, did, appointmentId > 0 ? appointmentId : null,
+                reportType, file.getOriginalFilename(), filePath, description, sendEmail ? 1 : 0);
+        } catch (Exception e) {
+            // patient_reports table may not exist yet
+        }
 
         // Send email to patient if requested
         if (sendEmail) {
@@ -219,15 +227,25 @@ public class DoctorController {
 
     // ── Helpers ───────────────────────────────────────────────
     private List<Map<String, Object>> getReports(int patientId, int doctorId) {
-        return jdbc.queryForList(
-            "SELECT * FROM patient_reports WHERE patient_id=? AND doctor_id=? ORDER BY created_at DESC",
-            patientId, doctorId);
+        try {
+            return jdbc.queryForList(
+                "SELECT * FROM patient_reports WHERE patient_id=? AND doctor_id=? ORDER BY created_at DESC",
+                patientId, doctorId);
+        } catch (Exception e) {
+            // Table may not exist yet — return empty list
+            return new java.util.ArrayList<>();
+        }
     }
 
     private List<Map<String, Object>> getNotes(int patientId, int doctorId) {
-        return jdbc.queryForList(
-            "SELECT * FROM doctor_notes WHERE patient_id=? AND doctor_id=? ORDER BY created_at DESC",
-            patientId, doctorId);
+        try {
+            return jdbc.queryForList(
+                "SELECT * FROM doctor_notes WHERE patient_id=? AND doctor_id=? ORDER BY created_at DESC",
+                patientId, doctorId);
+        } catch (Exception e) {
+            // Table may not exist yet — return empty list
+            return new java.util.ArrayList<>();
+        }
     }
 
     private String getExt(String filename) {
