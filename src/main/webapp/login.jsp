@@ -1,6 +1,12 @@
 ﻿<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %>
-<fmt:setLocale value="${cookie['hms_lang'].value != null ? cookie['hms_lang'].value : 'en'}" />
+<%
+    // Language helper
+    String lang = "en";
+    if (request.getCookies() != null)
+        for (jakarta.servlet.http.Cookie c : request.getCookies())
+            if ("hms_lang".equals(c.getName())) { lang = c.getValue(); break; }
+    boolean hi = "hi".equals(lang);
+%>
 <%
     // If already logged in via session → redirect to dashboard
     String sessionRole = (String) session.getAttribute("role");
@@ -72,8 +78,8 @@ function togglePass(){
 <div class="login-wrap">
 <div class="login-card">
     <div class="card-icon"><i class="fa fa-user-lock"></i></div>
-    <h2><fmt:message key="login.title"/></h2>
-    <p class="sub"><fmt:message key="login.subtitle"/></p>
+        <h2><%=hi?"वापस आएं":"Welcome Back"%></h2>
+        <p class="sub"><%=hi?"जारी रखने के लिए अपने खाते में साइन इन करें":"Sign in to your account to continue"%></p>
 
     <% if(request.getAttribute("error")!=null){ %>
     <div class="alert-msg alert-danger"><i class="fa fa-exclamation-circle"></i> <%=request.getAttribute("error")%></div>
