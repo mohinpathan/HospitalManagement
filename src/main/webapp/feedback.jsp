@@ -4,7 +4,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Patient Feedback</title>
+<title><%=L(hi,"मरीज़","Patient")%> Feedback</title>
 
 
 <!-- Bootstrap + Icons -->
@@ -112,7 +112,7 @@ function setRating(n){
     <div class="content flex-grow-1">
 
         <div class="mb-4">
-            <h3 class="page-title">Patient Feedback</h3>
+            <h3 class="page-title"><%=L(hi,"मरीज़","Patient")%> Feedback</h3>
             <small class="text-muted">
                 Help us improve our services by sharing your experience
             </small>
@@ -139,7 +139,7 @@ function setRating(n){
                     <label class="form-label">Feedback Category *</label>
                     <select name="category" class="form-select" required>
                         <option value="">Select Category</option>
-                        <option>Doctor</option>
+                        <option><%=L(hi,"डॉक्टर","Doctor")%></option>
                         <option>Staff</option>
                         <option>Facilities</option>
                         <option>Appointment Process</option>
@@ -171,10 +171,10 @@ function setRating(n){
                     Your feedback is valuable to us and will help improve our healthcare services.
                 </div>
 
-                <!-- Submit -->
+                <!-- <%=L(hi,"जमा करें","Submit")%> -->
                 <button type="submit" class="btn btn-purple w-100">
                     <i class="fa fa-paper-plane"></i>
-                    Submit Feedback
+                    <%=L(hi,"जमा करें","Submit")%> Feedback
                 </button>
 
             </form>

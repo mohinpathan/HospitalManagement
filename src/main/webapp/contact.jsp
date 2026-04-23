@@ -169,7 +169,7 @@
             <div class="info-item">
                 <div class="info-icon">📍</div>
                 <div>
-                    <b>Address</b>
+                    <b><%=L(hi,"पता","Address")%></b>
                     <p>123 Medical Center Drive<br>New York, NY 10001</p>
                 </div>
             </div>
@@ -177,7 +177,7 @@
             <div class="info-item">
                 <div class="info-icon">📞</div>
                 <div>
-                    <b>Phone</b>
+                    <b><%=L(hi,"फ़ोन","Phone")%></b>
                     <p>Emergency: +1 555 123 4567<br>Appointment: +1 555 987 6543</p>
                 </div>
             </div>
@@ -207,13 +207,13 @@
 
             <form action="ContactServlet" method="post">
 
-                <label>Full Name</label>
+                <label><%=L(hi,"पूरा नाम","Full Name")%></label>
                 <input type="text" name="name" required>
 
-                <label>Email Address</label>
+                <label><%=L(hi,"ईमेल पता","Email <%=L(hi,"पता","Address")%>")%></label>
                 <input type="email" name="email" required>
 
-                <label>Phone Number</label>
+                <label><%=L(hi,"फ़ोन","Phone")%> Number</label>
                 <input type="text" name="phone">
 
                 <label>Subject</label>
