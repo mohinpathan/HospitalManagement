@@ -1,7 +1,7 @@
 ﻿<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ include file="/WEB-INF/lang.jsp" %>
-<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Verify OTP - HealthCare Connect</title>
+<!DOCTYPE html><html lang="<%=hi?"hi":"en"%>"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title><%=L(hi,"OTP सत्यापित करें","Verify OTP")%> - HealthCare Connect</title>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
 <style>
@@ -34,7 +34,7 @@ function tick() {
     const el = document.getElementById('timer');
     if (el) el.textContent = m + ':' + (s < 10 ? '0' : '') + s;
     if (seconds > 0) { seconds--; setTimeout(tick, 1000); }
-    else { if(el) el.parentElement.innerHTML = '<span style="color:#ef4444;font-weight:600">OTP expired. <a href="/HospitalManagement/forgetpass.jsp" style="color:#ef4444">Request a new one</a></span>'; }
+    else { if(el) el.parentElement.innerHTML = '<span style="color:#ef4444;font-weight:600"><%=L(hi,"OTP समाप्त हो गया। नया OTP मांगें।","OTP expired. Request a new one.")%></span>'; }
 }
 window.onload = tick;
 </script>
@@ -43,41 +43,29 @@ window.onload = tick;
 <div class="wrap">
 <div class="card">
     <div class="card-icon"><i class="fa fa-shield-halved"></i></div>
-    <h2>Verify OTP</h2>
-    <p class="sub">Enter the 6-digit code sent to your email.</p>
-
-    <%-- Show the email from session --%>
+    <h2><%=L(hi,"OTP सत्यापित करें","Verify OTP")%></h2>
+    <p class="sub"><%=L(hi,"अपने ईमेल पर भेजा गया 6-अंकीय कोड दर्ज करें।","Enter the 6-digit code sent to your email.")%></p>
     <% String otpEmail = (String) session.getAttribute("otpEmail"); %>
     <% if (otpEmail != null) { %>
     <div class="otp-sent-banner">
         <i class="fa fa-envelope-circle-check"></i>
-        <p>OTP sent to <strong><%=otpEmail%></strong>. Check your inbox!</p>
+        <p><%=L(hi,"OTP भेजा गया:","OTP sent to")%> <strong><%=otpEmail%></strong></p>
     </div>
     <% } %>
-
     <% if(request.getAttribute("error") != null){ %>
     <div class="alert-msg alert-danger"><i class="fa fa-exclamation-circle"></i> <%=request.getAttribute("error")%></div>
     <% } %>
-
     <form action="/HospitalManagement/verifyOtp" method="post">
-        <%-- No hidden email/role needed — controller reads from session --%>
-        <label class="form-label">Enter OTP Code</label>
-        <input type="text" name="otp" class="otp-input"
-               placeholder="000000" maxlength="6" required
-               autocomplete="one-time-code" inputmode="numeric">
-
-        <div class="timer-box">OTP expires in: <span id="timer">10:00</span></div>
-
-        <button type="submit" class="btn-submit">
-            <i class="fa fa-check-circle"></i> Verify OTP
-        </button>
+        <label class="form-label"><%=L(hi,"OTP कोड दर्ज करें","Enter OTP Code")%></label>
+        <input type="text" name="otp" class="otp-input" placeholder="000000" maxlength="6" required autocomplete="one-time-code" inputmode="numeric">
+        <div class="timer-box"><%=L(hi,"OTP समाप्त होगा:","OTP expires in:")%> <span id="timer">10:00</span></div>
+        <button type="submit" class="btn-submit"><i class="fa fa-check-circle"></i> <%=L(hi,"OTP सत्यापित करें","Verify OTP")%></button>
     </form>
-
     <p style="text-align:center;margin-top:20px;font-size:14px;color:#64748b">
-        Didn't receive it?
-        <a href="/HospitalManagement/forgetpass.jsp" style="color:#7c3aed;font-weight:600">Resend OTP</a>
+        <%=L(hi,"नहीं मिला?","Didn't receive it?")%>
+        <a href="/HospitalManagement/forgetpass.jsp" style="color:#7c3aed;font-weight:600"><%=L(hi,"OTP दोबारा भेजें","Resend OTP")%></a>
         &nbsp;|&nbsp;
-        <a href="/HospitalManagement/login.jsp" style="color:#64748b;font-weight:600">← Back to Login</a>
+        <a href="/HospitalManagement/login.jsp" style="color:#64748b;font-weight:600">← <%=L(hi,"लॉगिन","Login")%></a>
     </p>
 </div>
 </div>

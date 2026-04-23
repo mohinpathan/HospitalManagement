@@ -1,12 +1,12 @@
 ﻿<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ include file="/WEB-INF/lang.jsp" %>
-<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Forgot Password</title>
+<!DOCTYPE html><html lang="<%=hi?"hi":"en"%>"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title><%=L(hi,"पासवर्ड भूल गए","Forgot Password")%> - HealthCare Connect</title>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-body{font-family:'Segoe UI',Arial,sans-serif;background:linear-gradient(135deg,#1e3a8a,#2b7cff 60%,#06b6d4);min-height:100vh;display:flex;flex-direction:column}
+body{font-family:'Segoe UI',Arial,sans-serif;background:linear-gradient(135deg,#1e3a8a 0%,#2b7cff 60%,#06b6d4 100%);min-height:100vh;display:flex;flex-direction:column}
 a{text-decoration:none}
 .wrap{flex:1;display:flex;align-items:center;justify-content:center;padding:40px 20px}
 .card{background:#fff;border-radius:22px;padding:40px 38px;width:100%;max-width:440px;box-shadow:0 24px 64px rgba(0,0,0,.18)}
@@ -32,33 +32,35 @@ h2{text-align:center;font-size:24px;font-weight:800;color:#0f172a;margin-bottom:
 <% String sent=request.getParameter("sent"); String email=request.getParameter("email");
    if(sent==null){ %>
     <div class="card-icon"><i class="fa fa-key"></i></div>
-    <h2>Forgot Password?</h2>
-    <p class="sub">Enter your email and role. We'll send you an OTP to reset your password.</p>
+    <h2><%=L(hi,"पासवर्ड भूल गए?","Forgot Password?")%></h2>
+    <p class="sub"><%=L(hi,"अपना ईमेल और भूमिका दर्ज करें। हम आपको OTP भेजेंगे।","Enter your email and role. We'll send you an OTP to reset your password.")%></p>
     <% if(request.getAttribute("error")!=null){ %><div class="alert-msg alert-danger"><i class="fa fa-exclamation-circle"></i> <%=request.getAttribute("error")%></div><% } %>
     <form action="/HospitalManagement/forgotPassword" method="post">
         <div style="margin-bottom:16px">
-            <label class="form-label">Login Role *</label>
+            <label class="form-label"><%=L(hi,"भूमिका *","Login Role *")%></label>
             <select name="role" class="form-select" required>
-                <option value="">Select Role</option>
-                <option value="patient">🧑 Patient</option>
-                <option value="doctor">👨‍⚕️ Doctor</option>
-                <option value="admin">🛡️ Admin</option>
+                <option value=""><%=L(hi,"भूमिका चुनें","Select Role")%></option>
+                <option value="patient">🧑 <%=L(hi,"मरीज़","Patient")%></option>
+                <option value="doctor">👨‍⚕️ <%=L(hi,"डॉक्टर","Doctor")%></option>
+                <option value="admin">🛡️ <%=L(hi,"एडमिन","Admin")%></option>
             </select>
         </div>
-        <label class="form-label">Email Address *</label>
+        <label class="form-label"><%=L(hi,"ईमेल पता *","Email Address *")%></label>
         <div class="input-group">
             <span class="ig-icon"><i class="fa fa-envelope"></i></span>
-            <input type="email" name="email" class="form-control" placeholder="your@email.com" required>
+            <input type="email" name="email" class="form-control" placeholder="<%=L(hi,"आपका ईमेल","your@email.com")%>" required>
         </div>
-        <button type="submit" class="btn-submit"><i class="fa fa-paper-plane me-2"></i>Send OTP</button>
+        <button type="submit" class="btn-submit"><i class="fa fa-paper-plane me-2"></i><%=L(hi,"OTP भेजें","Send OTP")%></button>
     </form>
 <% }else{ %>
     <div class="success-icon"><i class="fa fa-check"></i></div>
-    <h2>Check Your Email</h2>
-    <p class="sub">We've sent a 6-digit OTP to <strong><%=email%></strong>. Please check your inbox.</p>
-    <a href="/HospitalManagement/verifyOtp.jsp" class="btn-submit" style="display:block;text-align:center;margin-top:16px"><i class="fa fa-shield-halved me-2"></i>Enter OTP</a>
+    <h2><%=L(hi,"अपना ईमेल जांचें","Check Your Email")%></h2>
+    <p class="sub"><%=L(hi,"हमने","We've sent a 6-digit OTP to")%> <strong><%=email%></strong> <%=L(hi,"पर OTP भेजा है।","Please check your inbox.")%></p>
+    <a href="/HospitalManagement/verifyOtp.jsp" class="btn-submit" style="display:block;text-align:center;margin-top:16px"><i class="fa fa-shield-halved me-2"></i><%=L(hi,"OTP दर्ज करें","Enter OTP")%></a>
 <% } %>
-    <p style="text-align:center;margin-top:20px;font-size:14px;color:#64748b"><a href="/HospitalManagement/login.jsp" style="color:#2b7cff;font-weight:600">← Back to Login</a></p>
+    <p style="text-align:center;margin-top:20px;font-size:14px;color:#64748b">
+        <a href="/HospitalManagement/login.jsp" style="color:#2b7cff;font-weight:600">← <%=L(hi,"लॉगिन पर वापस जाएं","Back to Login")%></a>
+    </p>
 </div>
 </div>
 <jsp:include page="/footer.jsp" />
