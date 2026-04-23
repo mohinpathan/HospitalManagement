@@ -1,8 +1,8 @@
 ﻿<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ include file="/WEB-INF/lang.jsp" %>
 <%@ page import="java.util.*, com.hospital.model.*" %>
-<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Admin Dashboard</title>
+<!DOCTYPE html><html lang="<%=hi?"hi":"en"%>"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title><%=L(hi,"एडमिन डैशबोर्ड","Admin <%=L(hi,"डैशबोर्ड","Dashboard")%>")%></title>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
 <style>
@@ -102,8 +102,8 @@ body{background:#f0f4f8;margin:0;font-family:'Segoe UI',Arial,sans-serif}
 <!-- Welcome Bar -->
 <div class="welcome-bar">
     <div>
-        <h2>Admin Dashboard 🏥</h2>
-        <p>Welcome back, <strong><%=adminName%></strong>. Here's your hospital overview.</p>
+        <h2><%=L(hi,"एडमिन डैशबोर्ड 🏥","Admin <%=L(hi,"डैशबोर्ड","Dashboard")%> 🏥")%></h2>
+        <p><%=L(hi,"नमस्ते,","Welcome back,")%> <strong><%=adminName%></strong>. <%=L(hi,"यहाँ आपके अस्पताल का अवलोकन है।","Here's your hospital overview.")%></p>
     </div>
     <div class="date-chip"><i class="fa fa-calendar me-2"></i><%=sdf.format(new java.util.Date())%></div>
 </div>
@@ -111,32 +111,32 @@ body{background:#f0f4f8;margin:0;font-family:'Segoe UI',Arial,sans-serif}
 <!-- Stats Row 1 -->
 <div class="stats-grid">
     <a href="/HospitalManagement/admin/doctors" class="scard">
-        <div><div class="label">Total Doctors</div><div class="value">${totalDoctors}</div><div class="sub">Active staff</div></div>
+        <div><div class="label"><%=L(hi,"कुल डॉक्टर","Total <%=L(hi,"डॉक्टर","Doctor")%>s")%></div><div class="value">${total<%=L(hi,"डॉक्टर","Doctor")%>s}</div><div class="sub">Active staff</div></div>
         <div class="scard-icon ic-blue"><i class="fa fa-user-md"></i></div>
     </a>
     <a href="/HospitalManagement/admin/patients" class="scard">
-        <div><div class="label">Total Patients</div><div class="value">${totalPatients}</div><div class="sub">Registered</div></div>
+        <div><div class="label"><%=L(hi,"कुल मरीज़","Total <%=L(hi,"मरीज़","Patient")%>s")%></div><div class="value">${total<%=L(hi,"मरीज़","Patient")%>s}</div><div class="sub">Registered</div></div>
         <div class="scard-icon ic-green"><i class="fa fa-users"></i></div>
     </a>
     <a href="/HospitalManagement/admin/appointments" class="scard">
-        <div><div class="label">Appointments</div><div class="value">${totalAppointments}</div><div class="sub"><%=todayAppts%> today</div></div>
+        <div><div class="label"><%=L(hi,"अपॉइंटमेंट","Appointments")%></div><div class="value">${total<%=L(hi,"अपॉइंटमेंट","Appointments")%>}</div><div class="sub"><%=todayAppts%> today</div></div>
         <div class="scard-icon ic-purple"><i class="fa fa-calendar-check"></i></div>
     </a>
     <a href="/HospitalManagement/admin/bills" class="scard">
-        <div><div class="label">Total Revenue</div><div class="value" style="font-size:22px">₹<%=String.format("%.0f",totalRevenue)%></div><div class="sub"><%=pendingBills%> bills pending</div></div>
+        <div><div class="label"><%=L(hi,"कुल राजस्व","Total Revenue")%></div><div class="value" style="font-size:22px">₹<%=String.format("%.0f",totalRevenue)%></div><div class="sub"><%=pendingBills%> bills pending</div></div>
         <div class="scard-icon ic-orange"><i class="fa fa-indian-rupee-sign"></i></div>
     </a>
 </div>
 
-<!-- Quick Actions -->
+<!-- Quick <%=L(hi,"कार्रवाई","Actions")%> -->
 <div class="quick-grid">
     <a href="/HospitalManagement/admin/doctors/add" class="qcard">
         <div class="qc-icon ic-blue"><i class="fa fa-user-plus"></i></div>
-        <h6>Add Doctor</h6>
+        <h6><%=L(hi,"डॉक्टर जोड़ें","Add <%=L(hi,"डॉक्टर","Doctor")%>")%></h6>
     </a>
     <a href="/HospitalManagement/admin/departments" class="qcard">
         <div class="qc-icon ic-green"><i class="fa fa-hospital"></i></div>
-        <h6>Departments</h6>
+        <h6><%=L(hi,"विभाग","<%=L(hi,"विभाग","Department")%>s")%></h6>
     </a>
     <a href="/HospitalManagement/admin/reports" class="qcard">
         <div class="qc-icon ic-purple"><i class="fa fa-chart-line"></i></div>
@@ -148,26 +148,26 @@ body{background:#f0f4f8;margin:0;font-family:'Segoe UI',Arial,sans-serif}
     </a>
 </div>
 
-<!-- Pending + Departments -->
+<!-- Pending + <%=L(hi,"विभाग","<%=L(hi,"विभाग","Department")%>s")%> -->
 <div class="two-col">
     <div class="panel">
-        <div class="ph">⏳ Pending Appointments <a href="/HospitalManagement/admin/appointments">View All →</a></div>
+        <div class="ph">⏳ Pending <%=L(hi,"अपॉइंटमेंट","Appointments")%> <a href="/HospitalManagement/admin/appointments"><%=L(hi,"सभी देखें","<%=L(hi,"देखें","View")%> All")%> →</a></div>
         <%
             List<?> pendingList=(List<?>)request.getAttribute("pendingAppts");
             if(pendingList==null||pendingList.isEmpty()){
         %><div class="panel-empty"><i class="fa fa-check-circle fa-2x mb-2" style="color:#d1fae5;display:block"></i>No pending appointments</div><%
         }else{int shown=0;for(Object obj:pendingList){if(shown++>=5)break;Appointment ap=(Appointment)obj;%>
         <div class="pend-item">
-            <div class="pend-name"><%=ap.getPatientName()%> <span class="badge-pending ms-1">PENDING</span></div>
-            <div class="pend-meta"><i class="fa fa-user-md fa-xs"></i> <%=ap.getDoctorName()%> &nbsp;|&nbsp; <i class="fa fa-calendar fa-xs"></i> <%=ap.getAppointmentDate()%></div>
+            <div class="pend-name"><%=ap.get<%=L(hi,"मरीज़","Patient")%>Name()%> <span class="badge-pending ms-1">PENDING</span></div>
+            <div class="pend-meta"><i class="fa fa-user-md fa-xs"></i> <%=ap.get<%=L(hi,"डॉक्टर","Doctor")%>Name()%> &nbsp;|&nbsp; <i class="fa fa-calendar fa-xs"></i> <%=ap.getAppointmentDate()%></div>
             <div class="pend-actions">
                 <form action="/HospitalManagement/admin/appointments/status" method="post" style="margin:0">
                     <input type="hidden" name="id" value="<%=ap.getId()%>"><input type="hidden" name="status" value="approved">
-                    <button class="btn-approve"><i class="fa fa-check"></i> Approve</button>
+                    <button class="btn-approve"><i class="fa fa-check"></i> <%=L(hi,"स्वीकृत करें","Approve")%></button>
                 </form>
                 <form action="/HospitalManagement/admin/appointments/status" method="post" style="margin:0">
                     <input type="hidden" name="id" value="<%=ap.getId()%>"><input type="hidden" name="status" value="rejected">
-                    <button class="btn-reject"><i class="fa fa-times"></i> Reject</button>
+                    <button class="btn-reject"><i class="fa fa-times"></i> <%=L(hi,"अस्वीकार करें","Reject")%></button>
                 </form>
             </div>
         </div>
@@ -175,25 +175,25 @@ body{background:#f0f4f8;margin:0;font-family:'Segoe UI',Arial,sans-serif}
     </div>
 
     <div class="panel">
-        <div class="ph">🏥 Departments <a href="/HospitalManagement/admin/departments">Manage →</a></div>
+        <div class="ph">🏥 <%=L(hi,"विभाग","<%=L(hi,"विभाग","Department")%>s")%> <a href="/HospitalManagement/admin/departments">Manage →</a></div>
         <div class="dept-grid">
         <%
             List<Map<String,Object>> depts=(List<Map<String,Object>>)request.getAttribute("departments");
             if(depts!=null)for(Map<String,Object> dept:depts){
-        %><div class="dept-tile"><h5><%=dept.get("name")%></h5><p><%=dept.get("doctor_count")%> Doctors</p></div><%}%>
+        %><div class="dept-tile"><h5><%=dept.get("name")%></h5><p><%=dept.get("doctor_count")%> <%=L(hi,"डॉक्टर","Doctor")%>s</p></div><%}%>
         </div>
     </div>
 </div>
 
-<!-- Recent Registrations + Top Doctors -->
+<!-- Recent Registrations + Top <%=L(hi,"डॉक्टर","Doctor")%>s -->
 <div class="three-col">
     <div class="panel">
-        <div class="ph">🧑 Recent Patients <a href="/HospitalManagement/admin/patients">All →</a></div>
+        <div class="ph">🧑 <%=L(hi,"हाल के मरीज़","Recent <%=L(hi,"मरीज़","Patient")%>s")%> <a href="/HospitalManagement/admin/patients">All →</a></div>
         <%
-            List<?> recPats=(List<?>)request.getAttribute("recentPatients");
+            List<?> recPats=(List<?>)request.getAttribute("recent<%=L(hi,"मरीज़","Patient")%>s");
             if(recPats==null||recPats.isEmpty()){
         %><div class="panel-empty">No patients yet.</div><%
-        }else{for(Object obj:recPats){Patient p=(Patient)obj;%>
+        }else{for(Object obj:recPats){<%=L(hi,"मरीज़","Patient")%> p=(<%=L(hi,"मरीज़","Patient")%>)obj;%>
         <div class="recent-item">
             <div class="recent-avatar ic-green"><i class="fa fa-user"></i></div>
             <div>
@@ -205,26 +205,26 @@ body{background:#f0f4f8;margin:0;font-family:'Segoe UI',Arial,sans-serif}
     </div>
 
     <div class="panel">
-        <div class="ph">👨‍⚕️ Recent Doctors <a href="/HospitalManagement/admin/doctors">All →</a></div>
+        <div class="ph">👨‍⚕️ <%=L(hi,"हाल के डॉक्टर","Recent <%=L(hi,"डॉक्टर","Doctor")%>s")%> <a href="/HospitalManagement/admin/doctors">All →</a></div>
         <%
-            List<?> recDocs=(List<?>)request.getAttribute("recentDoctors");
+            List<?> recDocs=(List<?>)request.getAttribute("recent<%=L(hi,"डॉक्टर","Doctor")%>s");
             if(recDocs==null||recDocs.isEmpty()){
         %><div class="panel-empty">No doctors yet.</div><%
-        }else{for(Object obj:recDocs){Doctor d=(Doctor)obj;%>
+        }else{for(Object obj:recDocs){<%=L(hi,"डॉक्टर","Doctor")%> d=(<%=L(hi,"डॉक्टर","Doctor")%>)obj;%>
         <div class="recent-item">
             <div class="recent-avatar ic-blue"><i class="fa fa-user-md"></i></div>
             <div>
                 <div class="recent-name"><%=d.getFullName()%></div>
-                <div class="recent-sub"><%=d.getDepartmentName()!=null?d.getDepartmentName():""%></div>
+                <div class="recent-sub"><%=d.get<%=L(hi,"विभाग","Department")%>Name()!=null?d.get<%=L(hi,"विभाग","Department")%>Name():""%></div>
             </div>
         </div>
         <%}}%>
     </div>
 
     <div class="panel">
-        <div class="ph">🏆 Top Rated Doctors <a href="/HospitalManagement/admin/reports">Reports →</a></div>
+        <div class="ph">🏆 <%=L(hi,"शीर्ष रेटेड डॉक्टर","Top Rated <%=L(hi,"डॉक्टर","Doctor")%>s")%> <a href="/HospitalManagement/admin/reports">Reports →</a></div>
         <%
-            List<Map<String,Object>> topDocs=(List<Map<String,Object>>)request.getAttribute("topDoctors");
+            List<Map<String,Object>> topDocs=(List<Map<String,Object>>)request.getAttribute("top<%=L(hi,"डॉक्टर","Doctor")%>s");
             if(topDocs==null||topDocs.isEmpty()){
         %><div class="panel-empty">No reviews yet.</div><%
         }else{int rank=1;for(Map<String,Object> d:topDocs){

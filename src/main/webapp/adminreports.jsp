@@ -30,7 +30,7 @@ body{background:#f0f4f8;margin:0;font-family:'Segoe UI',Arial,sans-serif}
 <div class="dash-main">
 
     <div class="page-hdr">
-        <h2><i class="fa fa-chart-line me-2" style="color:#2b7cff"></i>Reports & Analytics</h2>
+        <h2><i class="fa fa-chart-line me-2" style="color:#2b7cff"></i><%=L(hi,"रिपोर्ट और विश्लेषण","Reports & Analytics")%></h2>
         <p>Hospital performance overview and statistics.</p>
     </div>
 
@@ -38,7 +38,7 @@ body{background:#f0f4f8;margin:0;font-family:'Segoe UI',Arial,sans-serif}
         <!-- Revenue Chart -->
         <div class="col-lg-8">
             <div class="chart-card">
-                <h5><i class="fa fa-indian-rupee-sign" style="color:#19b37a"></i> Monthly Revenue</h5>
+                <h5><i class="fa fa-indian-rupee-sign" style="color:#19b37a"></i> <%=L(hi,"मासिक राजस्व","Monthly Revenue")%></h5>
                 <canvas id="revenueChart" height="100"></canvas>
             </div>
         </div>
@@ -46,25 +46,25 @@ body{background:#f0f4f8;margin:0;font-family:'Segoe UI',Arial,sans-serif}
         <!-- Dept Stats -->
         <div class="col-lg-4">
             <div class="chart-card">
-                <h5><i class="fa fa-hospital" style="color:#7c3aed"></i> Appointments by Dept</h5>
+                <h5><i class="fa fa-hospital" style="color:#7c3aed"></i> <%=L(hi,"अपॉइंटमेंट","Appointments")%> by Dept</h5>
                 <canvas id="deptChart" height="200"></canvas>
             </div>
         </div>
 
-        <!-- Appointment Trend -->
+        <!-- <%=L(hi,"अपॉइंटमेंट ट्रेंड","Appointment Trend")%> -->
         <div class="col-lg-8">
             <div class="chart-card">
-                <h5><i class="fa fa-calendar-check" style="color:#2b7cff"></i> Appointment Trend</h5>
+                <h5><i class="fa fa-calendar-check" style="color:#2b7cff"></i> <%=L(hi,"अपॉइंटमेंट ट्रेंड","Appointment Trend")%></h5>
                 <canvas id="trendChart" height="100"></canvas>
             </div>
         </div>
 
-        <!-- Top Doctors -->
+        <!-- Top <%=L(hi,"डॉक्टर","Doctor")%>s -->
         <div class="col-lg-4">
             <div class="top-doc-card">
-                <h5><i class="fa fa-trophy" style="color:#f59e0b"></i> Top Rated Doctors</h5>
+                <h5><i class="fa fa-trophy" style="color:#f59e0b"></i> <%=L(hi,"शीर्ष रेटेड डॉक्टर","Top Rated <%=L(hi,"डॉक्टर","Doctor")%>s")%></h5>
                 <%
-                    List<Map<String,Object>> topDocs=(List<Map<String,Object>>)request.getAttribute("topDoctors");
+                    List<Map<String,Object>> topDocs=(List<Map<String,Object>>)request.getAttribute("top<%=L(hi,"डॉक्टर","Doctor")%>s");
                     int rank=1;
                     if(topDocs!=null)for(Map<String,Object> d:topDocs){
                         double avg=d.get("avg_rating")!=null?((Number)d.get("avg_rating")).doubleValue():0;
@@ -110,7 +110,7 @@ body{background:#f0f4f8;margin:0;font-family:'Segoe UI',Arial,sans-serif}
     deptLabels.append("]"); deptData.append("]");
 %>
 new Chart(document.getElementById('revenueChart'),{type:'bar',data:{labels:<%=revLabels%>,datasets:[{label:'Revenue (₹)',data:<%=revData%>,backgroundColor:'rgba(43,124,255,.7)',borderRadius:6}]},options:{plugins:{legend:{display:false}},scales:{y:{beginAtZero:true}}}});
-new Chart(document.getElementById('trendChart'),{type:'line',data:{labels:<%=trendLabels%>,datasets:[{label:'Appointments',data:<%=trendData%>,borderColor:'#19b37a',backgroundColor:'rgba(25,179,122,.1)',fill:true,tension:.4,pointRadius:4}]},options:{plugins:{legend:{display:false}},scales:{y:{beginAtZero:true}}}});
+new Chart(document.getElementById('trendChart'),{type:'line',data:{labels:<%=trendLabels%>,datasets:[{label:'<%=L(hi,"अपॉइंटमेंट","Appointments")%>',data:<%=trendData%>,borderColor:'#19b37a',backgroundColor:'rgba(25,179,122,.1)',fill:true,tension:.4,pointRadius:4}]},options:{plugins:{legend:{display:false}},scales:{y:{beginAtZero:true}}}});
 new Chart(document.getElementById('deptChart'),{type:'doughnut',data:{labels:<%=deptLabels%>,datasets:[{data:<%=deptData%>,backgroundColor:['#2b7cff','#19b37a','#7c3aed','#f59e0b','#ef4444','#64748b']}]},options:{plugins:{legend:{position:'bottom'}}}});
 </script>
 </body></html>
