@@ -198,6 +198,7 @@ public class UserService {
             p.setPassword(rs.getString("password")); p.setGender(rs.getString("gender"));
             p.setAge(rs.getInt("age")); p.setBloodGroup(rs.getString("blood_group"));
             p.setAddress(rs.getString("address")); p.setStatus(rs.getString("status"));
+            try { p.setPhoto(rs.getString("photo")); } catch (Exception ignored) {}
             return p;
         };
     }
@@ -212,6 +213,7 @@ public class UserService {
             d.setDepartmentId(rs.getInt("department_id")); d.setDepartmentName(rs.getString("dept_name"));
             d.setExperienceYrs(rs.getInt("experience_yrs")); d.setConsultationFee(rs.getDouble("consultation_fee"));
             d.setAddress(rs.getString("address")); d.setStatus(rs.getString("status"));
+            try { d.setPhoto(rs.getString("photo")); } catch (Exception ignored) {}
             return d;
         };
     }

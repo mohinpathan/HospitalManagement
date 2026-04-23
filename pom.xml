@@ -99,12 +99,7 @@
             <version>${spring.version}</version>
         </dependency>
 
-        <!-- Commons FileUpload (profile photo upload) -->
-        <dependency>
-            <groupId>commons-fileupload</groupId>
-            <artifactId>commons-fileupload</artifactId>
-            <version>1.5</version>
-        </dependency>
+        <!-- Commons IO (still useful for file operations) -->
         <dependency>
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>

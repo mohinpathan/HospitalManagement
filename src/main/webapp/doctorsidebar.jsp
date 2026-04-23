@@ -17,6 +17,7 @@
     <div class="sb-title">Doctor Panel</div>
     <a href="/HospitalManagement/doctor/dashboard"    class="<%= uri.contains("dashboard") ? "active" : "" %>"><i class="fa fa-th-large"></i> Dashboard</a>
     <a href="/HospitalManagement/doctor/appointments" class="<%= uri.contains("appointments") ? "active" : "" %>"><i class="fa fa-calendar-check"></i> Appointments</a>
+    <a href="/HospitalManagement/doctor/patients"     class="<%= uri.contains("patients") ? "active" : "" %>"><i class="fa fa-users"></i> My Patients</a>
     <a href="/HospitalManagement/docmyschedule.jsp"   class="<%= uri.contains("schedule") ? "active" : "" %>"><i class="fa fa-clock"></i> My Schedule</a>
     <div class="sb-divider"></div>
     <a href="/HospitalManagement/doctor/profile"      class="<%= uri.contains("profile") ? "active" : "" %>"><i class="fa fa-user"></i> My Profile</a>

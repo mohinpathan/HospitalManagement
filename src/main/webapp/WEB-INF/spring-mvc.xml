@@ -30,11 +30,9 @@
         <property name="suffix" value=".jsp" />
     </bean>
 
-    <!-- Multipart resolver for file uploads -->
+    <!-- Multipart resolver for file uploads — Spring 6 compatible -->
     <bean id="multipartResolver"
-          class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
-        <property name="maxUploadSize" value="5242880" /> <!-- 5 MB -->
-    </bean>
+          class="org.springframework.web.multipart.support.StandardServletMultipartResolver" />
 
     <!-- DataSource -->
     <bean id="dataSource"

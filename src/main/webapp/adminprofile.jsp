@@ -55,11 +55,21 @@ body{background:#f0f4f8;margin:0;font-family:'Segoe UI',Arial,sans-serif}
     %>
 
     <div class="profile-hero">
-        <div class="profile-avatar"><i class="fa fa-user-shield"></i></div>
+        <div class="profile-avatar">
+            <% com.hospital.model.Admin adminObj=(com.hospital.model.Admin)request.getAttribute("admin");
+               String adminPhoto=adminObj!=null&&adminObj.getPhone()!=null?null:null; // photo not in Admin model yet %>
+            <i class="fa fa-user-shield"></i>
+        </div>
         <div>
             <h3><%=name%></h3>
             <p><%=email%></p>
             <span class="badge-role">ADMINISTRATOR</span>
+            <div style="margin-top:10px">
+                <form action="/HospitalManagement/upload/photo" method="post" enctype="multipart/form-data" style="display:inline-flex;align-items:center;gap:8px">
+                    <input type="file" name="photo" accept="image/*" style="font-size:12px;color:rgba(255,255,255,.8);background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.3);border-radius:8px;padding:4px 8px;cursor:pointer" onchange="this.form.submit()">
+                    <span style="font-size:11px;opacity:.7">Change Photo</span>
+                </form>
+            </div>
         </div>
     </div>
 

@@ -2,6 +2,7 @@ package com.hospital.service;
 
 import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.*;
+import com.itextpdf.text.pdf.draw.LineSeparator;
 import com.hospital.model.Bill;
 import org.springframework.stereotype.Service;
 

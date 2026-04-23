@@ -61,11 +61,23 @@ body{background:#f0f4f8;margin:0;font-family:'Segoe UI',Arial,sans-serif}
     %>
 
     <div class="profile-hero">
-        <div class="profile-avatar"><i class="fa fa-user-md"></i></div>
+        <div class="profile-avatar">
+            <% if(d!=null && d.getPhoto()!=null && !d.getPhoto().isEmpty()){ %>
+            <img src="<%=d.getPhoto()%>" alt="Profile Photo" style="width:100%;height:100%;object-fit:cover;border-radius:50%">
+            <% }else{ %>
+            <i class="fa fa-user-md"></i>
+            <% } %>
+        </div>
         <div>
             <h3><%=name%></h3>
             <p><%=spec%> &nbsp;|&nbsp; <%=dept%></p>
             <span class="badge-role">DOCTOR</span>
+            <div style="margin-top:10px">
+                <form action="/HospitalManagement/upload/photo" method="post" enctype="multipart/form-data" style="display:inline-flex;align-items:center;gap:8px">
+                    <input type="file" name="photo" accept="image/*" style="font-size:12px;color:rgba(255,255,255,.8);background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.3);border-radius:8px;padding:4px 8px;cursor:pointer" onchange="this.form.submit()">
+                    <span style="font-size:11px;opacity:.7">Change Photo</span>
+                </form>
+            </div>
         </div>
     </div>
 
