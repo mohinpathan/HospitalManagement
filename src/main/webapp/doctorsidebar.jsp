@@ -1,4 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ include file="/WEB-INF/lang.jsp" %>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
 <% String uri = request.getRequestURI(); %>
 <style>
@@ -14,12 +15,12 @@
 .doc-sidebar .btn-logout-sb:hover{background:#fee2e2!important}
 </style>
 <aside class="doc-sidebar">
-    <div class="sb-title">Doctor Panel</div>
-    <a href="/HospitalManagement/doctor/dashboard"    class="<%= uri.contains("dashboard") ? "active" : "" %>"><i class="fa fa-th-large"></i> Dashboard</a>
-    <a href="/HospitalManagement/doctor/appointments" class="<%= uri.contains("appointments") ? "active" : "" %>"><i class="fa fa-calendar-check"></i> Appointments</a>
-    <a href="/HospitalManagement/doctor/patients"     class="<%= uri.contains("patients") ? "active" : "" %>"><i class="fa fa-users"></i> My Patients</a>
-    <a href="/HospitalManagement/docmyschedule.jsp"   class="<%= uri.contains("schedule") ? "active" : "" %>"><i class="fa fa-clock"></i> My Schedule</a>
+    <div class="sb-title"><%=t(hi,"डॉक्टर पैनल","Doctor Panel")%></div>
+    <a href="/HospitalManagement/doctor/dashboard"    class="<%= uri.contains("dashboard") ? "active" : "" %>"><i class="fa fa-th-large"></i> <%=t(hi,"डैशबोर्ड","Dashboard")%></a>
+    <a href="/HospitalManagement/doctor/appointments" class="<%= uri.contains("appointments") ? "active" : "" %>"><i class="fa fa-calendar-check"></i> <%=t(hi,"अपॉइंटमेंट","Appointments")%></a>
+    <a href="/HospitalManagement/doctor/patients"     class="<%= uri.contains("patients") ? "active" : "" %>"><i class="fa fa-users"></i> <%=t(hi,"मेरे मरीज़","My Patients")%></a>
+    <a href="/HospitalManagement/doctor/schedule"     class="<%= uri.contains("schedule") ? "active" : "" %>"><i class="fa fa-clock"></i> <%=t(hi,"मेरा शेड्यूल","My Schedule")%></a>
     <div class="sb-divider"></div>
-    <a href="/HospitalManagement/doctor/profile"      class="<%= uri.contains("profile") ? "active" : "" %>"><i class="fa fa-user"></i> My Profile</a>
-    <a href="/HospitalManagement/logout" class="btn-logout-sb"><i class="fa fa-sign-out-alt"></i> Logout</a>
+    <a href="/HospitalManagement/doctor/profile"      class="<%= uri.contains("profile") ? "active" : "" %>"><i class="fa fa-user"></i> <%=t(hi,"मेरी प्रोफ़ाइल","My Profile")%></a>
+    <a href="/HospitalManagement/logout" class="btn-logout-sb"><i class="fa fa-sign-out-alt"></i> <%=t(hi,"लॉगआउट","Logout")%></a>
 </aside>

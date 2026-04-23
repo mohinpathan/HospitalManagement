@@ -1,4 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ include file="/WEB-INF/lang.jsp" %>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
 <% String uri = request.getRequestURI(); %>
 <style>
@@ -14,36 +15,36 @@
 .adm-sidebar .sb-divider{height:1px;background:#f1f5f9;margin:12px 8px}
 </style>
 <aside class="adm-sidebar">
-    <div class="sb-title">Admin Panel</div>
+    <div class="sb-title"><%=t(hi,"एडमिन पैनल","Admin Panel")%></div>
     <ul>
         <li class="<%= uri.contains("dashboard") ? "active" : "" %>">
-            <a href="/HospitalManagement/admin/dashboard"><i class="fa fa-th-large"></i> Dashboard</a>
+            <a href="/HospitalManagement/admin/dashboard"><i class="fa fa-th-large"></i> <%=t(hi,"डैशबोर्ड","Dashboard")%></a>
         </li>
         <div class="sb-divider"></div>
         <li class="<%= uri.contains("doctor") ? "active" : "" %>">
-            <a href="/HospitalManagement/admin/doctors"><i class="fa fa-user-md"></i> Manage Doctors</a>
+            <a href="/HospitalManagement/admin/doctors"><i class="fa fa-user-md"></i> <%=t(hi,"डॉक्टर प्रबंधन","Manage Doctors")%></a>
         </li>
         <li class="<%= uri.contains("patient") ? "active" : "" %>">
-            <a href="/HospitalManagement/admin/patients"><i class="fa fa-users"></i> Manage Patients</a>
+            <a href="/HospitalManagement/admin/patients"><i class="fa fa-users"></i> <%=t(hi,"मरीज़ प्रबंधन","Manage Patients")%></a>
         </li>
         <li class="<%= uri.contains("appointment") ? "active" : "" %>">
-            <a href="/HospitalManagement/admin/appointments"><i class="fa fa-calendar-check"></i> Appointments</a>
+            <a href="/HospitalManagement/admin/appointments"><i class="fa fa-calendar-check"></i> <%=t(hi,"अपॉइंटमेंट","Appointments")%></a>
         </li>
         <li class="<%= uri.contains("department") ? "active" : "" %>">
-            <a href="/HospitalManagement/admin/departments"><i class="fa fa-hospital"></i> Departments</a>
+            <a href="/HospitalManagement/admin/departments"><i class="fa fa-hospital"></i> <%=t(hi,"विभाग","Departments")%></a>
         </li>
         <li class="<%= uri.contains("bills") ? "active" : "" %>">
-            <a href="/HospitalManagement/admin/bills"><i class="fa fa-file-invoice-dollar"></i> Bills & Payments</a>
+            <a href="/HospitalManagement/admin/bills"><i class="fa fa-file-invoice-dollar"></i> <%=t(hi,"बिल और भुगतान","Bills & Payments")%></a>
         </li>
         <li class="<%= uri.contains("reports") ? "active" : "" %>">
-            <a href="/HospitalManagement/admin/reports"><i class="fa fa-chart-line"></i> Reports</a>
+            <a href="/HospitalManagement/admin/reports"><i class="fa fa-chart-line"></i> <%=t(hi,"रिपोर्ट","Reports")%></a>
         </li>
         <li class="<%= uri.contains("feedback") ? "active" : "" %>">
-            <a href="/HospitalManagement/admin/feedback"><i class="fa fa-comments"></i> Feedback</a>
+            <a href="/HospitalManagement/admin/feedback"><i class="fa fa-comments"></i> <%=t(hi,"फ़ीडबैक","Feedback")%></a>
         </li>
         <div class="sb-divider"></div>
         <li class="<%= uri.contains("profile") ? "active" : "" %>">
-            <a href="/HospitalManagement/admin/profile"><i class="fa fa-user-cog"></i> My Profile</a>
+            <a href="/HospitalManagement/admin/profile"><i class="fa fa-user-cog"></i> <%=t(hi,"मेरी प्रोफ़ाइल","My Profile")%></a>
         </li>
     </ul>
 </aside>
