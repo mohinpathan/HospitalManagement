@@ -116,13 +116,14 @@ class AppointmentServiceTest {
     }
 
     @Test
-    @DisplayName("countByPatient returns 0 when null from DB")
+    @DisplayName("countByPatient returns 0 when DB returns null")
     void countByPatient_NullReturnsZero() {
         when(jdbc.queryForObject(anyString(), eq(Integer.class), anyInt()))
             .thenReturn(null);
 
-        // Should not throw NPE
-        assertDoesNotThrow(() -> apptService.countByPatient(1));
+        // Service now handles null safely — should return 0, not throw NPE
+        int result = apptService.countByPatient(1);
+        assertEquals(0, result);
     }
 
     // ── countAll ──────────────────────────────────────────────

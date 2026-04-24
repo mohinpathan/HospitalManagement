@@ -54,23 +54,29 @@ public class AppointmentService {
 
     // counts
     public int countByPatient(int patientId) {
-        return jdbc.queryForObject("SELECT COUNT(*) FROM appointments WHERE patient_id=?", Integer.class, patientId);
+        Integer c = jdbc.queryForObject("SELECT COUNT(*) FROM appointments WHERE patient_id=?", Integer.class, patientId);
+        return c != null ? c : 0;
     }
     public int countByPatientAndStatus(int patientId, String status) {
-        return jdbc.queryForObject("SELECT COUNT(*) FROM appointments WHERE patient_id=? AND status=?", Integer.class, patientId, status);
+        Integer c = jdbc.queryForObject("SELECT COUNT(*) FROM appointments WHERE patient_id=? AND status=?", Integer.class, patientId, status);
+        return c != null ? c : 0;
     }
     public int countByDoctor(int doctorId) {
-        return jdbc.queryForObject("SELECT COUNT(*) FROM appointments WHERE doctor_id=?", Integer.class, doctorId);
+        Integer c = jdbc.queryForObject("SELECT COUNT(*) FROM appointments WHERE doctor_id=?", Integer.class, doctorId);
+        return c != null ? c : 0;
     }
     public int countByDoctorAndStatus(int doctorId, String status) {
-        return jdbc.queryForObject("SELECT COUNT(*) FROM appointments WHERE doctor_id=? AND status=?", Integer.class, doctorId, status);
+        Integer c = jdbc.queryForObject("SELECT COUNT(*) FROM appointments WHERE doctor_id=? AND status=?", Integer.class, doctorId, status);
+        return c != null ? c : 0;
     }
     public int countByDoctorToday(int doctorId) {
-        return jdbc.queryForObject(
+        Integer c = jdbc.queryForObject(
             "SELECT COUNT(*) FROM appointments WHERE doctor_id=? AND appointment_date=CURDATE()", Integer.class, doctorId);
+        return c != null ? c : 0;
     }
     public int countAll() {
-        return jdbc.queryForObject("SELECT COUNT(*) FROM appointments", Integer.class);
+        Integer c = jdbc.queryForObject("SELECT COUNT(*) FROM appointments", Integer.class);
+        return c != null ? c : 0;
     }
 
     public int countToday() {
