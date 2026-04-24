@@ -5,23 +5,24 @@ import com.hospital.model.Doctor;
 import com.hospital.model.Patient;
 import com.hospital.service.UserService;
 import com.hospital.util.EmailService;
-import com.hospital.util.OtpUtil;
 import com.hospital.util.PasswordUtil;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.*;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.junit.jupiter.MockitoSettings;
+import org.mockito.quality.Strictness;
 import org.springframework.mock.web.MockHttpSession;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @ExtendWith(MockitoExtension.class)
+@MockitoSettings(strictness = Strictness.LENIENT)
 @DisplayName("AuthController Tests")
 class AuthControllerTest {
 
@@ -53,12 +54,13 @@ class AuthControllerTest {
     @DisplayName("Patient login with correct credentials should redirect to dashboard")
     void patientLogin_Success() throws Exception {
         Patient p = new Patient();
-        p.setId(1); p.setFullName("John Smith");
+        p.setId(1);
+        p.setFullName("John Smith");
         p.setEmail("john@hms.com");
         p.setPassword(PasswordUtil.hash("admin123"));
 
         when(userService.findPatientByEmail("john@hms.com")).thenReturn(p);
-        doNothing().when(emailService).sendLoginNotification(anyString(), anyString(), anyString());
+        // No email stub needed — login email was removed
 
         mockMvc.perform(post("/login")
                 .param("role",     "patient")
@@ -69,10 +71,11 @@ class AuthControllerTest {
     }
 
     @Test
-    @DisplayName("Patient login with wrong password should redirect with error")
+    @DisplayName("Patient login with wrong password should redirect to login")
     void patientLogin_WrongPassword() throws Exception {
         Patient p = new Patient();
-        p.setId(1); p.setEmail("john@hms.com");
+        p.setId(1);
+        p.setEmail("john@hms.com");
         p.setPassword(PasswordUtil.hash("admin123"));
 
         when(userService.findPatientByEmail("john@hms.com")).thenReturn(p);
@@ -86,7 +89,7 @@ class AuthControllerTest {
     }
 
     @Test
-    @DisplayName("Login with non-existent email should redirect with error")
+    @DisplayName("Patient login with non-existent email should redirect to login")
     void patientLogin_NotFound() throws Exception {
         when(userService.findPatientByEmail(anyString())).thenReturn(null);
 
@@ -104,13 +107,14 @@ class AuthControllerTest {
     @DisplayName("Doctor login with correct credentials should redirect to dashboard")
     void doctorLogin_Success() throws Exception {
         Doctor d = new Doctor();
-        d.setId(1); d.setFullName("Dr. Sarah Johnson");
+        d.setId(1);
+        d.setFullName("Dr. Sarah Johnson");
         d.setEmail("sarah@hms.com");
         d.setPassword(PasswordUtil.hash("admin123"));
         d.setDepartmentName("Cardiology");
 
         when(userService.findDoctorByEmail("sarah@hms.com")).thenReturn(d);
-        doNothing().when(emailService).sendLoginNotification(anyString(), anyString(), anyString());
+        // No email stub needed — login email was removed
 
         mockMvc.perform(post("/login")
                 .param("role",     "doctor")
@@ -120,18 +124,37 @@ class AuthControllerTest {
                .andExpect(redirectedUrl("/doctor/dashboard"));
     }
 
+    @Test
+    @DisplayName("Doctor login with wrong password should redirect to login")
+    void doctorLogin_WrongPassword() throws Exception {
+        Doctor d = new Doctor();
+        d.setId(1);
+        d.setEmail("sarah@hms.com");
+        d.setPassword(PasswordUtil.hash("admin123"));
+
+        when(userService.findDoctorByEmail("sarah@hms.com")).thenReturn(d);
+
+        mockMvc.perform(post("/login")
+                .param("role",     "doctor")
+                .param("email",    "sarah@hms.com")
+                .param("password", "wrongpass"))
+               .andExpect(status().is3xxRedirection())
+               .andExpect(redirectedUrl("/login.jsp"));
+    }
+
     // ── POST /login — Admin ───────────────────────────────────
 
     @Test
     @DisplayName("Admin login with correct credentials should redirect to dashboard")
     void adminLogin_Success() throws Exception {
         Admin a = new Admin();
-        a.setId(1); a.setFullName("Admin User");
+        a.setId(1);
+        a.setFullName("Admin User");
         a.setEmail("admin@hms.com");
         a.setPassword(PasswordUtil.hash("admin123"));
 
         when(userService.findAdminByEmail("admin@hms.com")).thenReturn(a);
-        doNothing().when(emailService).sendLoginNotification(anyString(), anyString(), anyString());
+        // No email stub needed — login email was removed
 
         mockMvc.perform(post("/login")
                 .param("role",     "admin")
@@ -139,6 +162,24 @@ class AuthControllerTest {
                 .param("password", "admin123"))
                .andExpect(status().is3xxRedirection())
                .andExpect(redirectedUrl("/admin/dashboard"));
+    }
+
+    @Test
+    @DisplayName("Admin login with wrong password should redirect to login")
+    void adminLogin_WrongPassword() throws Exception {
+        Admin a = new Admin();
+        a.setId(1);
+        a.setEmail("admin@hms.com");
+        a.setPassword(PasswordUtil.hash("admin123"));
+
+        when(userService.findAdminByEmail("admin@hms.com")).thenReturn(a);
+
+        mockMvc.perform(post("/login")
+                .param("role",     "admin")
+                .param("email",    "admin@hms.com")
+                .param("password", "wrongpass"))
+               .andExpect(status().is3xxRedirection())
+               .andExpect(redirectedUrl("/login.jsp"));
     }
 
     // ── GET /logout ───────────────────────────────────────────
@@ -154,7 +195,7 @@ class AuthControllerTest {
     // ── POST /forgotPassword ──────────────────────────────────
 
     @Test
-    @DisplayName("forgotPassword with valid email should redirect to verifyOtp")
+    @DisplayName("forgotPassword with valid email should redirect to verifyOtp.jsp")
     void forgotPassword_ValidEmail() throws Exception {
         when(userService.emailExists("john@hms.com", "patient")).thenReturn(true);
         doNothing().when(userService).saveOtp(anyString(), anyString(), anyString());
@@ -168,7 +209,7 @@ class AuthControllerTest {
     }
 
     @Test
-    @DisplayName("forgotPassword with invalid email should redirect back with error")
+    @DisplayName("forgotPassword with invalid email should redirect to forgetpass.jsp")
     void forgotPassword_InvalidEmail() throws Exception {
         when(userService.emailExists("nobody@test.com", "patient")).thenReturn(false);
 
@@ -182,7 +223,7 @@ class AuthControllerTest {
     // ── POST /verifyOtp ───────────────────────────────────────
 
     @Test
-    @DisplayName("verifyOtp with valid OTP should redirect to resetPassword")
+    @DisplayName("verifyOtp with valid OTP should redirect to resetPassword.jsp")
     void verifyOtp_Valid() throws Exception {
         MockHttpSession session = new MockHttpSession();
         session.setAttribute("otpEmail", "john@hms.com");
@@ -198,7 +239,7 @@ class AuthControllerTest {
     }
 
     @Test
-    @DisplayName("verifyOtp with invalid OTP should redirect back with error")
+    @DisplayName("verifyOtp with invalid OTP should redirect back to verifyOtp.jsp")
     void verifyOtp_Invalid() throws Exception {
         MockHttpSession session = new MockHttpSession();
         session.setAttribute("otpEmail", "john@hms.com");
@@ -214,8 +255,8 @@ class AuthControllerTest {
     }
 
     @Test
-    @DisplayName("verifyOtp with expired session should redirect to forgetpass")
-    void verifyOtp_ExpiredSession() throws Exception {
+    @DisplayName("verifyOtp with no session should redirect to forgetpass.jsp")
+    void verifyOtp_NoSession() throws Exception {
         MockHttpSession session = new MockHttpSession();
         // No otpEmail/otpRole in session
 
@@ -229,11 +270,11 @@ class AuthControllerTest {
     // ── POST /resetPassword ───────────────────────────────────
 
     @Test
-    @DisplayName("resetPassword with matching passwords should redirect to login")
+    @DisplayName("resetPassword with matching passwords should redirect to login.jsp")
     void resetPassword_Success() throws Exception {
         MockHttpSession session = new MockHttpSession();
-        session.setAttribute("otpEmail",   "john@hms.com");
-        session.setAttribute("otpRole",    "patient");
+        session.setAttribute("otpEmail",    "john@hms.com");
+        session.setAttribute("otpRole",     "patient");
         session.setAttribute("otpVerified", true);
 
         when(userService.getNameByEmail("john@hms.com", "patient")).thenReturn("John Smith");
@@ -252,8 +293,8 @@ class AuthControllerTest {
     @DisplayName("resetPassword with mismatched passwords should redirect back")
     void resetPassword_Mismatch() throws Exception {
         MockHttpSession session = new MockHttpSession();
-        session.setAttribute("otpEmail",   "john@hms.com");
-        session.setAttribute("otpRole",    "patient");
+        session.setAttribute("otpEmail",    "john@hms.com");
+        session.setAttribute("otpRole",     "patient");
         session.setAttribute("otpVerified", true);
 
         mockMvc.perform(post("/resetPassword")
@@ -262,5 +303,19 @@ class AuthControllerTest {
                 .param("confirmPassword", "differentpass"))
                .andExpect(status().is3xxRedirection())
                .andExpect(redirectedUrl("/resetPassword.jsp"));
+    }
+
+    @Test
+    @DisplayName("resetPassword with no session should redirect to forgetpass.jsp")
+    void resetPassword_NoSession() throws Exception {
+        MockHttpSession session = new MockHttpSession();
+        // No OTP session attributes
+
+        mockMvc.perform(post("/resetPassword")
+                .session(session)
+                .param("newPassword",     "newpass123")
+                .param("confirmPassword", "newpass123"))
+               .andExpect(status().is3xxRedirection())
+               .andExpect(redirectedUrl("/forgetpass.jsp"));
     }
 }
