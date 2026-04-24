@@ -28,6 +28,24 @@ public class EmailService {
         }
     }
 
+    // ── Send HTML email WITH file attachment ──────────────────
+    public void sendHtmlWithAttachment(String to, String subject, String htmlBody,
+                                        java.io.File attachmentFile, String attachmentName) {
+        try {
+            MimeMessage msg = mailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(msg, true, "UTF-8");
+            helper.setTo(to);
+            helper.setFrom("mohinkhan1118@gmail.com", "HealthCare Connect");
+            helper.setSubject(subject);
+            helper.setText(htmlBody, true);
+            // Attach the file
+            helper.addAttachment(attachmentName, attachmentFile);
+            mailSender.send(msg);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     // ── Shared email wrapper ──────────────────────────────────
     private String wrap(String accentColor, String iconEmoji, String title, String body) {
         return "<!DOCTYPE html><html><head><meta charset='UTF-8'></head><body style='margin:0;padding:0;background:#f0f4f8;font-family:Segoe UI,Arial,sans-serif'>"
@@ -140,7 +158,7 @@ public class EmailService {
         sendHtml(to, "Password Reset Successful ✅ - HealthCare Connect", wrap("#19b37a,#0d9668", "✅", "Password Reset Successful", body));
     }
 
-    // ── Report upload notification ────────────────────────────
+    // ── Report upload notification (no attachment) ───────────
     public void sendReportNotification(String to, String patientName, String doctorName,
                                         String reportType, String description) {
         String body = "<p style='color:#374151;font-size:16px;margin:0 0 16px'>Dear <strong>" + patientName + "</strong>,</p>"
@@ -156,6 +174,65 @@ public class EmailService {
             + "</div>";
         sendHtml(to, "New Medical Report Available 📋 - HealthCare Connect",
                  wrap("#7c3aed,#8b5cf6", "📋", "New Report Uploaded", body));
+    }
+
+    // ── Report email WITH file attached ───────────────────────
+    public void sendReportWithFile(String to, String patientName, String doctorName,
+                                    String reportType, String description,
+                                    java.io.File file, String originalFileName) {
+        String typeLabel = reportType.substring(0, 1).toUpperCase() + reportType.substring(1);
+        String now = new java.text.SimpleDateFormat("dd MMM yyyy, hh:mm a").format(new java.util.Date());
+
+        String body = "<p style='color:#374151;font-size:16px;margin:0 0 16px'>Dear <strong>" + patientName + "</strong>,</p>"
+            + "<p style='color:#374151;font-size:15px;line-height:1.7;margin:0 0 20px'>"
+            + "Dr. <strong>" + doctorName + "</strong> has uploaded a medical report for you. "
+            + "The report is <strong>attached to this email</strong> for your convenience.</p>"
+
+            + "<div style='background:#f8fafc;border-radius:12px;padding:20px 24px;margin:0 0 20px;border-left:4px solid #7c3aed'>"
+            + "<p style='color:#374151;font-size:14px;font-weight:700;margin:0 0 12px'>📋 Report Details</p>"
+            + "<table width='100%' cellpadding='0' cellspacing='0'>"
+            + "<tr><td style='padding:6px 0;font-size:13px;color:#64748b;width:120px'>Report Type</td>"
+            + "<td style='padding:6px 0;font-size:14px;color:#0f172a;font-weight:600'>" + typeLabel + "</td></tr>"
+            + "<tr><td style='padding:6px 0;font-size:13px;color:#64748b'>Doctor</td>"
+            + "<td style='padding:6px 0;font-size:14px;color:#0f172a;font-weight:600'>Dr. " + doctorName + "</td></tr>"
+            + "<tr><td style='padding:6px 0;font-size:13px;color:#64748b'>Description</td>"
+            + "<td style='padding:6px 0;font-size:14px;color:#374151'>" + (description != null && !description.isEmpty() ? description : "—") + "</td></tr>"
+            + "<tr><td style='padding:6px 0;font-size:13px;color:#64748b'>File Name</td>"
+            + "<td style='padding:6px 0;font-size:14px;color:#374151'>" + originalFileName + "</td></tr>"
+            + "<tr><td style='padding:6px 0;font-size:13px;color:#64748b'>Date</td>"
+            + "<td style='padding:6px 0;font-size:14px;color:#374151'>" + now + "</td></tr>"
+            + "</table></div>"
+
+            + "<div style='background:#d1fae5;border-radius:10px;padding:14px 18px;margin:0 0 20px;display:flex;align-items:center;gap:10px'>"
+            + "<p style='color:#065f46;font-size:13px;margin:0'>📎 <strong>The report file is attached to this email.</strong> Please save it for your records.</p>"
+            + "</div>"
+
+            + "<p style='color:#374151;font-size:14px;line-height:1.7;margin:0 0 20px'>"
+            + "You can also log in to your patient portal to view all your medical records online.</p>"
+
+            + "<div style='text-align:center;margin:24px 0'>"
+            + "<a href='http://localhost:8081/HospitalManagement/patient/medicalRecords' "
+            + "style='background:linear-gradient(135deg,#7c3aed,#8b5cf6);color:#fff;padding:13px 28px;"
+            + "border-radius:10px;text-decoration:none;font-weight:700;font-size:14px;display:inline-block'>"
+            + "View All My Reports →</a>"
+            + "</div>"
+
+            + "<p style='color:#94a3b8;font-size:12px;margin:0'>If you have any questions about this report, "
+            + "please contact your doctor or call us at +91 98765 43210.</p>";
+
+        String htmlEmail = wrap("#7c3aed,#8b5cf6", "📋", "Medical Report from Dr. " + doctorName, body);
+
+        // Send with attachment
+        if (file != null && file.exists()) {
+            sendHtmlWithAttachment(to,
+                typeLabel + " Report from Dr. " + doctorName + " - HealthCare Connect",
+                htmlEmail, file, originalFileName);
+        } else {
+            // Fallback: send without attachment if file not found
+            sendHtml(to,
+                typeLabel + " Report from Dr. " + doctorName + " - HealthCare Connect",
+                htmlEmail);
+        }
     }
 
     // ── Appointment Reminder email ────────────────────────────

@@ -148,14 +148,22 @@ public class DoctorController {
             // patient_reports table may not exist yet
         }
 
-        // Send email to patient if requested
+        // Send email WITH file attached to patient if requested
         if (sendEmail) {
             com.hospital.model.Patient pat = userService.getPatientById(patientId);
             Doctor doc = userService.getDoctorById(did);
             if (pat != null && pat.getEmail() != null) {
-                emailService.sendReportNotification(
-                    pat.getEmail(), pat.getFullName(),
-                    doc.getFullName(), reportType, description);
+                // Pass the actual saved file so it gets attached to the email
+                java.io.File savedFile = new java.io.File(UPLOAD_DIR + "reports/" + filename);
+                emailService.sendReportWithFile(
+                    pat.getEmail(),
+                    pat.getFullName(),
+                    doc.getFullName(),
+                    reportType,
+                    description,
+                    savedFile,
+                    file.getOriginalFilename()
+                );
             }
         }
 
