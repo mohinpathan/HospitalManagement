@@ -69,6 +69,7 @@ body{background:#f0f4f8;margin:0;font-family:'Segoe UI',Arial,sans-serif}
                 <td><span class="badge badge-<%=p.getStatus()%>"><%=p.getStatus().toUpperCase()%></span></td>
                 <td>
                     <div style="display:flex;gap:6px">
+                        <a href="/HospitalManagement/admin/patients/history/<%=p.getId()%>" class="btn-view" style="background:#ede9fe;color:#6d28d9"><i class="fa fa-file-medical"></i> History</a>
                         <a href="/HospitalManagement/admin/patients/view?id=<%=p.getId()%>" class="btn-view"><i class="fa fa-eye"></i> View</a>
                         <a href="/HospitalManagement/admin/patients/delete?id=<%=p.getId()%>" class="btn-del" onclick="return confirm('Remove this patient?')"><i class="fa fa-trash"></i></a>
                     </div>

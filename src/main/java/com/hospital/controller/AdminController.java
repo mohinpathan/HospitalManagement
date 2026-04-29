@@ -16,6 +16,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.hospital.service.ScheduleService;
+
 @Controller
 @RequestMapping("/admin")
 public class AdminController {
@@ -26,6 +28,7 @@ public class AdminController {
     @Autowired private BillService        billService;
     @Autowired private NotificationService notifService;
     @Autowired private ReviewService      reviewService;
+    @Autowired private ScheduleService    scheduleService;
 
     private boolean isAdmin(HttpSession s) { return "admin".equals(s.getAttribute("role")); }
 
@@ -234,6 +237,42 @@ public class AdminController {
         return "forward:/managebills.jsp";
     }
 
+    // ── DOCTOR SCHEDULES (Admin view) ────────────────────────
+    @GetMapping("/schedules")
+    public String viewSchedules(HttpSession session, HttpServletRequest req) {
+        if (!isAdmin(session)) return "redirect:/login.jsp";
+        req.setAttribute("doctors",   userService.getAllDoctors());
+        req.setAttribute("schedules", scheduleService.getAllSchedules());
+        return "forward:/adminschedules.jsp";
+    }
+
+    @GetMapping("/schedules/doctor/{doctorId}")
+    public String doctorSchedule(@PathVariable("doctorId") int doctorId,
+            @RequestParam(value = "date", required = false) String date,
+            HttpSession session, HttpServletRequest req) {
+        if (!isAdmin(session)) return "redirect:/login.jsp";
+        if (date == null || date.isEmpty()) {
+            date = new java.text.SimpleDateFormat("yyyy-MM-dd").format(new java.util.Date());
+        }
+        req.setAttribute("doctor",    userService.getDoctorById(doctorId));
+        req.setAttribute("schedules", scheduleService.getByDoctor(doctorId));
+        req.setAttribute("slots",     scheduleService.generateSlots(doctorId, date, -1));
+        req.setAttribute("date",      date);
+        return "forward:/admindoctorschedule.jsp";
+    }
+
+    // ── PATIENT FULL HISTORY ──────────────────────────────────
+    @GetMapping("/patients/history/{patientId}")
+    public String patientHistory(@PathVariable("patientId") int patientId,
+            HttpSession session, HttpServletRequest req) {
+        if (!isAdmin(session)) return "redirect:/login.jsp";
+        req.setAttribute("patient",      userService.getPatientById(patientId));
+        req.setAttribute("appointments", apptService.getByPatient(patientId));
+        req.setAttribute("bills",        billService.getBillsByPatient(patientId));
+        req.setAttribute("reports",      getPatientReports(patientId));
+        return "forward:/adminpatienthistory.jsp";
+    }
+
     // ── REPORTS ──────────────────────────────────────────────
     @GetMapping("/reports")
     public String reports(HttpSession session, HttpServletRequest req) {
@@ -287,5 +326,18 @@ public class AdminController {
         userService.updatePassword(a.getEmail(), "admin", PasswordUtil.hash(newPass));
         ra.addFlashAttribute("success", "Password changed.");
         return "redirect:/admin/profile";
+    }
+
+    // ── Private helpers ───────────────────────────────────────
+    private java.util.List<java.util.Map<String,Object>> getPatientReports(int patientId) {
+        try {
+            return new org.springframework.jdbc.core.JdbcTemplate(
+                ((org.springframework.jdbc.datasource.DriverManagerDataSource)
+                 apptService.getClass().getDeclaredField("jdbc").get(apptService))
+            ).queryForList(
+                "SELECT pr.*, d.full_name AS doctor_name FROM patient_reports pr " +
+                "JOIN doctors d ON pr.doctor_id=d.id WHERE pr.patient_id=? ORDER BY pr.created_at DESC",
+                patientId);
+        } catch (Exception e) { return new java.util.ArrayList<>(); }
     }
 }

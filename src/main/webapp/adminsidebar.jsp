@@ -35,6 +35,9 @@
         <li class="<%= uri.contains("bills") ? "active" : "" %>">
             <a href="/HospitalManagement/admin/bills"><i class="fa fa-file-invoice-dollar"></i> Bills & Payments</a>
         </li>
+        <li class="<%= uri.contains("schedule") ? "active" : "" %>">
+            <a href="/HospitalManagement/admin/schedules"><i class="fa fa-calendar-week"></i> Doctor Schedules</a>
+        </li>
         <li class="<%= uri.contains("reports") ? "active" : "" %>">
             <a href="/HospitalManagement/admin/reports"><i class="fa fa-chart-line"></i> Reports</a>
         </li>

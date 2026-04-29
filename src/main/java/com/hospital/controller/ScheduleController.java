@@ -8,6 +8,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.Map;
+
 @Controller
 @RequestMapping("/doctor/schedule")
 public class ScheduleController {
@@ -35,6 +37,30 @@ public class ScheduleController {
         return "redirect:/doctor/schedule";
     }
 
+    /** Reschedule — edit existing slot */
+    @GetMapping("/edit/{id}")
+    public String editForm(@PathVariable("id") int id,
+            HttpSession session, HttpServletRequest req) {
+        if (!"doctor".equals(session.getAttribute("role"))) return "redirect:/login.jsp";
+        req.setAttribute("editSlot",  scheduleService.getById(id));
+        req.setAttribute("schedules", scheduleService.getByDoctor((int) session.getAttribute("doctorId")));
+        return "forward:/docmyschedule.jsp";
+    }
+
+    @PostMapping("/update")
+    public String update(
+            @RequestParam("id")         int id,
+            @RequestParam("dayOfWeek")  String day,
+            @RequestParam("startTime")  String start,
+            @RequestParam("endTime")    String end,
+            HttpSession session, RedirectAttributes ra) {
+        if (!"doctor".equals(session.getAttribute("role"))) return "redirect:/login.jsp";
+        int did = (int) session.getAttribute("doctorId");
+        scheduleService.update(id, did, day, start, end);
+        ra.addFlashAttribute("success", "Schedule updated for " + day + ".");
+        return "redirect:/doctor/schedule";
+    }
+
     @GetMapping("/delete/{id}")
     public String delete(@PathVariable("id") int id, HttpSession session, RedirectAttributes ra) {
         if (!"doctor".equals(session.getAttribute("role"))) return "redirect:/login.jsp";
@@ -44,11 +70,14 @@ public class ScheduleController {
         return "redirect:/doctor/schedule";
     }
 
-    /** AJAX: get available slots for a doctor on a date */
+    /** AJAX: get slot calendar for a doctor on a date */
     @GetMapping("/slots")
     @ResponseBody
     public Object slots(@RequestParam("doctorId") int doctorId,
-                        @RequestParam("date")     String date) {
-        return scheduleService.getAvailableSlots(doctorId, date);
+                        @RequestParam("date")     String date,
+                        HttpSession session) {
+        int pid = session.getAttribute("patientId") != null
+                  ? (int) session.getAttribute("patientId") : -1;
+        return scheduleService.generateSlots(doctorId, date, pid);
     }
 }
